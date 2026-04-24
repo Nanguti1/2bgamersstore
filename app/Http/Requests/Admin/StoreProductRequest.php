@@ -20,9 +20,9 @@ class StoreProductRequest extends FormRequest
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
-            'image' => ['required', 'url', 'max:500'],
+            'image' => ['required', 'image', 'max:4096'],
             'gallery' => ['nullable', 'array', 'max:4'],
-            'gallery.*' => ['required', 'url', 'max:500'],
+            'gallery.*' => ['image', 'max:4096'],
             'is_active' => ['required', 'boolean'],
         ];
     }

@@ -12,8 +12,8 @@ type ProductFormData = {
     description: string;
     price: string;
     stock: string;
-    image: string;
-    gallery: string[];
+    image: File | null;
+    gallery: File[];
     is_active: boolean;
 };
 
@@ -27,30 +27,28 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
         description: '',
         price: '',
         stock: '',
-        image: '',
-        gallery: ['', '', '', ''],
+        image: null,
+        gallery: [],
         is_active: true,
     });
-
-    const setGalleryImage = (index: number, value: string): void => {
-        setData('gallery', data.gallery.map((item, currentIndex) => (currentIndex === index ? value : item)));
-    };
 
     const submit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
 
         post('/admin/products', {
-            data: {
-                ...data,
-                gallery: data.gallery.filter((item) => item.trim().length > 0),
-            },
+            forceFormData: true,
         });
+    };
+
+    const onGalleryChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        const files = Array.from(event.target.files ?? []).slice(0, MAX_GALLERY_ITEMS);
+        setData('gallery', files);
     };
 
     return (
         <main className="p-6">
             <h1 className="text-2xl font-bold">Create Product</h1>
-            <p className="mt-1 text-sm text-zinc-500">Primary image is required and gallery accepts up to 4 images.</p>
+            <p className="mt-1 text-sm text-zinc-500">Upload a primary image and up to 4 gallery images.</p>
 
             <form onSubmit={submit} className="mt-4 grid max-w-3xl gap-4">
                 <div className="grid gap-4 md:grid-cols-2">
@@ -95,8 +93,8 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                     </div>
 
                     <div className="grid gap-1">
-                        <label className="text-sm font-medium">Primary Image URL</label>
-                        <input value={data.image} onChange={(event) => setData('image', event.target.value)} className="rounded border p-2" placeholder="https://..." />
+                        <label className="text-sm font-medium">Primary Image</label>
+                        <input type="file" accept="image/*" onChange={(event) => setData('image', event.target.files?.[0] ?? null)} className="rounded border p-2" />
                         {errors.image && <p className="text-xs text-red-500">{errors.image}</p>}
                     </div>
                 </div>
@@ -108,34 +106,14 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                 </div>
 
                 <div className="rounded border p-4">
-                    <p className="text-sm font-semibold">Gallery (max {MAX_GALLERY_ITEMS})</p>
-                    <div className="mt-3 grid gap-3 md:grid-cols-2">
-                        {Array.from({ length: MAX_GALLERY_ITEMS }).map((_, index) => (
-                            <div key={index} className="grid gap-1">
-                                <label className="text-xs font-medium text-zinc-500">Gallery Image {index + 1}</label>
-                                <input
-                                    value={data.gallery[index] ?? ''}
-                                    onChange={(event) => setGalleryImage(index, event.target.value)}
-                                    className="rounded border p-2"
-                                    placeholder="https://..."
-                                />
-                                {(errors as Record<string, string | undefined>)[`gallery.${index}`] && (
-                                    <p className="text-xs text-red-500">
-                                        {(errors as Record<string, string | undefined>)[`gallery.${index}`]}
-                                    </p>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                    <p className="text-sm font-semibold">Gallery Images (max {MAX_GALLERY_ITEMS})</p>
+                    <input type="file" accept="image/*" multiple onChange={onGalleryChange} className="mt-2 rounded border p-2" />
                     {errors.gallery && <p className="mt-2 text-xs text-red-500">{errors.gallery}</p>}
+                    <p className="mt-2 text-xs text-zinc-500">Selected: {data.gallery.length} files</p>
                 </div>
 
                 <label className="inline-flex items-center gap-2 text-sm font-medium">
-                    <input
-                        type="checkbox"
-                        checked={data.is_active}
-                        onChange={(event) => setData('is_active', event.target.checked)}
-                    />
+                    <input type="checkbox" checked={data.is_active} onChange={(event) => setData('is_active', event.target.checked)} />
                     Active Product
                 </label>
 

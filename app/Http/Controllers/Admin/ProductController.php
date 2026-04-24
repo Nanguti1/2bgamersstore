@@ -8,6 +8,8 @@ use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,7 +36,17 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): RedirectResponse
     {
         $this->authorize('create', Product::class);
-        Product::query()->create($request->validated());
+
+        $validated = $request->validated();
+        $validated['image'] = $this->storeImage($request->file('image'));
+        $validated['gallery'] = collect($request->file('gallery', []))
+            ->map(fn (UploadedFile $file): string => $this->storeImage($file))
+            ->values()
+            ->all();
+
+        Product::query()->create($validated);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product created successfully.']);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product created successfully.']);
 
@@ -44,7 +56,25 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         $this->authorize('update', $product);
-        $product->update($request->validated());
+
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->storeImage($request->file('image'));
+        } else {
+            unset($validated['image']);
+        }
+
+        if ($request->hasFile('gallery')) {
+            $validated['gallery'] = collect($request->file('gallery', []))
+                ->map(fn (UploadedFile $file): string => $this->storeImage($file))
+                ->values()
+                ->all();
+        }
+
+        $product->update($validated);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
 
@@ -59,5 +89,14 @@ class ProductController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product deleted successfully.']);
 
         return back();
+    }
+
+    private function storeImage(?UploadedFile $file): string
+    {
+        if (! $file instanceof UploadedFile) {
+            return '';
+        }
+
+        return Storage::url($file->store('products', 'public'));
     }
 }

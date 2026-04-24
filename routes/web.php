@@ -8,11 +8,24 @@ use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\CheckoutController;
 use App\Http\Controllers\Storefront\HomeController;
 use App\Http\Controllers\Storefront\ProductController;
+use App\Http\Controllers\Storefront\StorePageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
+
+Route::get('/store', fn () => app(StorePageController::class)('store'))->name('store.page');
+Route::get('/consultation', fn () => app(StorePageController::class)('consultation'))->name('consultation.page');
+Route::get('/community', fn () => app(StorePageController::class)('community'))->name('community.page');
+Route::get('/events', fn () => app(StorePageController::class)('events'))->name('events.page');
+Route::get('/about', fn () => app(StorePageController::class)('about'))->name('about.page');
+Route::get('/account', fn () => app(StorePageController::class)('account'))->name('account.page');
+Route::get('/careers', fn () => app(StorePageController::class)('careers'))->name('careers.page');
+Route::get('/blog', fn () => app(StorePageController::class)('blog'))->name('blog.page');
+Route::get('/help', fn () => app(StorePageController::class)('help'))->name('help.page');
+Route::get('/track-order', fn () => app(StorePageController::class)('track-order'))->name('track-order.page');
+Route::get('/wishlist', fn () => app(StorePageController::class)('wishlist'))->name('wishlist.page');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

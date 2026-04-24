@@ -1,53 +1,68 @@
+import { Globe } from 'lucide-react';
 import { useState } from 'react';
 
+const tabs = [
+    { id: 'featured', label: 'Featured Products' },
+    { id: 'setups', label: 'Complete Setups' },
+    { id: 'experience', label: 'Store Experience' },
+] as const;
+
 export function ProductHeadingSection(): JSX.Element {
-    const [activeTab, setActiveTab] = useState('featured');
+    const [activeTab, setActiveTab] = useState<(typeof tabs)[number]['id']>('featured');
 
     return (
-        <section className="bg-gray-950 py-12">
-            <div className="mx-auto max-w-7xl px-6">
-                {/* Centered heading */}
-                <div className="text-center mb-12">
-                    <span className="text-blue-400 font-semibold">EXPLORE OUR COLLECTION</span>
-                    <h2 className="text-3xl md:text-4xl font-bold mt-2 text-white">Premium Gaming Products</h2>
-                    <p className="text-[#B0B0B0] mt-4 max-w-2xl mx-auto">
+        <section className="bg-gray-950 py-14">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="mb-12 text-center">
+                    <span className="text-sm font-bold tracking-wide text-orange-500">EXPLORE OUR COLLECTION</span>
+                    <h2 className="mt-3 text-3xl font-bold text-white md:text-5xl">Premium Gaming Products</h2>
+                    <p className="mx-auto mt-5 max-w-2xl text-base text-zinc-300">
                         Visit our store to experience these products firsthand with expert guidance
                     </p>
                 </div>
 
-                {/* Tab buttons */}
-                <div className="flex justify-center mb-8">
-                    <div className="inline-flex rounded-sm bg-[#252525] p-1">
-                        <button
-                            onClick={() => setActiveTab('featured')}
-                            className={`px-6 py-3 rounded-sm text-sm md:text-lg font-medium transition ${
-                                activeTab === 'featured'
-                                    ? 'bg-blue-600 text-white'
-                                    : 'text-gray-400 hover:text-white'
-                            }`}
-                        >
-                            Featured Products
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('setups')}
-                            className={`px-6 py-3 rounded-sm text-sm md:text-lg font-medium transition ${
-                                activeTab === 'setups'
-                                    ? 'bg-blue-600 text-white'
-                                    : 'text-gray-400 hover:text-white'
-                            }`}
-                        >
-                            Complete Setups
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('experience')}
-                            className={`px-6 py-3 rounded-sm text-sm md:text-lg font-medium transition ${
-                                activeTab === 'experience'
-                                    ? 'bg-blue-600 text-white'
-                                    : 'text-gray-400 hover:text-white'
-                            }`}
-                        >
-                            Store Experience
-                        </button>
+                <div className="mb-10 flex justify-center">
+                    <div className="inline-flex rounded-sm border border-zinc-800 bg-zinc-900/80 p-1">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                type="button"
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`rounded-sm px-8 py-4 text-base font-semibold transition ${
+                                    activeTab === tab.id
+                                        ? 'bg-blue-600 text-white'
+                                        : 'text-zinc-400 hover:text-white'
+                                }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-5 rounded-md border border-blue-500/30 bg-zinc-900/70 p-5 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="inline-flex size-11 items-center justify-center rounded bg-blue-600/20 text-blue-400">
+                            <Globe className="size-6" />
+                        </div>
+                        <div>
+                            <p className="text-3xl font-bold text-white">Featured Products</p>
+                            <p className="mt-1 text-sm text-zinc-400">20 premium gaming products</p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3 md:justify-end">
+                        <div className="rounded bg-[#0B1326] px-4 py-2 text-sm text-zinc-300">
+                            Rate: <span className="font-semibold text-white">1 USD ≈ 143 KES</span>
+                        </div>
+                        <div className="inline-flex overflow-hidden rounded border border-blue-500/40 bg-[#0B1326]">
+                            <button type="button" className="bg-blue-600 px-5 py-2 text-sm font-semibold text-white">
+                                KES
+                            </button>
+                            <button type="button" className="px-5 py-2 text-sm font-semibold text-zinc-300">
+                                USD
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

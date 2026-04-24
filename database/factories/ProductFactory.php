@@ -20,6 +20,10 @@ class ProductFactory extends Factory
             'price' => fake()->randomFloat(2, 20, 300),
             'stock' => fake()->numberBetween(5, 100),
             'image' => 'https://images.unsplash.com/photo-1542751371-adc38448a05e',
+            'gallery' => [
+                'https://images.unsplash.com/photo-1560253023-3ec5d502959f',
+                'https://images.unsplash.com/photo-1598550476439-6847785fcea6',
+            ],
             'is_active' => true,
         ];
     }

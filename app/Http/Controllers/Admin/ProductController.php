@@ -36,6 +36,8 @@ class ProductController extends Controller
         $this->authorize('create', Product::class);
         Product::query()->create($request->validated());
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product created successfully.']);
+
         return redirect()->route('admin.products.index');
     }
 
@@ -44,6 +46,8 @@ class ProductController extends Controller
         $this->authorize('update', $product);
         $product->update($request->validated());
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
+
         return back();
     }
 
@@ -51,6 +55,8 @@ class ProductController extends Controller
     {
         $this->authorize('delete', $product);
         $product->delete();
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product deleted successfully.']);
 
         return back();
     }

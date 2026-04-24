@@ -11,6 +11,16 @@ class AdminProductCrudTest extends TestCase
 {
     use RefreshDatabase;
 
+
+    public function test_admin_can_view_manage_products_page(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.products.index'))
+            ->assertOk();
+    }
+
     public function test_admin_can_create_product_with_gallery_images(): void
     {
         $admin = User::factory()->create(['is_admin' => true]);

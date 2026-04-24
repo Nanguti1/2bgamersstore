@@ -11,7 +11,17 @@ class AdminProductCrudTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_can_create_product(): void
+
+    public function test_admin_can_view_manage_products_page(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.products.index'))
+            ->assertOk();
+    }
+
+    public function test_admin_can_create_product_with_gallery_images(): void
     {
         $admin = User::factory()->create(['is_admin' => true]);
         $category = Category::factory()->create();
@@ -24,9 +34,37 @@ class AdminProductCrudTest extends TestCase
             'price' => 79.99,
             'stock' => 20,
             'image' => 'https://example.com/image.jpg',
+            'gallery' => [
+                'https://example.com/gallery-1.jpg',
+                'https://example.com/gallery-2.jpg',
+            ],
             'is_active' => true,
         ])->assertRedirect(route('admin.products.index'));
 
         $this->assertDatabaseHas('products', ['slug' => 'pro-controller']);
+    }
+
+    public function test_product_gallery_cannot_exceed_four_images(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $category = Category::factory()->create();
+
+        $this->actingAs($admin)->post(route('admin.products.store'), [
+            'category_id' => $category->id,
+            'name' => 'Ultra Keyboard',
+            'slug' => 'ultra-keyboard',
+            'description' => 'Mechanical keyboard',
+            'price' => 129.99,
+            'stock' => 12,
+            'image' => 'https://example.com/keyboard.jpg',
+            'gallery' => [
+                'https://example.com/gallery-1.jpg',
+                'https://example.com/gallery-2.jpg',
+                'https://example.com/gallery-3.jpg',
+                'https://example.com/gallery-4.jpg',
+                'https://example.com/gallery-5.jpg',
+            ],
+            'is_active' => true,
+        ])->assertSessionHasErrors('gallery');
     }
 }

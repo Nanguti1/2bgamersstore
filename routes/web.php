@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ManagementController as AdminManagementController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Storefront\CartController;
@@ -32,6 +33,26 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         Route::patch('/products/{product}', [AdminProductController::class, 'update'])->name('products.update');
         Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::patch('/orders/{order}', [AdminOrderController::class, 'update'])->name('orders.update');
+        Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+        Route::get('/categories', [AdminManagementController::class, 'categories'])->name('categories.index');
+        Route::post('/categories', [AdminManagementController::class, 'storeCategory'])->name('categories.store');
+        Route::patch('/categories/{category}', [AdminManagementController::class, 'updateCategory'])->name('categories.update');
+        Route::delete('/categories/{category}', [AdminManagementController::class, 'destroyCategory'])->name('categories.destroy');
+        Route::get('/models', [AdminManagementController::class, 'models'])->name('models.index');
+        Route::post('/models', [AdminManagementController::class, 'storeModel'])->name('models.store');
+        Route::patch('/models/{model}', [AdminManagementController::class, 'updateModel'])->name('models.update');
+        Route::delete('/models/{model}', [AdminManagementController::class, 'destroyModel'])->name('models.destroy');
+        Route::get('/customers', [AdminManagementController::class, 'customers'])->name('customers.index');
+        Route::post('/customers', [AdminManagementController::class, 'storeCustomer'])->name('customers.store');
+        Route::patch('/customers/{customer}', [AdminManagementController::class, 'updateCustomer'])->name('customers.update');
+        Route::delete('/customers/{customer}', [AdminManagementController::class, 'destroyCustomer'])->name('customers.destroy');
+        Route::get('/access-control', [AdminManagementController::class, 'accessControl'])->name('access-control.index');
+        Route::patch('/access-control/users/{user}/role', [AdminManagementController::class, 'assignRole'])->name('access-control.users.role');
+        Route::post('/access-control/roles', [AdminManagementController::class, 'storeRole'])->name('access-control.roles.store');
+        Route::delete('/access-control/roles/{role}', [AdminManagementController::class, 'destroyRole'])->name('access-control.roles.destroy');
+        Route::post('/access-control/permissions', [AdminManagementController::class, 'storePermission'])->name('access-control.permissions.store');
+        Route::delete('/access-control/permissions/{permission}', [AdminManagementController::class, 'destroyPermission'])->name('access-control.permissions.destroy');
     });
 });
 

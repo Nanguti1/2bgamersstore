@@ -5,14 +5,27 @@ namespace Tests\Feature\Ecommerce;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AdminProductCrudTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_can_create_product(): void
+    public function test_admin_can_view_manage_products_page(): void
     {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.products.index'))
+            ->assertOk();
+    }
+
+    public function test_admin_can_create_product_with_gallery_images(): void
+    {
+        Storage::fake('public');
+
         $admin = User::factory()->create(['is_admin' => true]);
         $category = Category::factory()->create();
 
@@ -23,10 +36,40 @@ class AdminProductCrudTest extends TestCase
             'description' => 'Tournament controller',
             'price' => 79.99,
             'stock' => 20,
-            'image' => 'https://example.com/image.jpg',
+            'image' => UploadedFile::fake()->image('main.jpg'),
+            'gallery' => [
+                UploadedFile::fake()->image('gallery-1.jpg'),
+                UploadedFile::fake()->image('gallery-2.jpg'),
+            ],
             'is_active' => true,
         ])->assertRedirect(route('admin.products.index'));
 
         $this->assertDatabaseHas('products', ['slug' => 'pro-controller']);
+    }
+
+    public function test_product_gallery_cannot_exceed_four_images(): void
+    {
+        Storage::fake('public');
+
+        $admin = User::factory()->create(['is_admin' => true]);
+        $category = Category::factory()->create();
+
+        $this->actingAs($admin)->post(route('admin.products.store'), [
+            'category_id' => $category->id,
+            'name' => 'Ultra Keyboard',
+            'slug' => 'ultra-keyboard',
+            'description' => 'Mechanical keyboard',
+            'price' => 129.99,
+            'stock' => 12,
+            'image' => UploadedFile::fake()->image('main.jpg'),
+            'gallery' => [
+                UploadedFile::fake()->image('gallery-1.jpg'),
+                UploadedFile::fake()->image('gallery-2.jpg'),
+                UploadedFile::fake()->image('gallery-3.jpg'),
+                UploadedFile::fake()->image('gallery-4.jpg'),
+                UploadedFile::fake()->image('gallery-5.jpg'),
+            ],
+            'is_active' => true,
+        ])->assertSessionHasErrors('gallery');
     }
 }

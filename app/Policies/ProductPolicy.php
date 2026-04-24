@@ -9,21 +9,21 @@ class ProductPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
 
     public function create(User $user): bool
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
 
     public function update(User $user, Product $product): bool
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
 
     public function delete(User $user, Product $product): bool
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
 }

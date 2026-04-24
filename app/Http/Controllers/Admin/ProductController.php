@@ -48,6 +48,8 @@ class ProductController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product created successfully.']);
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product created successfully.']);
+
         return redirect()->route('admin.products.index');
     }
 
@@ -71,6 +73,8 @@ class ProductController extends Controller
         }
 
         $product->update($validated);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
 

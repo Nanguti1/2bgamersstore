@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ManagementController as AdminManagementController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Storefront\CartController;
@@ -32,6 +33,11 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         Route::patch('/products/{product}', [AdminProductController::class, 'update'])->name('products.update');
         Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::get('/categories', [AdminManagementController::class, 'categories'])->name('categories.index');
+        Route::get('/models', [AdminManagementController::class, 'models'])->name('models.index');
+        Route::get('/customers', [AdminManagementController::class, 'customers'])->name('customers.index');
+        Route::get('/access-control', [AdminManagementController::class, 'accessControl'])->name('access-control.index');
+        Route::patch('/access-control/users/{user}/role', [AdminManagementController::class, 'assignRole'])->name('access-control.users.role');
     });
 });
 

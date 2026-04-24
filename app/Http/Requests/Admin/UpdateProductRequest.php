@@ -9,7 +9,7 @@ class UpdateProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return (bool) $this->user()?->is_admin;
+        return (bool) $this->user()?->isAdmin();
     }
 
     public function rules(): array
@@ -21,7 +21,9 @@ class UpdateProductRequest extends FormRequest
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
-            'image' => ['nullable', 'url', 'max:500'],
+            'image' => ['required', 'url', 'max:500'],
+            'gallery' => ['nullable', 'array', 'max:4'],
+            'gallery.*' => ['required', 'url', 'max:500'],
             'is_active' => ['required', 'boolean'],
         ];
     }

@@ -5,7 +5,7 @@ export function Footer(): JSX.Element {
     return (
         <footer className="bg-zinc-950">
             {/* Main Footer Section */}
-            <div className="mx-auto max-w-7xl px-6 py-12">
+            <div className="mx-auto max-w-screen-2xl px-8 py-12">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     {/* About Section - Blue Background */}
                     <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-6 text-white">
@@ -110,7 +110,7 @@ export function Footer(): JSX.Element {
 
             {/* Copyright Section */}
             <div className="border-t border-zinc-800 bg-zinc-900/50">
-                <div className="mx-auto max-w-7xl px-6 py-6">
+                <div className="mx-auto max-w-screen-2xl px-8 py-6">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         {/* Copyright */}
                         <p className="text-sm text-gray-400">

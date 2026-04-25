@@ -3,7 +3,7 @@ import { home } from '@/routes';
 
 export function CtaSection() {
     return (
-        <section className="mx-auto max-w-7xl px-6 py-16">
+        <section className="mx-auto max-w-screen-2xl px-8 py-16">
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 to-blue-600 px-6 py-16 text-center md:py-24 md:px-8">
                 {/* Background pattern */}
                 <div className="absolute inset-0 opacity-10">

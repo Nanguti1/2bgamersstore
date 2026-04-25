@@ -17,7 +17,7 @@ export function Navbar(): JSX.Element {
         <>
             {/* Top Bar */}
             <div className="bg-gradient-to-r from-blue-900 to-blue-800 text-white text-xs py-2">
-                <div className="mx-auto max-w-7xl px-6 flex justify-between items-center">
+                <div className="mx-auto max-w-screen-2xl px-8 flex justify-between items-center">
                     <div className="flex items-center gap-4">
                         <span className="font-semibold">VISIT OUR STORE:</span>
                         <span>Luthuli Avenue Gaberone Plaza, First Floor Luthuli Ave, Nairobi</span>
@@ -32,7 +32,7 @@ export function Navbar(): JSX.Element {
 
             {/* Main Navbar */}
             <header className="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
-                <nav className="mx-auto max-w-7xl px-6">
+                <nav className="mx-auto max-w-screen-2xl px-8">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2">

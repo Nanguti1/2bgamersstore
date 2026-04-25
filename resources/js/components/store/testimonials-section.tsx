@@ -40,7 +40,7 @@ export function TestimonialsSection({ testimonials = [] }: { testimonials: Testi
     const displayTestimonials = testimonials.length > 0 ? testimonials : defaultTestimonials;
 
     return (
-        <section className="mx-auto max-w-7xl px-6 py-16">
+        <section className="mx-auto max-w-screen-2xl px-8 py-16">
             <div className="text-center">
                 <p className="text-sm font-semibold text-blue-400">WHAT GAMERS SAY</p>
                 <h2 className="mt-2 text-3xl font-bold md:text-4xl">Trusted by Gaming Community</h2>

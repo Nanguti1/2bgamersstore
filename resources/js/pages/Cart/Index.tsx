@@ -32,23 +32,23 @@ export default function CartIndex({ cart, total }: { cart: CartData; total: numb
     const orderTotal = total + shipping + tax;
 
     return (
-        <main className="min-h-screen bg-[#f4f4f5] text-[#111827]">
+        <main className="min-h-screen bg-gray-950 text-gray-100">
             <Navbar />
-            <section className="mx-auto max-w-5xl px-6 py-14">
-                <h1 className="text-4xl font-semibold tracking-tight">Shopping Cart</h1>
+            <section className="mx-auto max-w-screen-2xl px-8 py-16">
+                <h1 className="text-4xl font-semibold tracking-tight text-white">Shopping Cart</h1>
 
-                <div className="mt-10 space-y-0 overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+                <div className="mt-10 space-y-0 overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900">
                     {cart.items.map((item) => (
-                        <div key={item.id} className="grid gap-5 border-b border-zinc-200 p-6 last:border-b-0 md:grid-cols-[120px_1fr_auto] md:items-start">
+                        <div key={item.id} className="grid gap-5 border-b border-zinc-700 p-6 last:border-b-0 md:grid-cols-[120px_1fr_auto] md:items-start">
                             <img
                                 src={item.product.image ?? 'https://placehold.co/120x120'}
                                 alt={item.product.name}
-                                className="h-28 w-28 rounded-xl border border-zinc-100 bg-zinc-50 object-cover"
+                                className="h-28 w-28 rounded-xl border border-zinc-700 bg-zinc-800 object-cover"
                             />
 
                             <div>
-                                <h2 className="text-lg font-medium">{item.product.name}</h2>
-                                <p className="mt-3 text-sm text-zinc-600">
+                                <h2 className="text-lg font-medium text-white">{item.product.name}</h2>
+                                <p className="mt-3 text-sm text-gray-400">
                                     {item.product.stock > 0 ? '✓ In stock' : '• Ships in 3–4 weeks'}
                                 </p>
                             </div>
@@ -59,7 +59,7 @@ export default function CartIndex({ cart, total }: { cart: CartData; total: numb
                                     onChange={(event) => {
                                         router.patch(`/cart/${item.id}`, { quantity: Number(event.target.value) }, { preserveScroll: true });
                                     }}
-                                    className="w-20 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm"
+                                    className="w-20 rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white"
                                 >
                                     {Array.from({ length: 10 }).map((_, index) => (
                                         <option key={index + 1} value={index + 1}>
@@ -70,33 +70,33 @@ export default function CartIndex({ cart, total }: { cart: CartData; total: numb
                                 <button
                                     type="button"
                                     onClick={() => router.delete(`/cart/${item.id}`, { preserveScroll: true })}
-                                    className="mt-3 block text-sm text-indigo-600 hover:text-indigo-700"
+                                    className="mt-3 block text-sm text-blue-400 hover:text-blue-300"
                                 >
                                     Remove
                                 </button>
-                                <p className="mt-5 text-right text-base font-semibold">{formatKes(Number(item.product.price) * item.quantity)}</p>
+                                <p className="mt-5 text-right text-base font-semibold text-white">{formatKes(Number(item.product.price) * item.quantity)}</p>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="mt-8 ml-auto max-w-xl rounded-2xl border border-zinc-200 bg-white p-6">
+                <div className="mt-8 ml-auto max-w-xl rounded-2xl border border-zinc-700 bg-zinc-900 p-6">
                     <div className="space-y-3 text-sm">
-                        <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-                            <span>Subtotal</span>
-                            <span className="font-medium">{formatKes(total)}</span>
+                        <div className="flex items-center justify-between border-b border-zinc-700 pb-3">
+                            <span className="text-gray-400">Subtotal</span>
+                            <span className="font-medium text-white">{formatKes(total)}</span>
                         </div>
-                        <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-                            <span>Shipping</span>
-                            <span className="font-medium">{formatKes(shipping)}</span>
+                        <div className="flex items-center justify-between border-b border-zinc-700 pb-3">
+                            <span className="text-gray-400">Shipping</span>
+                            <span className="font-medium text-white">{formatKes(shipping)}</span>
                         </div>
-                        <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-                            <span>Tax (VAT 16%)</span>
-                            <span className="font-medium">{formatKes(tax)}</span>
+                        <div className="flex items-center justify-between border-b border-zinc-700 pb-3">
+                            <span className="text-gray-400">Tax (VAT 16%)</span>
+                            <span className="font-medium text-white">{formatKes(tax)}</span>
                         </div>
                         <div className="flex items-center justify-between pt-1 text-base font-semibold">
-                            <span>Order total</span>
-                            <span>{formatKes(orderTotal)}</span>
+                            <span className="text-white">Order total</span>
+                            <span className="text-white">{formatKes(orderTotal)}</span>
                         </div>
                     </div>
                 </div>
@@ -104,11 +104,11 @@ export default function CartIndex({ cart, total }: { cart: CartData; total: numb
                 <div className="mt-8 ml-auto max-w-xl">
                     <Link
                         href="/checkout"
-                        className="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-white hover:bg-indigo-500"
+                        className="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-base font-semibold text-white hover:bg-blue-500"
                     >
                         Checkout
                     </Link>
-                    <Link href="/products" className="mt-4 block text-center text-sm text-indigo-600 hover:text-indigo-700">
+                    <Link href="/products" className="mt-4 block text-center text-sm text-blue-400 hover:text-blue-300">
                         Continue Shopping →
                     </Link>
                 </div>

@@ -32,7 +32,7 @@ export default function Home({
             <StatsSection />
             <ProductHeadingSection />
 
-            <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+            <section className="mx-auto max-w-screen-2xl px-8 pt-2 pb-16">
                 <div className="mb-8 flex items-end justify-between">
                     <div>
                         <h3 className="text-2xl font-bold md:text-3xl">Featured Products</h3>

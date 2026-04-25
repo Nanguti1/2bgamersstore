@@ -6,7 +6,7 @@ export default function ProductIndex({ products }: { products: { data: any[] } }
     return (
         <main className="min-h-screen bg-zinc-950 text-zinc-100">
             <Navbar />
-            <section className="mx-auto max-w-7xl px-6 py-12">
+            <section className="mx-auto max-w-screen-2xl px-8 py-12">
                 <h1 className="text-3xl font-bold">Products</h1>
                 <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                     {products.data.map((product) => <ProductCard key={product.id} product={product} />)}

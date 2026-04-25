@@ -36,20 +36,17 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
         state: '',
         postal_code: '',
         country: 'KE',
-        card_email: '',
-        card_name: '',
-        card_number: '',
-        expiry: '',
-        cvc: '',
+        mpesa_phone: '',
+        payment_method: 'mpesa',
     });
 
     return (
-        <main className="min-h-screen bg-[#f4f4f5] text-[#111827]">
+        <main className="min-h-screen bg-gray-950 text-gray-100">
             <Navbar />
 
-            <section className="mx-auto grid max-w-6xl gap-0 border-x border-zinc-200 bg-white md:grid-cols-[1.5fr_1fr]">
-                <div className="border-b border-zinc-200 p-8 md:border-r md:border-b-0 md:p-12">
-                    <h1 className="text-3xl font-semibold">Checkout</h1>
+            <section className="mx-auto grid max-w-screen-2xl gap-0 border-x border-zinc-800 bg-zinc-900 md:grid-cols-[1.5fr_1fr] my-16 px-8">
+                <div className="border-b border-zinc-800 p-8 md:border-r md:border-b-0 md:p-12">
+                    <h1 className="text-3xl font-semibold text-white">Checkout</h1>
 
                     <form
                         onSubmit={(event) => {
@@ -58,50 +55,53 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                         }}
                         className="mt-8 space-y-4"
                     >
-                        <input
-                            value={data.card_email}
-                            onChange={(event) => setData('card_email', event.target.value)}
-                            className="w-full rounded-md border border-zinc-300 px-3 py-2"
-                            placeholder="Email address"
-                        />
-                        <input
-                            value={data.card_name}
-                            onChange={(event) => setData('card_name', event.target.value)}
-                            className="w-full rounded-md border border-zinc-300 px-3 py-2"
-                            placeholder="Name on card"
-                        />
-                        <input
-                            value={data.card_number}
-                            onChange={(event) => setData('card_number', event.target.value)}
-                            className="w-full rounded-md border border-zinc-300 px-3 py-2"
-                            placeholder="Card number"
-                        />
+                        {/* Payment Method Selection */}
+                        <div className="mb-6">
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Payment Method</label>
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-3 p-3 border border-zinc-700 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input
+                                        type="radio"
+                                        name="payment_method"
+                                        value="mpesa"
+                                        checked={data.payment_method === 'mpesa'}
+                                        onChange={() => setData('payment_method', 'mpesa')}
+                                        className="text-blue-600"
+                                    />
+                                    <span className="text-white font-medium">M-Pesa</span>
+                                </label>
+                            </div>
+                        </div>
 
-                        <div className="grid grid-cols-[2fr_1fr] gap-3">
-                            <input
-                                value={data.expiry}
-                                onChange={(event) => setData('expiry', event.target.value)}
-                                className="rounded-md border border-zinc-300 px-3 py-2"
-                                placeholder="Expiration date (MM/YY)"
-                            />
-                            <input
-                                value={data.cvc}
-                                onChange={(event) => setData('cvc', event.target.value)}
-                                className="rounded-md border border-zinc-300 px-3 py-2"
-                                placeholder="CVC"
-                            />
+                        {/* M-Pesa Phone Number */}
+                        {data.payment_method === 'mpesa' && (
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">M-Pesa Phone Number</label>
+                                <input
+                                    value={data.mpesa_phone}
+                                    onChange={(event) => setData('mpesa_phone', event.target.value)}
+                                    className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                    placeholder="2547XXXXXXXX"
+                                    maxLength={12}
+                                />
+                                <p className="text-xs text-gray-400 mt-1">Enter your M-Pesa phone number (format: 2547XXXXXXXX)</p>
+                            </div>
+                        )}
+
+                        <div className="mt-6">
+                            <label className="block text-sm font-medium text-gray-300 mb-4">Shipping Information</label>
                         </div>
 
                         <input
                             value={data.line_1}
                             onChange={(event) => setData('line_1', event.target.value)}
-                            className="w-full rounded-md border border-zinc-300 px-3 py-2"
+                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
                             placeholder="Address"
                         />
                         <input
                             value={data.line_2}
                             onChange={(event) => setData('line_2', event.target.value)}
-                            className="w-full rounded-md border border-zinc-300 px-3 py-2"
+                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
                             placeholder="Apartment / Landmark"
                         />
 
@@ -109,19 +109,19 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                             <input
                                 value={data.city}
                                 onChange={(event) => setData('city', event.target.value)}
-                                className="rounded-md border border-zinc-300 px-3 py-2"
+                                className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
                                 placeholder="City"
                             />
                             <input
                                 value={data.state}
                                 onChange={(event) => setData('state', event.target.value)}
-                                className="rounded-md border border-zinc-300 px-3 py-2"
+                                className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
                                 placeholder="County"
                             />
                             <input
                                 value={data.postal_code}
                                 onChange={(event) => setData('postal_code', event.target.value)}
-                                className="rounded-md border border-zinc-300 px-3 py-2"
+                                className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
                                 placeholder="Postal code"
                             />
                         </div>
@@ -129,39 +129,37 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                         <input
                             value={data.country}
                             onChange={(event) => setData('country', event.target.value.toUpperCase())}
-                            className="w-full rounded-md border border-zinc-300 px-3 py-2"
+                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
                             placeholder="Country code (KE)"
                             maxLength={2}
                         />
 
-                        {(errors.line_1 || errors.city || errors.state || errors.postal_code || errors.country) && (
-                            <p className="text-sm text-red-600">Please fill all required shipping fields correctly.</p>
+                        {(errors.line_1 || errors.city || errors.state || errors.postal_code || errors.country || errors.mpesa_phone) && (
+                            <p className="text-sm text-red-600">Please fill all required fields correctly.</p>
                         )}
 
                         <button
                             disabled={processing}
-                            className="mt-3 inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-4 py-3 font-semibold text-white hover:bg-indigo-500 disabled:opacity-60"
+                            className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-4 py-3 font-semibold text-white hover:bg-blue-500 disabled:opacity-60"
                         >
                             {processing ? 'Processing...' : `Pay ${formatKes(grandTotal)}`}
                         </button>
-
-                        <p className="text-center text-xs text-zinc-500">Payment details stored in plain text</p>
                     </form>
                 </div>
 
                 <aside className="p-8 md:p-10">
                     <div className="space-y-6">
                         {cart.items.map((item) => (
-                            <div key={item.id} className="flex gap-4 border-b border-zinc-100 pb-5">
+                            <div key={item.id} className="flex gap-4 border-b border-zinc-700 pb-5">
                                 <img
                                     src={item.product.image ?? 'https://placehold.co/92x92'}
                                     alt={item.product.name}
-                                    className="h-20 w-20 rounded-lg border border-zinc-100 object-cover"
+                                    className="h-20 w-20 rounded-lg border border-zinc-700 object-cover"
                                 />
                                 <div className="flex-1">
-                                    <p className="font-semibold">{item.product.name}</p>
-                                    <p className="text-sm text-zinc-600">Qty: {item.quantity}</p>
-                                    <p className="text-sm font-medium text-zinc-800">{formatKes(Number(item.product.price) * item.quantity)}</p>
+                                    <p className="font-semibold text-white">{item.product.name}</p>
+                                    <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
+                                    <p className="text-sm font-medium text-white">{formatKes(Number(item.product.price) * item.quantity)}</p>
                                 </div>
                             </div>
                         ))}
@@ -169,20 +167,20 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
 
                     <div className="mt-8 space-y-3 text-sm">
                         <div className="flex justify-between">
-                            <span>Subtotal</span>
-                            <span>{formatKes(total)}</span>
+                            <span className="text-gray-400">Subtotal</span>
+                            <span className="text-white">{formatKes(total)}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span>Taxes</span>
-                            <span>{formatKes(tax)}</span>
+                            <span className="text-gray-400">Taxes</span>
+                            <span className="text-white">{formatKes(tax)}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span>Shipping</span>
-                            <span>{formatKes(shipping)}</span>
+                            <span className="text-gray-400">Shipping</span>
+                            <span className="text-white">{formatKes(shipping)}</span>
                         </div>
-                        <div className="mt-4 flex justify-between border-t border-zinc-200 pt-4 text-base font-semibold">
-                            <span>Total</span>
-                            <span>{formatKes(grandTotal)}</span>
+                        <div className="mt-4 flex justify-between border-t border-zinc-700 pt-4 text-base font-semibold">
+                            <span className="text-white">Total</span>
+                            <span className="text-white">{formatKes(grandTotal)}</span>
                         </div>
                     </div>
                 </aside>

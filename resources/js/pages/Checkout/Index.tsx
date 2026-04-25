@@ -70,10 +70,32 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                                     />
                                     <span className="text-white font-medium">M-Pesa</span>
                                 </label>
+                                <label className="flex items-center gap-3 p-3 border border-zinc-700 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input
+                                        type="radio"
+                                        name="payment_method"
+                                        value="cash"
+                                        checked={data.payment_method === 'cash'}
+                                        onChange={() => setData('payment_method', 'cash')}
+                                        className="text-blue-600"
+                                    />
+                                    <span className="text-white font-medium">Cash on Delivery</span>
+                                </label>
+                                <label className="flex items-center gap-3 p-3 border border-zinc-700 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input
+                                        type="radio"
+                                        name="payment_method"
+                                        value="bank"
+                                        checked={data.payment_method === 'bank'}
+                                        onChange={() => setData('payment_method', 'bank')}
+                                        className="text-blue-600"
+                                    />
+                                    <span className="text-white font-medium">Bank Transfer</span>
+                                </label>
                             </div>
                         </div>
 
-                        {/* M-Pesa Phone Number */}
+                        {/* M-Pesa Phone Number - only show for M-Pesa */}
                         {data.payment_method === 'mpesa' && (
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">M-Pesa Phone Number</label>
@@ -85,6 +107,16 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                                     maxLength={12}
                                 />
                                 <p className="text-xs text-gray-400 mt-1">Enter your M-Pesa phone number (format: 2547XXXXXXXX)</p>
+                            </div>
+                        )}
+
+                        {/* Bank Transfer Info - only show for Bank */}
+                        {data.payment_method === 'bank' && (
+                            <div className="p-4 bg-zinc-800 rounded-lg border border-zinc-700">
+                                <p className="text-sm text-gray-300 mb-2">Bank Transfer Details:</p>
+                                <p className="text-sm text-gray-400">Bank: Equity Bank</p>
+                                <p className="text-sm text-gray-400">Account Name: 2B Gamers Entertainment</p>
+                                <p className="text-sm text-gray-400">Account Number: 1234567890</p>
                             </div>
                         )}
 

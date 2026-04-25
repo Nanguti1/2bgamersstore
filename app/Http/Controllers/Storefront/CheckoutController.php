@@ -24,9 +24,29 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request, OrderService $orderService): RedirectResponse
     {
-        $address = $request->user()->addresses()->create($request->validated());
-        $orderService->checkout($request->user(), $address);
+        $address = $request->user()->addresses()->create([
+            'line_1' => $request->validated('line_1'),
+            'line_2' => $request->validated('line_2'),
+            'city' => $request->validated('city'),
+            'state' => $request->validated('state'),
+            'postal_code' => $request->validated('postal_code'),
+            'country' => $request->validated('country'),
+        ]);
 
-        return redirect()->route('products.index');
+        $mpesaPhone = $request->validated('mpesa_phone');
+        $paymentMethod = $request->validated('payment_method');
+        $shippingAmount = 650; // Fixed shipping cost
+        $taxAmount = $orderService->cartService->total($orderService->cartService->getCart($request->user())) * 0.16;
+
+        $order = $orderService->checkout(
+            $request->user(),
+            $address,
+            $mpesaPhone,
+            $shippingAmount,
+            $taxAmount,
+            $paymentMethod
+        );
+
+        return redirect()->route('home')->with('success', 'Order placed successfully!');
     }
 }

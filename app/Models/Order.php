@@ -16,7 +16,7 @@ class Order extends Model
     /** @use HasFactory<OrderFactory> */
     use HasFactory;
 
-    protected $fillable = ['user_id', 'address_id', 'total_amount', 'status', 'payment_status'];
+    protected $fillable = ['user_id', 'address_id', 'mpesa_phone', 'total_amount', 'shipping_amount', 'tax_amount', 'status', 'payment_status', 'payment_method'];
 
     protected function casts(): array
     {
@@ -24,6 +24,8 @@ class Order extends Model
             'status' => OrderStatus::class,
             'payment_status' => PaymentStatus::class,
             'total_amount' => 'decimal:2',
+            'shipping_amount' => 'decimal:2',
+            'tax_amount' => 'decimal:2',
         ];
     }
 

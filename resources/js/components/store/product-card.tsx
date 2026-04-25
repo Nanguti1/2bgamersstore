@@ -1,6 +1,7 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import { Heart, ShoppingCart, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useCart } from '@/contexts/CartContext';
 
 type Product = {
     id: number;
@@ -12,6 +13,8 @@ type Product = {
 
 export function ProductCard({ product }: { product: Product }): JSX.Element {
     const [isWishlisted, setIsWishlisted] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+    const { incrementCart } = useCart();
 
     const priceInKsh = Math.round(product.price * 130); // Convert to Ksh (approximate rate)
 
@@ -19,6 +22,25 @@ export function ProductCard({ product }: { product: Product }): JSX.Element {
         const message = `Hi, I'm interested in ${product.name}. Can you provide more details?`;
         const whatsappUrl = `https://wa.me/254702898605?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
+    };
+
+    const handleAddToCart = () => {
+        setIsAdding(true);
+        router.post(
+            '/cart',
+            { product_id: product.id, quantity: 1 },
+            {
+                onFinish: () => {
+                    setIsAdding(false);
+                    incrementCart();
+                },
+                preserveScroll: true,
+                onError: () => {
+                    // If there's an error (likely unauthenticated), redirect to login
+                    window.location.href = '/login';
+                },
+            }
+        );
     };
 
     return (
@@ -75,9 +97,13 @@ export function ProductCard({ product }: { product: Product }): JSX.Element {
                             <MessageCircle className="h-4 w-4" />
                             <span className="hidden sm:inline">Inquire</span>
                         </button>
-                        <button className="flex-1 rounded-lg bg-blue-600 px-3 py-2 transition hover:bg-blue-700 flex items-center justify-center gap-2 text-white font-semibold text-sm">
+                        <button
+                            onClick={handleAddToCart}
+                            disabled={isAdding}
+                            className="flex-1 rounded-lg bg-blue-600 px-3 py-2 transition hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-white font-semibold text-sm"
+                        >
                             <ShoppingCart className="h-4 w-4" />
-                            <span className="hidden sm:inline">Add to Cart</span>
+                            <span className="hidden sm:inline">{isAdding ? 'Adding...' : 'Add to Cart'}</span>
                         </button>
                     </div>
                 </div>

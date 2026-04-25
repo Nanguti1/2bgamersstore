@@ -29,6 +29,9 @@ Route::get('/track-order', fn () => app(StorePageController::class)('track-order
 Route::get('/wishlist', fn () => app(StorePageController::class)('wishlist'))->name('wishlist.page');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::get('/cart-count', function () {
+        return response()->json(['count' => auth()->user()->cart?->items()->count() ?? 0]);
+    });
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::patch('/cart/{item}', [CartController::class, 'update'])->name('cart.update');

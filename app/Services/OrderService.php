@@ -19,12 +19,12 @@ class OrderService
     ) {
     }
 
-    public function checkout(User $user, Address $address): Order
+    public function checkout(User $user, Address $address, string $mpesaPhone, float $shippingAmount, float $taxAmount, string $paymentMethod): Order
     {
         $cart = $this->cartService->getCart($user);
         $total = $this->calculateCartTotalAction->execute($cart);
-        $order = $this->createOrderAction->execute($cart, $address, $total);
+        $order = $this->createOrderAction->execute($cart, $address, $total, $mpesaPhone, $shippingAmount, $taxAmount, $paymentMethod);
 
-        return $this->processCheckoutAction->execute($cart->load('items.product'), $order);
+        return $this->processCheckoutAction->execute($cart->load('items.product'), $order, $paymentMethod);
     }
 }

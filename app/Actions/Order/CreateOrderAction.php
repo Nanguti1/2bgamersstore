@@ -10,12 +10,16 @@ use App\Models\Order;
 
 class CreateOrderAction
 {
-    public function execute(Cart $cart, Address $address, float $totalAmount): Order
+    public function execute(Cart $cart, Address $address, float $totalAmount, string $mpesaPhone, float $shippingAmount, float $taxAmount, string $paymentMethod): Order
     {
         $order = Order::create([
             'user_id' => $cart->user_id,
             'address_id' => $address->id,
+            'mpesa_phone' => $mpesaPhone,
             'total_amount' => $totalAmount,
+            'shipping_amount' => $shippingAmount,
+            'tax_amount' => $taxAmount,
+            'payment_method' => $paymentMethod,
             'status' => OrderStatus::Pending,
             'payment_status' => PaymentStatus::Pending,
         ]);

@@ -1,8 +1,6 @@
 import { Footer } from '@/components/store/footer';
 import { Navbar } from '@/components/store/navbar';
-import { useForm } from '@inertiajs/react';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
+import { useForm, router } from '@inertiajs/react';
 
 interface CartItem {
     id: number;
@@ -46,14 +44,6 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
         payment_method: 'mpesa',
     });
 
-    // Show success message if redirected from successful checkout
-    useEffect(() => {
-        const successMessage = (window as any).pageProps?.flash?.success;
-        if (successMessage) {
-            toast.success(successMessage);
-        }
-    }, []);
-
     return (
         <main className="min-h-screen bg-gray-950 text-gray-100">
             <Navbar />
@@ -65,7 +55,11 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                     <form
                         onSubmit={(event) => {
                             event.preventDefault();
-                            post('/checkout');
+                            const submitData: any = { ...data };
+                            if (submitData.payment_method !== 'mpesa') {
+                                delete submitData.mpesa_phone;
+                            }
+                            router.post('/checkout', submitData);
                         }}
                         className="mt-8 space-y-4"
                     >

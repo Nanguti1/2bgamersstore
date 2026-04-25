@@ -19,7 +19,7 @@ class OrderService
     ) {
     }
 
-    public function checkout(User $user, Address $address, string $mpesaPhone, float $shippingAmount, float $taxAmount, string $paymentMethod, string $firstName, string $lastName, string $email, string $phone): Order
+    public function checkout(User $user, Address $address, ?string $mpesaPhone, float $shippingAmount, float $taxAmount, string $paymentMethod, string $firstName, string $lastName, string $email, string $phone): Order
     {
         $cart = $this->cartService->getCart($user);
         $total = $this->calculateCartTotalAction->execute($cart);

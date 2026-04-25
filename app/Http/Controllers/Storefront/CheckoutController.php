@@ -37,7 +37,7 @@ class CheckoutController extends Controller
         $lastName = $request->validated('last_name');
         $email = $request->validated('email');
         $phone = $request->validated('phone');
-        $mpesaPhone = $request->validated('mpesa_phone');
+        $mpesaPhone = $request->validated('mpesa_phone') ?? null;
         $paymentMethod = $request->validated('payment_method');
         $shippingAmount = 650; // Fixed shipping cost
         $taxAmount = $orderService->cartService->total($orderService->cartService->getCart($request->user())) * 0.16;

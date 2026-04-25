@@ -10,51 +10,61 @@ type Order = {
     };
 };
 
+const formatKes = (value: number): string => {
+    return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }).format(value);
+};
+
 export default function AdminOrdersIndex({ orders, statuses }: { orders: { data: Order[] }; statuses: string[] }): JSX.Element {
     return (
-        <main className="p-6">
-            <h1 className="text-2xl font-bold">Manage Orders</h1>
+        <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
+            <div className="mx-auto max-w-7xl">
+                <h1 className="text-3xl font-semibold text-slate-900">Manage Orders</h1>
 
-            <div className="mt-4 overflow-hidden rounded border">
-                <table className="min-w-full text-sm">
-                    <thead className="bg-zinc-50 text-left">
-                        <tr>
-                            <th className="px-4 py-2">Order #</th>
-                            <th className="px-4 py-2">Customer</th>
-                            <th className="px-4 py-2">Total</th>
-                            <th className="px-4 py-2">Status</th>
-                            <th className="px-4 py-2 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orders.data.map((order) => (
-                            <tr key={order.id} className="border-t">
-                                <td className="px-4 py-2 font-medium">#{order.id}</td>
-                                <td className="px-4 py-2">
-                                    <p>{order.user?.name ?? 'Guest'}</p>
-                                    <p className="text-xs text-zinc-500">{order.user?.email ?? '-'}</p>
-                                </td>
-                                <td className="px-4 py-2">${order.total_amount}</td>
-                                <td className="px-4 py-2">
-                                    <select
-                                        defaultValue={order.status}
-                                        className="rounded border px-2 py-1"
-                                        onChange={(event) => router.patch(`/admin/orders/${order.id}`, { status: event.target.value })}
-                                    >
-                                        {statuses.map((status) => (
-                                            <option key={status} value={status}>{status}</option>
-                                        ))}
-                                    </select>
-                                </td>
-                                <td className="px-4 py-2 text-right">
-                                    <button type="button" className="text-red-600" onClick={() => router.delete(`/admin/orders/${order.id}`)}>
-                                        Delete
-                                    </button>
-                                </td>
+                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-full text-left text-base text-slate-900">
+                        <thead className="bg-[#053354] text-white">
+                            <tr>
+                                <th className="px-6 py-4 font-semibold">Order #</th>
+                                <th className="px-6 py-4 font-semibold">Customer</th>
+                                <th className="px-6 py-4 font-semibold">Total</th>
+                                <th className="px-6 py-4 font-semibold">Status</th>
+                                <th className="px-6 py-4 text-right font-semibold">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {orders.data.map((order, index) => (
+                                <tr key={order.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
+                                    <td className="px-6 py-5 font-semibold">#{order.id}</td>
+                                    <td className="px-6 py-5">
+                                        <p>{order.user?.name ?? 'Guest'}</p>
+                                        <p className="text-sm text-slate-500">{order.user?.email ?? '-'}</p>
+                                    </td>
+                                    <td className="px-6 py-5">{formatKes(Number(order.total_amount))}</td>
+                                    <td className="px-6 py-5">
+                                        <select
+                                            defaultValue={order.status}
+                                            className="rounded-lg border border-slate-300 bg-white px-3 py-2"
+                                            onChange={(event) => router.patch(`/admin/orders/${order.id}`, { status: event.target.value })}
+                                        >
+                                            {statuses.map((status) => (
+                                                <option key={status} value={status}>{status}</option>
+                                            ))}
+                                        </select>
+                                    </td>
+                                    <td className="px-6 py-5 text-right">
+                                        <button
+                                            type="button"
+                                            className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
+                                            onClick={() => router.delete(`/admin/orders/${order.id}`)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     );

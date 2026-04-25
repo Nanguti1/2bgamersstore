@@ -50,111 +50,113 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
     };
 
     return (
-        <main className="p-6">
-            <h1 className="text-2xl font-bold">Roles & Permissions</h1>
+        <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
+            <div className="mx-auto max-w-7xl">
+                <h1 className="text-3xl font-semibold text-slate-900">Roles & Permissions</h1>
 
-            <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                <form onSubmit={submitRole} className="rounded border p-4">
-                    <p className="font-semibold">Create Role</p>
-                    <input className="mt-2 w-full rounded border p-2" value={roleForm.data.name} onChange={(event) => roleForm.setData('name', event.target.value)} placeholder="Role name" />
-                    <div className="mt-3 grid gap-2 md:grid-cols-2">
-                        {permissions.map((permission) => (
-                            <label key={permission.id} className="inline-flex items-center gap-2 text-sm">
-                                <input type="checkbox" checked={roleForm.data.permissions.includes(permission.id)} onChange={() => togglePermission(permission.id)} />
-                                {permission.name}
-                            </label>
-                        ))}
-                    </div>
-                    <button className="mt-3 rounded bg-blue-600 px-4 py-2 text-white">Create Role</button>
-                </form>
-
-                <form onSubmit={submitPermission} className="rounded border p-4">
-                    <p className="font-semibold">Create Permission</p>
-                    <input className="mt-2 w-full rounded border p-2" value={permissionForm.data.name} onChange={(event) => permissionForm.setData('name', event.target.value)} placeholder="Permission name" />
-                    <button className="mt-3 rounded bg-blue-600 px-4 py-2 text-white">Create Permission</button>
-                </form>
-            </div>
-
-            <div className="mt-6 grid gap-4 lg:grid-cols-2">
-                <div className="overflow-hidden rounded border">
-                    <table className="min-w-full text-sm">
-                        <thead className="bg-zinc-50 text-left">
-                            <tr>
-                                <th className="px-4 py-2">Role</th>
-                                <th className="px-4 py-2">Permissions</th>
-                                <th className="px-4 py-2 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {roles.map((role) => (
-                                <tr key={role.id} className="border-t">
-                                    <td className="px-4 py-2 font-medium capitalize">{role.name}</td>
-                                    <td className="px-4 py-2 text-zinc-500">{role.permissions_count}</td>
-                                    <td className="px-4 py-2 text-right">
-                                        <button type="button" className="text-red-600" onClick={() => router.delete(`/admin/access-control/roles/${role.id}`)}>Delete</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div className="overflow-hidden rounded border">
-                    <table className="min-w-full text-sm">
-                        <thead className="bg-zinc-50 text-left">
-                            <tr>
-                                <th className="px-4 py-2">Permission</th>
-                                <th className="px-4 py-2 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div className="mt-6 grid gap-4 lg:grid-cols-2">
+                    <form onSubmit={submitRole} className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+                        <p className="font-semibold text-slate-900">Create Role</p>
+                        <input className="mt-3 w-full rounded-lg border border-zinc-300 px-3 py-2" value={roleForm.data.name} onChange={(event) => roleForm.setData('name', event.target.value)} placeholder="Role name" />
+                        <div className="mt-4 grid gap-2 md:grid-cols-2">
                             {permissions.map((permission) => (
-                                <tr key={permission.id} className="border-t">
-                                    <td className="px-4 py-2 font-medium">{permission.name}</td>
-                                    <td className="px-4 py-2 text-right">
-                                        <button type="button" className="text-red-600" onClick={() => router.delete(`/admin/access-control/permissions/${permission.id}`)}>Delete</button>
-                                    </td>
-                                </tr>
+                                <label key={permission.id} className="inline-flex items-center gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-sm">
+                                    <input type="checkbox" checked={roleForm.data.permissions.includes(permission.id)} onChange={() => togglePermission(permission.id)} />
+                                    {permission.name}
+                                </label>
                             ))}
+                        </div>
+                        <button className="mt-4 rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300">Create Role</button>
+                    </form>
+
+                    <form onSubmit={submitPermission} className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+                        <p className="font-semibold text-slate-900">Create Permission</p>
+                        <input className="mt-3 w-full rounded-lg border border-zinc-300 px-3 py-2" value={permissionForm.data.name} onChange={(event) => permissionForm.setData('name', event.target.value)} placeholder="Permission name" />
+                        <button className="mt-4 rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300">Create Permission</button>
+                    </form>
+                </div>
+
+                <div className="mt-6 grid gap-4 lg:grid-cols-2">
+                    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                        <table className="min-w-full text-left text-base text-slate-900">
+                            <thead className="bg-[#053354] text-white">
+                                <tr>
+                                    <th className="px-6 py-4 font-semibold">Role</th>
+                                    <th className="px-6 py-4 font-semibold">Permissions</th>
+                                    <th className="px-6 py-4 text-right font-semibold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {roles.map((role, index) => (
+                                    <tr key={role.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
+                                        <td className="px-6 py-5 font-medium capitalize">{role.name}</td>
+                                        <td className="px-6 py-5">{role.permissions_count}</td>
+                                        <td className="px-6 py-5 text-right">
+                                            <button type="button" className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={() => router.delete(`/admin/access-control/roles/${role.id}`)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                        <table className="min-w-full text-left text-base text-slate-900">
+                            <thead className="bg-[#053354] text-white">
+                                <tr>
+                                    <th className="px-6 py-4 font-semibold">Permission</th>
+                                    <th className="px-6 py-4 text-right font-semibold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {permissions.map((permission, index) => (
+                                    <tr key={permission.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
+                                        <td className="px-6 py-5 font-medium">{permission.name}</td>
+                                        <td className="px-6 py-5 text-right">
+                                            <button type="button" className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={() => router.delete(`/admin/access-control/permissions/${permission.id}`)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-full text-left text-base text-slate-900">
+                        <thead className="bg-[#053354] text-white">
+                            <tr>
+                                <th className="px-6 py-4 font-semibold">User</th>
+                                <th className="px-6 py-4 font-semibold">Email</th>
+                                <th className="px-6 py-4 font-semibold">Role Assignment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users.data.map((user, index) => {
+                                const currentRole = user.roles[0]?.name ?? '';
+
+                                return (
+                                    <tr key={user.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
+                                        <td className="px-6 py-5 font-medium">{user.name}</td>
+                                        <td className="px-6 py-5">{user.email}</td>
+                                        <td className="px-6 py-5">
+                                            <select
+                                                defaultValue={currentRole}
+                                                className="rounded-lg border border-zinc-300 bg-white px-3 py-2"
+                                                onChange={(event) => assignRole(user.id, event.target.value)}
+                                            >
+                                                <option value="" disabled>Select role</option>
+                                                {roles.map((role) => (
+                                                    <option key={role.id} value={role.name}>{role.name}</option>
+                                                ))}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div className="mt-6 overflow-hidden rounded border">
-                <table className="min-w-full text-sm">
-                    <thead className="bg-zinc-50 text-left">
-                        <tr>
-                            <th className="px-4 py-2">User</th>
-                            <th className="px-4 py-2">Email</th>
-                            <th className="px-4 py-2">Role Assignment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.data.map((user) => {
-                            const currentRole = user.roles[0]?.name ?? '';
-
-                            return (
-                                <tr key={user.id} className="border-t">
-                                    <td className="px-4 py-2 font-medium">{user.name}</td>
-                                    <td className="px-4 py-2 text-zinc-500">{user.email}</td>
-                                    <td className="px-4 py-2">
-                                        <select
-                                            defaultValue={currentRole}
-                                            className="rounded border px-2 py-1"
-                                            onChange={(event) => assignRole(user.id, event.target.value)}
-                                        >
-                                            <option value="" disabled>Select role</option>
-                                            {roles.map((role) => (
-                                                <option key={role.id} value={role.name}>{role.name}</option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
             </div>
         </main>
     );

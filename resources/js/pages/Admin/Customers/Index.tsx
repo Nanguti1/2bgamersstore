@@ -21,51 +21,57 @@ export default function AdminCustomersIndex({ customers }: { customers: { data: 
     };
 
     return (
-        <main className="p-6">
-            <h1 className="text-2xl font-bold">Manage Customers</h1>
+        <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
+            <div className="mx-auto max-w-7xl">
+                <h1 className="text-3xl font-semibold text-slate-900">Manage Customers</h1>
 
-            <form onSubmit={submit} className="mt-4 grid gap-2 rounded border p-4 md:grid-cols-4 md:items-end">
-                <div className="grid gap-1">
-                    <label className="text-sm font-medium">Name</label>
-                    <input value={data.name} onChange={(event) => setData('name', event.target.value)} className="rounded border p-2" />
-                    {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
-                </div>
-                <div className="grid gap-1">
-                    <label className="text-sm font-medium">Email</label>
-                    <input value={data.email} onChange={(event) => setData('email', event.target.value)} className="rounded border p-2" />
-                    {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
-                </div>
-                <div className="grid gap-1">
-                    <label className="text-sm font-medium">Password</label>
-                    <input type="password" value={data.password} onChange={(event) => setData('password', event.target.value)} className="rounded border p-2" />
-                    {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
-                </div>
-                <button className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60" disabled={processing}>Add Customer</button>
-            </form>
+                <form onSubmit={submit} className="mt-6 grid gap-4 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm md:grid-cols-4 md:items-end">
+                    <div className="grid gap-1">
+                        <label className="text-sm font-medium text-slate-700">Name</label>
+                        <input value={data.name} onChange={(event) => setData('name', event.target.value)} className="rounded-lg border border-zinc-300 px-3 py-2" />
+                        {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
+                    </div>
+                    <div className="grid gap-1">
+                        <label className="text-sm font-medium text-slate-700">Email</label>
+                        <input value={data.email} onChange={(event) => setData('email', event.target.value)} className="rounded-lg border border-zinc-300 px-3 py-2" />
+                        {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
+                    </div>
+                    <div className="grid gap-1">
+                        <label className="text-sm font-medium text-slate-700">Password</label>
+                        <input type="password" value={data.password} onChange={(event) => setData('password', event.target.value)} className="rounded-lg border border-zinc-300 px-3 py-2" />
+                        {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
+                    </div>
+                    <button className="rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>+ New Client</button>
+                </form>
 
-            <div className="mt-4 overflow-hidden rounded border">
-                <table className="min-w-full text-sm">
-                    <thead className="bg-zinc-50 text-left">
-                        <tr>
-                            <th className="px-4 py-2">Name</th>
-                            <th className="px-4 py-2">Email</th>
-                            <th className="px-4 py-2 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {customers.data.map((customer) => (
-                            <tr key={customer.id} className="border-t">
-                                <td className="px-4 py-2 font-medium">{customer.name}</td>
-                                <td className="px-4 py-2 text-zinc-500">{customer.email}</td>
-                                <td className="px-4 py-2 text-right">
-                                    <button type="button" className="text-red-600" onClick={() => router.delete(`/admin/customers/${customer.id}`)}>
-                                        Delete
-                                    </button>
-                                </td>
+                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-full text-left text-base text-slate-900">
+                        <thead className="bg-[#053354] text-white">
+                            <tr>
+                                <th className="px-6 py-4 font-semibold">Client</th>
+                                <th className="px-6 py-4 font-semibold">Email</th>
+                                <th className="px-6 py-4 text-right font-semibold">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {customers.data.map((customer, index) => (
+                                <tr key={customer.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
+                                    <td className="px-6 py-5 font-medium">{customer.name}</td>
+                                    <td className="px-6 py-5">{customer.email}</td>
+                                    <td className="px-6 py-5 text-right">
+                                        <button
+                                            type="button"
+                                            className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
+                                            onClick={() => router.delete(`/admin/customers/${customer.id}`)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     );

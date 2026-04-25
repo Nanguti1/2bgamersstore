@@ -11,45 +11,59 @@ type Product = {
     };
 };
 
+const formatKes = (value: number): string => {
+    return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }).format(value);
+};
+
 export default function AdminProductsIndex({ products }: { products: { data: Product[] } }): JSX.Element {
     return (
-        <main className="p-6">
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold">Manage Products</h1>
-                <Link href="/admin/products/create" className="rounded bg-blue-600 px-4 py-2 text-white">
-                    Add Product
-                </Link>
-            </div>
+        <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
+            <div className="mx-auto max-w-7xl">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-3xl font-semibold text-slate-900">Manage Products</h1>
+                    <Link href="/admin/products/create" className="rounded-xl bg-pink-200 px-5 py-2.5 font-medium text-slate-900 hover:bg-pink-300">
+                        + New Product
+                    </Link>
+                </div>
 
-            <div className="mt-4 overflow-hidden rounded border">
-                <table className="min-w-full text-sm">
-                    <thead className="bg-zinc-50 text-left">
-                        <tr>
-                            <th className="px-4 py-2">Name</th>
-                            <th className="px-4 py-2">Category</th>
-                            <th className="px-4 py-2">Price</th>
-                            <th className="px-4 py-2">Stock</th>
-                            <th className="px-4 py-2">Status</th>
-                            <th className="px-4 py-2 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {products.data.map((product) => (
-                            <tr key={product.id} className="border-t">
-                                <td className="px-4 py-2 font-medium">{product.name}</td>
-                                <td className="px-4 py-2">{product.category?.name ?? 'N/A'}</td>
-                                <td className="px-4 py-2">${product.price}</td>
-                                <td className="px-4 py-2">{product.stock}</td>
-                                <td className="px-4 py-2">{product.is_active ? 'Active' : 'Inactive'}</td>
-                                <td className="px-4 py-2 text-right">
-                                    <button type="button" className="text-red-600" onClick={() => router.delete(`/admin/products/${product.id}`)}>
-                                        Delete
-                                    </button>
-                                </td>
+                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-full text-left text-base text-slate-900">
+                        <thead className="bg-[#053354] text-white">
+                            <tr>
+                                <th className="px-6 py-4 font-semibold">Name</th>
+                                <th className="px-6 py-4 font-semibold">Category</th>
+                                <th className="px-6 py-4 font-semibold">Price</th>
+                                <th className="px-6 py-4 font-semibold">Stock</th>
+                                <th className="px-6 py-4 font-semibold">Status</th>
+                                <th className="px-6 py-4 text-right font-semibold">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {products.data.map((product, index) => (
+                                <tr key={product.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
+                                    <td className="px-6 py-5 font-medium">{product.name}</td>
+                                    <td className="px-6 py-5">{product.category?.name ?? 'N/A'}</td>
+                                    <td className="px-6 py-5">{formatKes(Number(product.price))}</td>
+                                    <td className="px-6 py-5">{product.stock}</td>
+                                    <td className="px-6 py-5">
+                                        <span className={`rounded-full px-3 py-1 text-xs font-semibold ${product.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-zinc-200 text-zinc-700'}`}>
+                                            {product.is_active ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-5 text-right">
+                                        <button
+                                            type="button"
+                                            className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
+                                            onClick={() => router.delete(`/admin/products/${product.id}`)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     );

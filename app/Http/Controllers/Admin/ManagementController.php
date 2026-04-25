@@ -22,6 +22,20 @@ class ManagementController extends Controller
         ]);
     }
 
+    public function showCategory(Category $category): Response
+    {
+        return Inertia::render('Admin/Categories/Show', [
+            'category' => $category,
+        ]);
+    }
+
+    public function editCategory(Category $category): Response
+    {
+        return Inertia::render('Admin/Categories/Edit', [
+            'category' => $category,
+        ]);
+    }
+
     public function storeCategory(Request $request): RedirectResponse
     {
         Category::query()->create($request->validate([
@@ -59,6 +73,22 @@ class ManagementController extends Controller
     {
         return Inertia::render('Admin/Models/Index', [
             'models' => HardwareModel::query()->with('category')->latest()->paginate(20),
+            'categories' => Category::query()->orderBy('name')->get(),
+        ]);
+    }
+
+    public function showModel(HardwareModel $model): Response
+    {
+        return Inertia::render('Admin/Models/Show', [
+            'model' => $model->load('category'),
+            'categories' => Category::query()->orderBy('name')->get(),
+        ]);
+    }
+
+    public function editModel(HardwareModel $model): Response
+    {
+        return Inertia::render('Admin/Models/Edit', [
+            'model' => $model->load('category'),
             'categories' => Category::query()->orderBy('name')->get(),
         ]);
     }
@@ -102,6 +132,20 @@ class ManagementController extends Controller
     {
         return Inertia::render('Admin/Customers/Index', [
             'customers' => User::query()->where('is_admin', false)->latest()->paginate(20),
+        ]);
+    }
+
+    public function showCustomer(User $customer): Response
+    {
+        return Inertia::render('Admin/Customers/Show', [
+            'customer' => $customer,
+        ]);
+    }
+
+    public function editCustomer(User $customer): Response
+    {
+        return Inertia::render('Admin/Customers/Edit', [
+            'customer' => $customer,
         ]);
     }
 

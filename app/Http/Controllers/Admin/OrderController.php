@@ -21,6 +21,21 @@ class OrderController extends Controller
         ]);
     }
 
+    public function show(Order $order): Response
+    {
+        return Inertia::render('Admin/Orders/Show', [
+            'order' => $order->load(['user', 'address', 'items.product', 'payment']),
+        ]);
+    }
+
+    public function edit(Order $order): Response
+    {
+        return Inertia::render('Admin/Orders/Edit', [
+            'order' => $order->load(['user', 'address', 'items.product', 'payment']),
+            'statuses' => array_map(static fn (OrderStatus $status): string => $status->value, OrderStatus::cases()),
+        ]);
+    }
+
     public function update(Request $request, Order $order): RedirectResponse
     {
         $validated = $request->validate([

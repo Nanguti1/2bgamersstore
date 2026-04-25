@@ -33,6 +33,25 @@ class ProductController extends Controller
         ]);
     }
 
+    public function show(Product $product): Response
+    {
+        $this->authorize('view', $product);
+
+        return Inertia::render('Admin/Products/Show', [
+            'product' => $product->load('category'),
+        ]);
+    }
+
+    public function edit(Product $product): Response
+    {
+        $this->authorize('update', $product);
+
+        return Inertia::render('Admin/Products/Edit', [
+            'product' => $product->load('category'),
+            'categories' => Category::query()->orderBy('name')->get(),
+        ]);
+    }
+
     public function store(StoreProductRequest $request): RedirectResponse
     {
         $this->authorize('create', Product::class);

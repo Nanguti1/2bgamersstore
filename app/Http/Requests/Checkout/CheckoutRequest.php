@@ -14,6 +14,10 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:20'],
             'line_1' => ['required', 'string', 'max:255'],
             'line_2' => ['nullable', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:120'],

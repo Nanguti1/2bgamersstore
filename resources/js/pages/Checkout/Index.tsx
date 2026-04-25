@@ -1,6 +1,8 @@
 import { Footer } from '@/components/store/footer';
 import { Navbar } from '@/components/store/navbar';
 import { useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 interface CartItem {
     id: number;
@@ -30,6 +32,10 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
     const grandTotal = total + shipping + tax;
 
     const { data, setData, post, processing, errors } = useForm({
+        first_name: '',
+        last_name: '',
+        email: '',
+        phone: '',
         line_1: '',
         line_2: '',
         city: '',
@@ -39,6 +45,14 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
         mpesa_phone: '',
         payment_method: 'mpesa',
     });
+
+    // Show success message if redirected from successful checkout
+    useEffect(() => {
+        const successMessage = (window as any).pageProps?.flash?.success;
+        if (successMessage) {
+            toast.success(successMessage);
+        }
+    }, []);
 
     return (
         <main className="min-h-screen bg-gray-950 text-gray-100">
@@ -119,6 +133,41 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                                 <p className="text-sm text-gray-400">Account Number: 1234567890</p>
                             </div>
                         )}
+
+                        <div className="mt-6">
+                            <label className="block text-sm font-medium text-gray-300 mb-4">Customer Information</label>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <input
+                                value={data.first_name}
+                                onChange={(event) => setData('first_name', event.target.value)}
+                                className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                placeholder="First Name"
+                            />
+                            <input
+                                value={data.last_name}
+                                onChange={(event) => setData('last_name', event.target.value)}
+                                className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                placeholder="Last Name"
+                            />
+                        </div>
+
+                        <input
+                            value={data.email}
+                            onChange={(event) => setData('email', event.target.value)}
+                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                            placeholder="Email"
+                            type="email"
+                        />
+
+                        <input
+                            value={data.phone}
+                            onChange={(event) => setData('phone', event.target.value)}
+                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                            placeholder="Phone Number"
+                            type="tel"
+                        />
 
                         <div className="mt-6">
                             <label className="block text-sm font-medium text-gray-300 mb-4">Shipping Information</label>

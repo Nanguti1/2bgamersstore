@@ -51,13 +51,29 @@ export default function AdminProductsIndex({ products }: { products: { data: Pro
                                         </span>
                                     </td>
                                     <td className="px-6 py-5 text-right">
-                                        <button
-                                            type="button"
-                                            className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
-                                            onClick={() => router.delete(`/admin/products/${product.id}`)}
-                                        >
-                                            Delete
-                                        </button>
+                                        <div className="flex items-center justify-end gap-2">
+                                            <button
+                                                type="button"
+                                                className="rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                                                onClick={() => router.visit(`/admin/products/${product.id}`)}
+                                            >
+                                                Show
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
+                                                onClick={() => router.visit(`/admin/products/${product.id}/edit`)}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
+                                                onClick={() => router.delete(`/admin/products/${product.id}`)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

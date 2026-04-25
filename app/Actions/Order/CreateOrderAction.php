@@ -10,10 +10,14 @@ use App\Models\Order;
 
 class CreateOrderAction
 {
-    public function execute(Cart $cart, Address $address, float $totalAmount, string $mpesaPhone, float $shippingAmount, float $taxAmount, string $paymentMethod): Order
+    public function execute(Cart $cart, Address $address, float $totalAmount, string $mpesaPhone, float $shippingAmount, float $taxAmount, string $paymentMethod, string $firstName, string $lastName, string $email, string $phone): Order
     {
         $order = Order::create([
             'user_id' => $cart->user_id,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email' => $email,
+            'phone' => $phone,
             'address_id' => $address->id,
             'mpesa_phone' => $mpesaPhone,
             'total_amount' => $totalAmount,

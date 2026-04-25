@@ -33,6 +33,10 @@ class CheckoutController extends Controller
             'country' => $request->validated('country'),
         ]);
 
+        $firstName = $request->validated('first_name');
+        $lastName = $request->validated('last_name');
+        $email = $request->validated('email');
+        $phone = $request->validated('phone');
         $mpesaPhone = $request->validated('mpesa_phone');
         $paymentMethod = $request->validated('payment_method');
         $shippingAmount = 650; // Fixed shipping cost
@@ -44,7 +48,11 @@ class CheckoutController extends Controller
             $mpesaPhone,
             $shippingAmount,
             $taxAmount,
-            $paymentMethod
+            $paymentMethod,
+            $firstName,
+            $lastName,
+            $email,
+            $phone
         );
 
         return redirect()->route('home')->with('success', 'Order placed successfully!');

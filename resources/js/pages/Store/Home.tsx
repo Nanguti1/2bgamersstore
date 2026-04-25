@@ -7,6 +7,9 @@ import { ProductHeadingSection } from '@/components/store/product-heading-sectio
 import { StatsSection } from '@/components/store/stats-section';
 import { TestimonialsSection } from '@/components/store/testimonials-section';
 import { Link } from '@inertiajs/react';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
+import { usePage } from '@inertiajs/react';
 
 interface Testimonial {
     id: number;
@@ -24,6 +27,15 @@ export default function Home({
     featuredProducts: Array<Record<string, never>>;
     testimonials: Testimonial[];
 }): JSX.Element {
+    const { props } = usePage();
+
+    // Show success message if redirected from successful checkout
+    useEffect(() => {
+        const flash = props as any;
+        if (flash.flash?.success) {
+            toast.success(flash.flash.success);
+        }
+    }, [props]);
     return (
         <main className="min-h-screen bg-gray-950 text-gray-100">
             <Navbar />

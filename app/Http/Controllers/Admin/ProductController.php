@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
+use App\Http\Requests\Admin\ToggleProductFeaturedRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
@@ -20,7 +21,7 @@ class ProductController extends Controller
         $this->authorize('viewAny', Product::class);
 
         return Inertia::render('Admin/Products/Index', [
-            'products' => Product::query()->with('category')->latest()->paginate(15),
+            'products' => Product::query()->with('category')->latest()->paginate(20)->withQueryString(),
         ]);
     }
 
@@ -106,6 +107,19 @@ class ProductController extends Controller
         $product->delete();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product deleted successfully.']);
+
+        return back();
+    }
+
+    public function toggleFeatured(ToggleProductFeaturedRequest $request, Product $product): RedirectResponse
+    {
+        $this->authorize('update', $product);
+
+        $product->update([
+            'featured' => $request->validated('featured'),
+        ]);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
 
         return back();
     }

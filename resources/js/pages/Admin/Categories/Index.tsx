@@ -6,7 +6,12 @@ type Category = {
     description: string | null;
 };
 
-export default function AdminCategoriesIndex({ categories }: { categories: { data: Category[] } }): JSX.Element {
+type PaginatedCategories = {
+    data: Category[];
+    links: Array<{ url: string | null; label: string; active: boolean }>;
+};
+
+export default function AdminCategoriesIndex({ categories }: { categories: PaginatedCategories }): JSX.Element {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         description: '',
@@ -34,7 +39,7 @@ export default function AdminCategoriesIndex({ categories }: { categories: { dat
                         <label className="text-sm font-medium text-slate-700">Description</label>
                         <input value={data.description} onChange={(event) => setData('description', event.target.value)} className="rounded-lg border border-zinc-300 px-3 py-2" />
                     </div>
-                    <button className="rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>
+                    <button className="cursor-pointer rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>
                         Add Category
                     </button>
                 </form>
@@ -57,21 +62,21 @@ export default function AdminCategoriesIndex({ categories }: { categories: { dat
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                                                className="cursor-pointer rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
                                                 onClick={() => router.visit(`/admin/categories/${category.id}`)}
                                             >
                                                 Show
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
+                                                className="cursor-pointer rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
                                                 onClick={() => router.visit(`/admin/categories/${category.id}/edit`)}
                                             >
                                                 Edit
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
+                                                className="cursor-pointer rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
                                                 onClick={() => router.delete(`/admin/categories/${category.id}`)}
                                             >
                                                 Delete
@@ -82,6 +87,18 @@ export default function AdminCategoriesIndex({ categories }: { categories: { dat
                             ))}
                         </tbody>
                     </table>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                    {categories.links.map((link, index) => (
+                        <button
+                            key={`${link.label}-${index}`}
+                            type="button"
+                            className={`cursor-pointer rounded-lg border px-3 py-1 text-sm ${link.active ? 'border-blue-700 bg-blue-700 text-white' : 'border-zinc-300 bg-white text-slate-800'}`}
+                            disabled={link.url === null}
+                            onClick={() => link.url && router.visit(link.url)}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
                 </div>
             </div>
         </main>

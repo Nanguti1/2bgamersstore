@@ -18,7 +18,12 @@ type User = {
     roles: Array<{ name: string }>;
 };
 
-export default function AdminAccessControlIndex({ users, roles, permissions }: { users: { data: User[] }; roles: Role[]; permissions: Permission[] }): JSX.Element {
+type PaginatedUsers = {
+    data: User[];
+    links: Array<{ url: string | null; label: string; active: boolean }>;
+};
+
+export default function AdminAccessControlIndex({ users, roles, permissions }: { users: PaginatedUsers; roles: Role[]; permissions: Permission[] }): JSX.Element {
     const roleForm = useForm({ name: '', permissions: [] as number[] });
     const permissionForm = useForm({ name: '' });
 
@@ -66,13 +71,13 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
                                 </label>
                             ))}
                         </div>
-                        <button className="mt-4 rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300">Create Role</button>
+                        <button className="mt-4 cursor-pointer rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300">Create Role</button>
                     </form>
 
                     <form onSubmit={submitPermission} className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                         <p className="font-semibold text-slate-900">Create Permission</p>
                         <input className="mt-3 w-full rounded-lg border border-zinc-300 px-3 py-2" value={permissionForm.data.name} onChange={(event) => permissionForm.setData('name', event.target.value)} placeholder="Permission name" />
-                        <button className="mt-4 rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300">Create Permission</button>
+                        <button className="mt-4 cursor-pointer rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300">Create Permission</button>
                     </form>
                 </div>
 
@@ -92,7 +97,7 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
                                         <td className="px-6 py-5 font-medium capitalize">{role.name}</td>
                                         <td className="px-6 py-5">{role.permissions_count}</td>
                                         <td className="px-6 py-5 text-right">
-                                            <button type="button" className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={() => router.delete(`/admin/access-control/roles/${role.id}`)}>Delete</button>
+                                            <button type="button" className="cursor-pointer rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={() => router.delete(`/admin/access-control/roles/${role.id}`)}>Delete</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -113,7 +118,7 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
                                     <tr key={permission.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
                                         <td className="px-6 py-5 font-medium">{permission.name}</td>
                                         <td className="px-6 py-5 text-right">
-                                            <button type="button" className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={() => router.delete(`/admin/access-control/permissions/${permission.id}`)}>Delete</button>
+                                            <button type="button" className="cursor-pointer rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={() => router.delete(`/admin/access-control/permissions/${permission.id}`)}>Delete</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -156,6 +161,18 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
                             })}
                         </tbody>
                     </table>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                    {users.links.map((link, index) => (
+                        <button
+                            key={`${link.label}-${index}`}
+                            type="button"
+                            className={`cursor-pointer rounded-lg border px-3 py-1 text-sm ${link.active ? 'border-blue-700 bg-blue-700 text-white' : 'border-zinc-300 bg-white text-slate-800'}`}
+                            disabled={link.url === null}
+                            onClick={() => link.url && router.visit(link.url)}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
                 </div>
             </div>
         </main>

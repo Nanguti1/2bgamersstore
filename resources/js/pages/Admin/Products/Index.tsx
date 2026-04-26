@@ -6,6 +6,7 @@ type Product = {
     price: string;
     stock: number;
     is_active: boolean;
+    featured: boolean;
     category?: {
         name: string;
     };
@@ -15,7 +16,12 @@ const formatKes = (value: number): string => {
     return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }).format(value);
 };
 
-export default function AdminProductsIndex({ products }: { products: { data: Product[] } }): JSX.Element {
+type PaginatedProducts = {
+    data: Product[];
+    links: Array<{ url: string | null; label: string; active: boolean }>;
+};
+
+export default function AdminProductsIndex({ products }: { products: PaginatedProducts }): JSX.Element {
     return (
         <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
             <div className="mx-auto max-w-7xl">
@@ -35,6 +41,7 @@ export default function AdminProductsIndex({ products }: { products: { data: Pro
                                 <th className="px-6 py-4 font-semibold">Price</th>
                                 <th className="px-6 py-4 font-semibold">Stock</th>
                                 <th className="px-6 py-4 font-semibold">Status</th>
+                                <th className="px-6 py-4 font-semibold">Featured</th>
                                 <th className="px-6 py-4 text-right font-semibold">Actions</th>
                             </tr>
                         </thead>
@@ -50,25 +57,34 @@ export default function AdminProductsIndex({ products }: { products: { data: Pro
                                             {product.is_active ? 'Active' : 'Inactive'}
                                         </span>
                                     </td>
+                                    <td className="px-6 py-5">
+                                        <button
+                                            type="button"
+                                            className={`cursor-pointer rounded-full px-3 py-1 text-xs font-semibold ${product.featured ? 'bg-yellow-100 text-yellow-700' : 'bg-zinc-200 text-zinc-700'}`}
+                                            onClick={() => router.patch(`/admin/products/${product.id}/featured`, { featured: !product.featured })}
+                                        >
+                                            {product.featured ? 'Featured' : 'Not Featured'}
+                                        </button>
+                                    </td>
                                     <td className="px-6 py-5 text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                                                className="cursor-pointer rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
                                                 onClick={() => router.visit(`/admin/products/${product.id}`)}
                                             >
                                                 Show
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
+                                                className="cursor-pointer rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
                                                 onClick={() => router.visit(`/admin/products/${product.id}/edit`)}
                                             >
                                                 Edit
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
+                                                className="cursor-pointer rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
                                                 onClick={() => router.delete(`/admin/products/${product.id}`)}
                                             >
                                                 Delete
@@ -79,6 +95,18 @@ export default function AdminProductsIndex({ products }: { products: { data: Pro
                             ))}
                         </tbody>
                     </table>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                    {products.links.map((link, index) => (
+                        <button
+                            key={`${link.label}-${index}`}
+                            type="button"
+                            className={`cursor-pointer rounded-lg border px-3 py-1 text-sm ${link.active ? 'border-blue-700 bg-blue-700 text-white' : 'border-zinc-300 bg-white text-slate-800'}`}
+                            disabled={link.url === null}
+                            onClick={() => link.url && router.visit(link.url)}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
                 </div>
             </div>
         </main>

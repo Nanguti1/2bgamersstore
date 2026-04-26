@@ -7,11 +7,18 @@ export default function AdminModelsShow({ model }: { model: any }): JSX.Element 
                 <div className="mb-6">
                     <button
                         onClick={() => router.visit('/admin/models')}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="cursor-pointer text-blue-600 hover:text-blue-800"
                     >
                         ← Back to Models
                     </button>
                 </div>
+                <button
+                    type="button"
+                    onClick={() => router.visit(`/admin/models/${model.id}/edit`)}
+                    className="mb-6 cursor-pointer rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+                >
+                    Edit Model
+                </button>
                 <h1 className="text-3xl font-semibold text-slate-900 mb-6">Model Details</h1>
                 <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                     <div className="grid gap-4">

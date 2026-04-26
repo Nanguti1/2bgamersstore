@@ -18,7 +18,7 @@ class ManagementController extends Controller
     public function categories(): Response
     {
         return Inertia::render('Admin/Categories/Index', [
-            'categories' => Category::query()->latest()->paginate(20),
+            'categories' => Category::query()->latest()->paginate(20)->withQueryString(),
         ]);
     }
 
@@ -38,10 +38,14 @@ class ManagementController extends Controller
 
     public function storeCategory(Request $request): RedirectResponse
     {
-        Category::query()->create($request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:categories,name'],
             'description' => ['nullable', 'string'],
-        ]));
+        ]);
+
+        $validated['slug'] = Category::generateUniqueSlug($validated['name']);
+
+        Category::query()->create($validated);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Category created successfully.']);
 
@@ -50,10 +54,16 @@ class ManagementController extends Controller
 
     public function updateCategory(Request $request, Category $category): RedirectResponse
     {
-        $category->update($request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:categories,name,'.$category->id],
             'description' => ['nullable', 'string'],
-        ]));
+        ]);
+
+        if ($validated['name'] !== $category->name) {
+            $validated['slug'] = Category::generateUniqueSlug($validated['name'], $category->id);
+        }
+
+        $category->update($validated);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Category updated successfully.']);
 
@@ -72,7 +82,7 @@ class ManagementController extends Controller
     public function models(): Response
     {
         return Inertia::render('Admin/Models/Index', [
-            'models' => HardwareModel::query()->with('category')->latest()->paginate(20),
+            'models' => HardwareModel::query()->with('category')->latest()->paginate(20)->withQueryString(),
             'categories' => Category::query()->orderBy('name')->get(),
         ]);
     }
@@ -131,7 +141,7 @@ class ManagementController extends Controller
     public function customers(): Response
     {
         return Inertia::render('Admin/Customers/Index', [
-            'customers' => User::query()->where('is_admin', false)->latest()->paginate(20),
+            'customers' => User::query()->where('is_admin', false)->latest()->paginate(20)->withQueryString(),
         ]);
     }
 
@@ -195,7 +205,7 @@ class ManagementController extends Controller
     public function accessControl(): Response
     {
         return Inertia::render('Admin/AccessControl/Index', [
-            'users' => User::query()->with('roles')->latest()->paginate(20),
+            'users' => User::query()->with('roles')->latest()->paginate(20)->withQueryString(),
             'roles' => Role::query()->withCount('permissions')->orderBy('name')->get(),
             'permissions' => Permission::query()->orderBy('name')->get(),
         ]);

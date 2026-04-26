@@ -25,6 +25,7 @@ class UpdateProductRequest extends FormRequest
             'gallery' => ['nullable', 'array', 'max:4'],
             'gallery.*' => ['image', 'max:4096'],
             'is_active' => ['required', 'boolean'],
+            'featured' => ['required', 'boolean'],
         ];
     }
 }

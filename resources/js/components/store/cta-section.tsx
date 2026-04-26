@@ -1,5 +1,4 @@
 import { Link } from '@inertiajs/react';
-import { home } from '@/routes';
 
 export function CtaSection() {
     return (
@@ -22,7 +21,7 @@ export function CtaSection() {
                             JOIN OUR NEWSLETTER
                         </button>
                         <Link
-                            href={home()}
+                            href="/products"
                             className="rounded-lg border-2 border-white px-8 py-3 font-semibold text-white transition hover:bg-white/10"
                         >
                             SHOP NOW

@@ -17,6 +17,11 @@ class ProductPolicy
         return $user->isAdmin();
     }
 
+    public function view(User $user, Product $product): bool
+    {
+        return $user->isAdmin();
+    }
+
     public function update(User $user, Product $product): bool
     {
         return $user->isAdmin();

@@ -23,6 +23,7 @@ class Product extends Model
         'image',
         'gallery',
         'is_active',
+        'featured',
     ];
 
     protected function casts(): array
@@ -31,6 +32,7 @@ class Product extends Model
             'price' => 'decimal:2',
             'gallery' => 'array',
             'is_active' => 'boolean',
+            'featured' => 'boolean',
         ];
     }
 

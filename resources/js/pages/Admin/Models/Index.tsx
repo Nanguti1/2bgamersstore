@@ -12,7 +12,12 @@ type HardwareModel = {
     category: Category;
 };
 
-export default function AdminModelsIndex({ models, categories }: { models: { data: HardwareModel[] }; categories: Category[] }): JSX.Element {
+type PaginatedModels = {
+    data: HardwareModel[];
+    links: Array<{ url: string | null; label: string; active: boolean }>;
+};
+
+export default function AdminModelsIndex({ models, categories }: { models: PaginatedModels; categories: Category[] }): JSX.Element {
     const { data, setData, post, processing, errors, reset } = useForm({
         category_id: categories[0]?.id ?? '',
         name: '',
@@ -49,7 +54,7 @@ export default function AdminModelsIndex({ models, categories }: { models: { dat
                         <label className="text-sm font-medium text-slate-700">Description</label>
                         <input value={data.description} onChange={(event) => setData('description', event.target.value)} className="rounded-lg border border-zinc-300 px-3 py-2" />
                     </div>
-                    <button className="rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>Add Model</button>
+                    <button className="cursor-pointer rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>Add Model</button>
                 </form>
 
                 <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
@@ -72,21 +77,21 @@ export default function AdminModelsIndex({ models, categories }: { models: { dat
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                                                className="cursor-pointer rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
                                                 onClick={() => router.visit(`/admin/models/${item.id}`)}
                                             >
                                                 Show
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
+                                                className="cursor-pointer rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
                                                 onClick={() => router.visit(`/admin/models/${item.id}/edit`)}
                                             >
                                                 Edit
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
+                                                className="cursor-pointer rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
                                                 onClick={() => router.delete(`/admin/models/${item.id}`)}
                                             >
                                                 Delete
@@ -97,6 +102,18 @@ export default function AdminModelsIndex({ models, categories }: { models: { dat
                             ))}
                         </tbody>
                     </table>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                    {models.links.map((link, index) => (
+                        <button
+                            key={`${link.label}-${index}`}
+                            type="button"
+                            className={`cursor-pointer rounded-lg border px-3 py-1 text-sm ${link.active ? 'border-blue-700 bg-blue-700 text-white' : 'border-zinc-300 bg-white text-slate-800'}`}
+                            disabled={link.url === null}
+                            onClick={() => link.url && router.visit(link.url)}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
                 </div>
             </div>
         </main>

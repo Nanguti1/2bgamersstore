@@ -16,7 +16,7 @@ class OrderController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Orders/Index', [
-            'orders' => Order::query()->with(['user', 'items.product', 'payment'])->latest()->paginate(20),
+            'orders' => Order::query()->with(['user', 'items.product', 'payment'])->latest()->paginate(20)->withQueryString(),
             'statuses' => array_map(static fn (OrderStatus $status): string => $status->value, OrderStatus::cases()),
         ]);
     }

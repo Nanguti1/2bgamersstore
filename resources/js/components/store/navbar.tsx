@@ -1,17 +1,17 @@
-import { Link } from '@inertiajs/react';
-import { ShoppingCart, Search, ChevronDown, Monitor, Laptop, Gamepad2, Headphones, ArrowRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Link, router } from '@inertiajs/react';
+import { ArrowRight, ChevronDown, Gamepad2, Headphones, Laptop, Monitor, Search, ShoppingCart } from 'lucide-react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 
 export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreName?: boolean }): JSX.Element {
     const [exploreDropdown, setExploreDropdown] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const { cartCount, updateCartCount } = useCart();
 
-    // Fetch cart count on mount
     useEffect(() => {
         fetch('/cart-count')
-            .then(res => res.json())
-            .then(data => updateCartCount(data.count))
+            .then((res) => res.json())
+            .then((data) => updateCartCount(data.count))
             .catch(() => {});
     }, [updateCartCount]);
 
@@ -23,58 +23,69 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
         { name: 'Gaming Headsets', icon: Headphones },
     ];
 
+    const submitSearch = (event: FormEvent<HTMLFormElement>): void => {
+        event.preventDefault();
+
+        router.get(
+            '/products',
+            {
+                search: searchTerm.trim() === '' ? undefined : searchTerm.trim(),
+            },
+            {
+                preserveState: false,
+                preserveScroll: false,
+            },
+        );
+    };
+
     return (
         <>
-            {/* Top Bar */}
-            <div className="bg-gradient-to-r from-blue-900 to-blue-800 text-white text-xs py-2">
-                <div className="mx-auto max-w-screen-2xl px-8 flex justify-between items-center">
+            <div className="bg-gradient-to-r from-blue-900 to-blue-800 py-2 text-xs text-white">
+                <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-8">
                     <div className="flex items-center gap-4">
                         <span className="font-semibold">VISIT OUR STORE:</span>
                         <span>Luthuli Avenue Gaberone Plaza, First Floor Luthuli Ave, Nairobi</span>
                     </div>
-                    <div className="hidden md:flex items-center gap-4">
-                        <span className="bg-yellow-500 text-black px-3 py-1 rounded font-semibold">
+                    <div className="hidden items-center gap-4 md:flex">
+                        <span className="rounded bg-yellow-500 px-3 py-1 font-semibold text-black">
                             FREE SETUP CONSULTATION FOR ALL VISITORS!
                         </span>
                     </div>
                 </div>
             </div>
 
-            {/* Main Navbar */}
-            <header className="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
-                <nav className="mx-auto max-w-screen-2xl px-8">
-                    <div className="flex items-center justify-between h-16">
-                        {/* Logo */}
+            <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950">
+                <nav className="mx-auto max-w-screen-2xl px-4 md:px-8">
+                    <div className="flex h-16 items-center justify-between gap-3">
                         <Link href="/" className="flex items-center gap-2">
-                            <span className="text-2xl font-black text-white tracking-tight">{showHomepageStoreName ? '2B Gamers Store' : '2B Gamers'}</span>
+                            <span className="text-2xl font-black tracking-tight text-white">{showHomepageStoreName ? '2B Gamers Store' : '2B Gamers'}</span>
                         </Link>
 
-                        {/* Navigation Links */}
-                        <div className="hidden lg:flex items-center gap-8">
-                            <Link href="/" className="text-gray-300 hover:text-white transition font-medium">
+                        <div className="hidden items-center gap-8 lg:flex">
+                            <Link href="/" className="font-medium text-gray-300 transition hover:text-white">
                                 Home
                             </Link>
 
-                            {/* Explore Products Dropdown */}
-                            <div 
+                            <div
                                 className="relative"
                                 onMouseEnter={() => setExploreDropdown(true)}
                                 onMouseLeave={() => setExploreDropdown(false)}
                             >
-                                <button className="flex items-center gap-1 text-gray-300 hover:text-white transition font-medium">
+                                <button className="flex items-center gap-1 font-medium text-gray-300 transition hover:text-white">
                                     Explore Products
                                     <ChevronDown className="size-4" />
                                 </button>
 
                                 {exploreDropdown && (
-                                    <div className="absolute top-full left-0 mt-2 w-72 bg-zinc-900 border border-zinc-700 rounded-lg shadow-2xl overflow-hidden">
+                                    <div className="absolute top-full left-0 mt-2 w-72 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900 shadow-2xl">
                                         {categories.map((category) => {
                                             const Icon = category.icon;
+
                                             return (
                                                 <Link
                                                     key={category.name}
-                                                    href={`/products?category=${category.name.toLowerCase().replace(' ', '-')}`}
-                                                    className="flex items-center justify-between px-4 py-3 hover:bg-zinc-800 transition border-b border-zinc-800 last:border-0"
+                                                    href={`/products?category=${category.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                                    className="flex items-center justify-between border-b border-zinc-800 px-4 py-3 transition hover:bg-zinc-800 last:border-0"
                                                 >
                                                     <div className="flex items-center gap-3">
                                                         <Icon className="size-5 text-blue-400" />
@@ -84,10 +95,10 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                                                 </Link>
                                             );
                                         })}
-                                        <div className="px-4 py-3 bg-zinc-800/50">
+                                        <div className="bg-zinc-800/50 px-4 py-3">
                                             <Link
                                                 href="/products"
-                                                className="text-sm text-blue-400 hover:text-blue-300 font-medium"
+                                                className="text-sm font-medium text-blue-400 hover:text-blue-300"
                                             >
                                                 View all our store →
                                             </Link>
@@ -96,38 +107,55 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                                 )}
                             </div>
 
-                            <Link href="/store" className="text-gray-300 hover:text-white transition font-medium">
+                            <Link href="/store" className="font-medium text-gray-300 transition hover:text-white">
                                 Visit Store
                             </Link>
-                            <Link href="/consultation" className="text-gray-300 hover:text-white transition font-medium">
+                            <Link href="/consultation" className="font-medium text-gray-300 transition hover:text-white">
                                 Setup Consultation
                             </Link>
-                            <Link href="/community" className="text-gray-300 hover:text-white transition font-medium">
+                            <Link href="/community" className="font-medium text-gray-300 transition hover:text-white">
                                 Community
                             </Link>
                         </div>
 
-                        {/* Right Side */}
-                        <div className="flex items-center gap-4">
-                            <button className="p-2 text-gray-300 hover:text-white transition">
-                                <Search className="size-5" />
-                            </button>
+                        <div className="flex items-center gap-3 md:gap-4">
+                            <form onSubmit={submitSearch} className="hidden items-center rounded-lg border border-zinc-700 bg-zinc-900 px-2 md:flex">
+                                <Search className="size-4 text-zinc-400" />
+                                <input
+                                    value={searchTerm}
+                                    onChange={(event) => setSearchTerm(event.target.value)}
+                                    placeholder="Search products"
+                                    className="w-36 bg-transparent px-2 py-1.5 text-sm text-zinc-100 outline-none lg:w-44"
+                                />
+                            </form>
                             <Link
                                 href="/events"
-                                className="hidden md:inline-flex items-center bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg hover:shadow-green-500/50 transition"
+                                className="hidden items-center rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-4 py-2 font-semibold text-white transition hover:shadow-lg hover:shadow-green-500/50 md:inline-flex"
                             >
                                 Today's Events
                             </Link>
-                            <Link href="/cart" className="relative p-2 text-gray-300 hover:text-white transition">
+                            <Link href="/cart" className="relative p-2 text-gray-300 transition hover:text-white">
                                 <ShoppingCart className="size-5" />
                                 {cartCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                                         {cartCount}
                                     </span>
                                 )}
                             </Link>
                         </div>
                     </div>
+
+                    <form onSubmit={submitSearch} className="flex pb-4 md:hidden">
+                        <div className="flex w-full items-center rounded-lg border border-zinc-700 bg-zinc-900 px-3">
+                            <Search className="size-4 text-zinc-400" />
+                            <input
+                                value={searchTerm}
+                                onChange={(event) => setSearchTerm(event.target.value)}
+                                placeholder="Search products"
+                                className="w-full bg-transparent px-2 py-2 text-sm text-zinc-100 outline-none"
+                            />
+                        </div>
+                    </form>
                 </nav>
             </header>
         </>

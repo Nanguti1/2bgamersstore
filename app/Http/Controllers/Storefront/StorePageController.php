@@ -28,22 +28,35 @@ class StorePageController extends Controller
 
         abort_unless(isset($titles[$page]), 404);
 
+        $user = request()->user();
+
         return Inertia::render('Store/Info', [
             'title' => $titles[$page],
             'page' => $page,
             'consultationPrefill' => [
-                'name' => request()->user()?->name,
-                'email' => request()->user()?->email,
+                'name' => $user?->name,
+                'email' => $user?->email,
             ],
+            'account' => $page === 'account' && $user ? [
+                'user' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ],
+                'orders' => $user->orders()
+                    ->with(['items.product:id,name,slug,image'])
+                    ->latest('id')
+                    ->paginate(8)
+                    ->withQueryString(),
+            ] : null,
             'community' => $page === 'community' ? [
                 'products' => Product::query()
                     ->where('is_active', true)
-                    ->latest()
+                    ->latest('id')
                     ->paginate(8, ['id', 'name', 'slug', 'price', 'image'], 'products_page')
                     ->withQueryString(),
                 'reviews' => ProductReview::query()
                     ->with(['product:id,name,slug,image', 'user:id,name'])
-                    ->latest()
+                    ->latest('id')
                     ->paginate(8, ['id', 'product_id', 'user_id', 'rating', 'comment', 'created_at'], 'reviews_page')
                     ->withQueryString(),
             ] : null,

@@ -26,6 +26,18 @@ export default function AdminProductsEdit({ product, categories }: { product: an
         return data.gallery.map((file) => URL.createObjectURL(file));
     }, [data.gallery]);
 
+    const primaryImagePreview = useMemo(() => {
+        if (data.image) {
+            return URL.createObjectURL(data.image);
+        }
+
+        if (!data.remove_primary_image) {
+            return product.image;
+        }
+
+        return null;
+    }, [data.image, data.remove_primary_image, product.image]);
+
     return (
         <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
             <div className="mx-auto max-w-7xl">
@@ -92,9 +104,7 @@ export default function AdminProductsEdit({ product, categories }: { product: an
                         </div>
                         <div className="md:col-span-2 rounded-lg border border-zinc-200 p-4">
                             <p className="text-sm font-medium text-slate-700">Primary Image</p>
-                            {product.image && !data.remove_primary_image && (
-                                <img src={product.image} alt={product.name} className="mt-2 h-24 w-24 rounded border object-cover" />
-                            )}
+                            {primaryImagePreview && <img src={primaryImagePreview} alt={product.name} className="mt-2 h-24 w-24 rounded border object-cover" />}
                             <input
                                 type="file"
                                 accept="image/*"

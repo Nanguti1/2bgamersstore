@@ -1,15 +1,17 @@
 <?php
 
+use App\Http\Controllers\Admin\ConsultationAppointmentController as AdminConsultationAppointmentController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ManagementController as AdminManagementController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\CheckoutController;
+use App\Http\Controllers\Storefront\ConsultationAppointmentController;
 use App\Http\Controllers\Storefront\HomeController;
 use App\Http\Controllers\Storefront\ProductController;
-use App\Http\Controllers\Storefront\StorePageController;
 use App\Http\Controllers\Storefront\ProductReviewController;
+use App\Http\Controllers\Storefront\StorePageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -18,6 +20,7 @@ Route::get('/products/{slug}', [ProductController::class, 'show'])->name('produc
 
 Route::get('/store', fn () => app(StorePageController::class)('store'))->name('store.page');
 Route::get('/consultation', fn () => app(StorePageController::class)('consultation'))->name('consultation.page');
+Route::post('/consultation/appointments', [ConsultationAppointmentController::class, 'store'])->name('consultation.appointments.store');
 Route::get('/community', fn () => app(StorePageController::class)('community'))->name('community.page');
 Route::get('/events', fn () => app(StorePageController::class)('events'))->name('events.page');
 Route::get('/about', fn () => app(StorePageController::class)('about'))->name('about.page');
@@ -59,6 +62,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         Route::get('/orders/{order}/edit', [AdminOrderController::class, 'edit'])->name('orders.edit');
         Route::patch('/orders/{order}', [AdminOrderController::class, 'update'])->name('orders.update');
         Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+        Route::get('/consultation-appointments', [AdminConsultationAppointmentController::class, 'index'])->name('consultation-appointments.index');
+        Route::patch('/consultation-appointments/{appointment}/status', [AdminConsultationAppointmentController::class, 'updateStatus'])->name('consultation-appointments.status');
         Route::get('/categories', [AdminManagementController::class, 'categories'])->name('categories.index');
         Route::get('/categories/{category}', [AdminManagementController::class, 'showCategory'])->name('categories.show');
         Route::get('/categories/{category}/edit', [AdminManagementController::class, 'editCategory'])->name('categories.edit');

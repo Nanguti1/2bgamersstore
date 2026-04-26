@@ -7,6 +7,7 @@ import {
     ShoppingCart,
     Tags,
     Users,
+    CalendarCheck2,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
@@ -53,6 +54,11 @@ const mainNavItems: NavItem[] = [
         title: 'Orders',
         href: '/admin/orders',
         icon: ShoppingCart,
+    },
+    {
+        title: 'Consultations',
+        href: '/admin/consultation-appointments',
+        icon: CalendarCheck2,
     },
     {
         title: 'Roles & Permissions',

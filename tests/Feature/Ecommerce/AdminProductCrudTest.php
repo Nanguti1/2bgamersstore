@@ -3,6 +3,7 @@
 namespace Tests\Feature\Ecommerce;
 
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -42,9 +43,10 @@ class AdminProductCrudTest extends TestCase
                 UploadedFile::fake()->image('gallery-2.jpg'),
             ],
             'is_active' => true,
+            'featured' => true,
         ])->assertRedirect(route('admin.products.index'));
 
-        $this->assertDatabaseHas('products', ['slug' => 'pro-controller']);
+        $this->assertDatabaseHas('products', ['slug' => 'pro-controller', 'featured' => true]);
     }
 
     public function test_product_gallery_cannot_exceed_four_images(): void
@@ -70,6 +72,29 @@ class AdminProductCrudTest extends TestCase
                 UploadedFile::fake()->image('gallery-5.jpg'),
             ],
             'is_active' => true,
+            'featured' => false,
         ])->assertSessionHasErrors('gallery');
+    }
+
+    public function test_admin_can_view_product_details_page(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $product = Product::factory()->create();
+
+        $this->actingAs($admin)
+            ->get(route('admin.products.show', $product))
+            ->assertOk();
+    }
+
+    public function test_admin_can_toggle_featured_status_from_list(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $product = Product::factory()->create(['featured' => false]);
+
+        $this->actingAs($admin)
+            ->patch(route('admin.products.featured', $product))
+            ->assertRedirect();
+
+        $this->assertTrue((bool) $product->fresh()->featured);
     }
 }

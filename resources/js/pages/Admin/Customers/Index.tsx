@@ -6,7 +6,12 @@ type Customer = {
     email: string;
 };
 
-export default function AdminCustomersIndex({ customers }: { customers: { data: Customer[] } }): JSX.Element {
+type PaginatedCustomers = {
+    data: Customer[];
+    links: Array<{ url: string | null; label: string; active: boolean }>;
+};
+
+export default function AdminCustomersIndex({ customers }: { customers: PaginatedCustomers }): JSX.Element {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -41,7 +46,7 @@ export default function AdminCustomersIndex({ customers }: { customers: { data: 
                         <input type="password" value={data.password} onChange={(event) => setData('password', event.target.value)} className="rounded-lg border border-zinc-300 px-3 py-2" />
                         {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
                     </div>
-                    <button className="rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>+ New Client</button>
+                    <button className="cursor-pointer rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>+ New Client</button>
                 </form>
 
                 <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
@@ -62,21 +67,21 @@ export default function AdminCustomersIndex({ customers }: { customers: { data: 
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                                                className="cursor-pointer rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
                                                 onClick={() => router.visit(`/admin/customers/${customer.id}`)}
                                             >
                                                 Show
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
+                                                className="cursor-pointer rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
                                                 onClick={() => router.visit(`/admin/customers/${customer.id}/edit`)}
                                             >
                                                 Edit
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
+                                                className="cursor-pointer rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
                                                 onClick={() => router.delete(`/admin/customers/${customer.id}`)}
                                             >
                                                 Delete
@@ -87,6 +92,18 @@ export default function AdminCustomersIndex({ customers }: { customers: { data: 
                             ))}
                         </tbody>
                     </table>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                    {customers.links.map((link, index) => (
+                        <button
+                            key={`${link.label}-${index}`}
+                            type="button"
+                            className={`cursor-pointer rounded-lg border px-3 py-1 text-sm ${link.active ? 'border-blue-700 bg-blue-700 text-white' : 'border-zinc-300 bg-white text-slate-800'}`}
+                            disabled={link.url === null}
+                            onClick={() => link.url && router.visit(link.url)}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
                 </div>
             </div>
         </main>

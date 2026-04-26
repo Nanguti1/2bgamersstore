@@ -15,6 +15,7 @@ type ProductFormData = {
     image: File | null;
     gallery: File[];
     is_active: boolean;
+    featured: boolean;
 };
 
 const MAX_GALLERY_ITEMS = 4;
@@ -30,6 +31,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
         image: null,
         gallery: [],
         is_active: true,
+        featured: false,
     });
 
     const submit = (event: React.FormEvent<HTMLFormElement>): void => {
@@ -117,7 +119,12 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                     Active Product
                 </label>
 
-                <button disabled={processing} className="w-fit rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60">
+                <label className="inline-flex items-center gap-2 text-sm font-medium">
+                    <input type="checkbox" checked={data.featured} onChange={(event) => setData('featured', event.target.checked)} />
+                    Featured Product
+                </label>
+
+                <button disabled={processing} className="w-fit cursor-pointer rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60">
                     Save
                 </button>
             </form>

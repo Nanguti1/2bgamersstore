@@ -1,18 +1,20 @@
 import { Link, router, useForm } from '@inertiajs/react';
 
 export default function AdminProductsEdit({ product, categories }: { product: any; categories: any[] }): JSX.Element {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, patch, processing, errors } = useForm({
+        slug: product.slug,
         name: product.name,
         description: product.description || '',
         price: product.price,
         stock: product.stock,
         category_id: product.category_id,
         is_active: product.is_active,
+        featured: product.featured,
     });
 
     const submit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
-        put(`/admin/products/${product.id}`);
+        patch(`/admin/products/${product.id}`);
     };
 
     return (
@@ -90,6 +92,17 @@ export default function AdminProductsEdit({ product, categories }: { product: an
                                 <span className="text-sm font-medium text-slate-700">Active</span>
                             </label>
                         </div>
+                        <div className="md:col-span-2">
+                            <label className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    checked={data.featured}
+                                    onChange={(event) => setData('featured', event.target.checked)}
+                                    className="rounded border-zinc-300"
+                                />
+                                <span className="text-sm font-medium text-slate-700">Featured</span>
+                            </label>
+                        </div>
                     </div>
                     <div className="mt-6 flex justify-end gap-3">
                         <Link
@@ -101,7 +114,7 @@ export default function AdminProductsEdit({ product, categories }: { product: an
                         <button
                             type="submit"
                             disabled={processing}
-                            className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                            className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
                         >
                             {processing ? 'Saving...' : 'Save Changes'}
                         </button>

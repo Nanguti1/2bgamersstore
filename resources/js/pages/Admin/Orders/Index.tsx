@@ -14,7 +14,12 @@ const formatKes = (value: number): string => {
     return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }).format(value);
 };
 
-export default function AdminOrdersIndex({ orders, statuses }: { orders: { data: Order[] }; statuses: string[] }): JSX.Element {
+type PaginatedOrders = {
+    data: Order[];
+    links: Array<{ url: string | null; label: string; active: boolean }>;
+};
+
+export default function AdminOrdersIndex({ orders, statuses }: { orders: PaginatedOrders; statuses: string[] }): JSX.Element {
     return (
         <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
             <div className="mx-auto max-w-7xl">
@@ -55,21 +60,21 @@ export default function AdminOrdersIndex({ orders, statuses }: { orders: { data:
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                                                className="cursor-pointer rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
                                                 onClick={() => router.visit(`/admin/orders/${order.id}`)}
                                             >
                                                 Show
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
+                                                className="cursor-pointer rounded-lg bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700"
                                                 onClick={() => router.visit(`/admin/orders/${order.id}/edit`)}
                                             >
                                                 Edit
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
+                                                className="cursor-pointer rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
                                                 onClick={() => router.delete(`/admin/orders/${order.id}`)}
                                             >
                                                 Delete
@@ -80,6 +85,18 @@ export default function AdminOrdersIndex({ orders, statuses }: { orders: { data:
                             ))}
                         </tbody>
                     </table>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                    {orders.links.map((link, index) => (
+                        <button
+                            key={`${link.label}-${index}`}
+                            type="button"
+                            className={`cursor-pointer rounded-lg border px-3 py-1 text-sm ${link.active ? 'border-blue-700 bg-blue-700 text-white' : 'border-zinc-300 bg-white text-slate-800'}`}
+                            disabled={link.url === null}
+                            onClick={() => link.url && router.visit(link.url)}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
                 </div>
             </div>
         </main>

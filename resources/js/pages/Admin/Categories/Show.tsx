@@ -7,11 +7,18 @@ export default function AdminCategoriesShow({ category }: { category: any }): JS
                 <div className="mb-6">
                     <button
                         onClick={() => router.visit('/admin/categories')}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="cursor-pointer text-blue-600 hover:text-blue-800"
                     >
                         ← Back to Categories
                     </button>
                 </div>
+                <button
+                    type="button"
+                    onClick={() => router.visit(`/admin/categories/${category.id}/edit`)}
+                    className="mb-6 cursor-pointer rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+                >
+                    Edit Category
+                </button>
                 <h1 className="text-3xl font-semibold text-slate-900 mb-6">Category Details</h1>
                 <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                     <div className="grid gap-4">

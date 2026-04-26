@@ -25,6 +25,7 @@ class ProductFactory extends Factory
                 'https://images.unsplash.com/photo-1598550476439-6847785fcea6',
             ],
             'is_active' => true,
+            'featured' => false,
         ];
     }
 }

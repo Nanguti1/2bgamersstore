@@ -20,7 +20,7 @@ class ProductController extends Controller
         $this->authorize('viewAny', Product::class);
 
         return Inertia::render('Admin/Products/Index', [
-            'products' => Product::query()->with('category')->latest()->paginate(15),
+            'products' => Product::query()->with('category')->latest()->paginate(20)->withQueryString(),
         ]);
     }
 
@@ -106,6 +106,19 @@ class ProductController extends Controller
         $product->delete();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product deleted successfully.']);
+
+        return back();
+    }
+
+    public function toggleFeatured(Product $product): RedirectResponse
+    {
+        $this->authorize('update', $product);
+
+        $product->update([
+            'featured' => ! $product->featured,
+        ]);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
 
         return back();
     }

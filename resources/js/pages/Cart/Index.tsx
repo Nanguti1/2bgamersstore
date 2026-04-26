@@ -1,5 +1,6 @@
 import { Footer } from '@/components/store/footer';
 import { Navbar } from '@/components/store/navbar';
+import { ThinHero } from '@/components/store/thin-hero';
 import { Link, router } from '@inertiajs/react';
 
 interface CartItem {
@@ -32,11 +33,10 @@ export default function CartIndex({ cart, total }: { cart: CartData; total: numb
     const orderTotal = total + shipping + tax;
 
     return (
-        <main className="min-h-screen bg-gray-950 text-gray-100">
+        <main className="min-h-screen bg-[#f4f4f5] text-[#111827]">
             <Navbar />
+            <ThinHero title="Shopping Cart" />
             <section className="mx-auto max-w-screen-2xl px-8 py-16">
-                <h1 className="text-4xl font-semibold tracking-tight text-white">Shopping Cart</h1>
-
                 <div className="mt-10 space-y-0 overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900">
                     {cart.items.map((item) => (
                         <div key={item.id} className="grid gap-5 border-b border-zinc-700 p-6 last:border-b-0 md:grid-cols-[120px_1fr_auto] md:items-start">

@@ -22,8 +22,11 @@ class UpdateProductRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
             'image' => ['nullable', 'image', 'max:4096'],
+            'remove_primary_image' => ['nullable', 'boolean'],
             'gallery' => ['nullable', 'array', 'max:4'],
             'gallery.*' => ['image', 'max:4096'],
+            'existing_gallery' => ['nullable', 'array', 'max:4'],
+            'existing_gallery.*' => ['string', 'max:2048'],
             'is_active' => ['required', 'boolean'],
             'featured' => ['required', 'boolean'],
         ];

@@ -1,5 +1,6 @@
 import { Footer } from '@/components/store/footer';
 import { Navbar } from '@/components/store/navbar';
+import { ThinHero } from '@/components/store/thin-hero';
 import { useForm, router } from '@inertiajs/react';
 
 interface CartItem {
@@ -45,8 +46,9 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
     });
 
     return (
-        <main className="min-h-screen bg-gray-950 text-gray-100">
+        <main className="min-h-screen bg-[#f4f4f5] text-[#111827]">
             <Navbar />
+            <ThinHero title="Checkout" />
 
             <section className="mx-auto grid max-w-screen-2xl gap-0 border-x border-zinc-800 bg-zinc-900 md:grid-cols-[1.5fr_1fr] my-16 px-8">
                 <div className="border-b border-zinc-800 p-8 md:border-r md:border-b-0 md:p-12">

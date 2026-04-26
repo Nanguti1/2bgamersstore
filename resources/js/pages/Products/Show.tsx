@@ -1,6 +1,9 @@
 import { Footer } from '@/components/store/footer';
 import { Navbar } from '@/components/store/navbar';
+import { ThinHero } from '@/components/store/thin-hero';
 import { Link, useForm } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
+import { useCart } from '@/contexts/CartContext';
 
 interface Review {
     id: number;
@@ -20,6 +23,7 @@ interface Product {
     description: string;
     price: number;
     image: string | null;
+    gallery?: string[] | null;
 }
 
 const formatKes = (value: number): string => {
@@ -41,13 +45,35 @@ export default function ProductShow({
 }): JSX.Element {
     const addToCartForm = useForm({ product_id: product.id, quantity: 1 });
     const reviewForm = useForm({ rating: 5, comment: '' });
+    const { incrementCart } = useCart();
+    const productImages = useMemo(() => {
+        const images = [product.image, ...(product.gallery ?? [])].filter((image): image is string => Boolean(image));
+
+        return images.length > 0 ? images : ['https://placehold.co/700x500'];
+    }, [product.gallery, product.image]);
+    const [activeImage, setActiveImage] = useState(productImages[0]);
 
     return (
         <main className="min-h-screen bg-[#f4f4f5] text-[#111827]">
             <Navbar />
+            <ThinHero title={product.name} />
 
             <section className="mx-auto grid max-w-6xl gap-10 px-6 py-12 md:grid-cols-2">
-                <img src={product.image ?? 'https://placehold.co/700x500'} alt={product.name} className="w-full rounded-xl border border-zinc-200 object-cover" />
+                <div>
+                    <img src={activeImage} alt={product.name} className="w-full rounded-xl border border-zinc-200 object-cover" />
+                    <div className="mt-4 grid grid-cols-5 gap-3">
+                        {productImages.map((image, index) => (
+                            <button
+                                key={`${image}-${index}`}
+                                type="button"
+                                onClick={() => setActiveImage(image)}
+                                className={`overflow-hidden rounded-lg border ${activeImage === image ? 'border-indigo-500' : 'border-zinc-200'}`}
+                            >
+                                <img src={image} alt={`${product.name} ${index + 1}`} className="h-16 w-full object-cover" />
+                            </button>
+                        ))}
+                    </div>
+                </div>
                 <div>
                     <h1 className="text-4xl font-bold">{product.name}</h1>
                     <p className="mt-3 text-zinc-600">{product.description}</p>
@@ -59,7 +85,12 @@ export default function ProductShow({
                     <form
                         onSubmit={(event) => {
                             event.preventDefault();
-                            addToCartForm.post('/cart');
+                            addToCartForm.post('/cart', {
+                                preserveScroll: true,
+                                onSuccess: () => {
+                                    incrementCart();
+                                },
+                            });
                         }}
                         className="mt-6 flex items-center gap-3"
                     >

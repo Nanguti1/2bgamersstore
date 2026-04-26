@@ -17,6 +17,17 @@ class ProductService
             ->withQueryString();
     }
 
+    public function listFeaturedActiveProducts(int $perPage = 12): LengthAwarePaginator
+    {
+        return Product::query()
+            ->with('category')
+            ->where('is_active', true)
+            ->where('featured', true)
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
     public function getBySlug(string $slug): Product
     {
         return Product::query()->with('category')->where('slug', $slug)->firstOrFail();

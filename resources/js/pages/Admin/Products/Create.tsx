@@ -1,4 +1,5 @@
 import { useForm } from '@inertiajs/react';
+import { useMemo } from 'react';
 
 type Category = {
     id: number;
@@ -46,6 +47,18 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
         const files = Array.from(event.target.files ?? []).slice(0, MAX_GALLERY_ITEMS);
         setData('gallery', files);
     };
+
+    const primaryImagePreview = useMemo(() => {
+        if (!data.image) {
+            return null;
+        }
+
+        return URL.createObjectURL(data.image);
+    }, [data.image]);
+
+    const galleryPreviews = useMemo(() => {
+        return data.gallery.map((file) => URL.createObjectURL(file));
+    }, [data.gallery]);
 
     return (
         <main className="p-6">
@@ -97,6 +110,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                     <div className="grid gap-1">
                         <label className="text-sm font-medium">Primary Image</label>
                         <input type="file" accept="image/*" onChange={(event) => setData('image', event.target.files?.[0] ?? null)} className="rounded border p-2" />
+                        {primaryImagePreview && <img src={primaryImagePreview} alt="Primary preview" className="mt-2 h-32 w-32 rounded border object-cover" />}
                         {errors.image && <p className="text-xs text-red-500">{errors.image}</p>}
                     </div>
                 </div>
@@ -112,6 +126,13 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                     <input type="file" accept="image/*" multiple onChange={onGalleryChange} className="mt-2 rounded border p-2" />
                     {errors.gallery && <p className="mt-2 text-xs text-red-500">{errors.gallery}</p>}
                     <p className="mt-2 text-xs text-zinc-500">Selected: {data.gallery.length} files</p>
+                    {galleryPreviews.length > 0 && (
+                        <div className="mt-3 grid grid-cols-4 gap-2">
+                            {galleryPreviews.map((preview, index) => (
+                                <img key={`${preview}-${index}`} src={preview} alt={`Gallery preview ${index + 1}`} className="h-24 w-full rounded border object-cover" />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <label className="inline-flex items-center gap-2 text-sm font-medium">

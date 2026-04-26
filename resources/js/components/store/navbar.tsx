@@ -3,13 +3,13 @@ import { ShoppingCart, Search, ChevronDown, Monitor, Laptop, Gamepad2, Headphone
 import { useState, useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
 
-export function Navbar(): JSX.Element {
+export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreName?: boolean }): JSX.Element {
     const [exploreDropdown, setExploreDropdown] = useState(false);
     const { cartCount, updateCartCount } = useCart();
 
     // Fetch cart count on mount
     useEffect(() => {
-        fetch('/api/cart-count')
+        fetch('/cart-count')
             .then(res => res.json())
             .then(data => updateCartCount(data.count))
             .catch(() => {});
@@ -46,7 +46,7 @@ export function Navbar(): JSX.Element {
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2">
-                            <span className="text-2xl font-black text-white tracking-tight">2B Gamers</span>
+                            <span className="text-2xl font-black text-white tracking-tight">{showHomepageStoreName ? '2B Gamers Store' : '2B Gamers'}</span>
                         </Link>
 
                         {/* Navigation Links */}

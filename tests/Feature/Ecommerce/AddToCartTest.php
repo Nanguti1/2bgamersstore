@@ -25,5 +25,10 @@ class AddToCartTest extends TestCase
             'product_id' => $product->id,
             'quantity' => 1,
         ]);
+
+        $this->actingAs($user)
+            ->get('/cart-count')
+            ->assertOk()
+            ->assertJson(['count' => 1]);
     }
 }

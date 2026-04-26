@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function __invoke(ProductService $productService): Response
     {
         return Inertia::render('Store/Home', [
-            'featuredProducts' => $productService->listActiveProducts(20)->items(),
+            'featuredProducts' => $productService->listFeaturedActiveProducts(20)->items(),
             'testimonials' => Testimonial::where('is_published', true)->limit(3)->get(),
         ]);
     }

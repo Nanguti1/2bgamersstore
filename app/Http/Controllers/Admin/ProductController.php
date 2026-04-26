@@ -81,16 +81,31 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $this->storeImage($request->file('image'));
+        } elseif ($request->boolean('remove_primary_image')) {
+            $validated['image'] = null;
         } else {
             unset($validated['image']);
         }
 
+        $existingGallery = collect($request->input('existing_gallery', $product->gallery ?? []))
+            ->filter(fn (mixed $image): bool => is_string($image) && $image !== '')
+            ->values();
+
         if ($request->hasFile('gallery')) {
-            $validated['gallery'] = collect($request->file('gallery', []))
+            $newGalleryImages = collect($request->file('gallery', []))
                 ->map(fn (UploadedFile $file): string => $this->storeImage($file))
+                ->values();
+
+            $validated['gallery'] = $existingGallery
+                ->merge($newGalleryImages)
+                ->take(4)
                 ->values()
                 ->all();
+        } else {
+            $validated['gallery'] = $existingGallery->take(4)->all();
         }
+
+        unset($validated['remove_primary_image'], $validated['existing_gallery']);
 
         $product->update($validated);
 

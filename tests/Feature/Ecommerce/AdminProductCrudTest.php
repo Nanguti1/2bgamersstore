@@ -97,4 +97,36 @@ class AdminProductCrudTest extends TestCase
 
         $this->assertTrue((bool) $product->fresh()->featured);
     }
+
+    public function test_admin_can_update_product_gallery_and_remove_existing_images(): void
+    {
+        Storage::fake('public');
+
+        $admin = User::factory()->create(['is_admin' => true]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create([
+            'category_id' => $category->id,
+            'gallery' => ['/storage/products/original-1.jpg', '/storage/products/original-2.jpg'],
+        ]);
+
+        $this->actingAs($admin)
+            ->patch(route('admin.products.update', $product), [
+                'category_id' => $category->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'description' => $product->description,
+                'price' => $product->price,
+                'stock' => $product->stock,
+                'existing_gallery' => ['/storage/products/original-2.jpg'],
+                'gallery' => [UploadedFile::fake()->image('new-gallery.jpg')],
+                'is_active' => true,
+                'featured' => false,
+            ])
+            ->assertRedirect();
+
+        $updatedProduct = $product->fresh();
+
+        $this->assertContains('/storage/products/original-2.jpg', $updatedProduct->gallery);
+        $this->assertCount(2, $updatedProduct->gallery);
+    }
 }

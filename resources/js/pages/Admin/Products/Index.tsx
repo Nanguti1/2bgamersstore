@@ -61,7 +61,7 @@ export default function AdminProductsIndex({ products }: { products: PaginatedPr
                                         <button
                                             type="button"
                                             className={`cursor-pointer rounded-full px-3 py-1 text-xs font-semibold ${product.featured ? 'bg-yellow-100 text-yellow-700' : 'bg-zinc-200 text-zinc-700'}`}
-                                            onClick={() => router.patch(`/admin/products/${product.id}/featured`)}
+                                            onClick={() => router.patch(`/admin/products/${product.id}/featured`, { featured: !product.featured })}
                                         >
                                             {product.featured ? 'Featured' : 'Not Featured'}
                                         </button>

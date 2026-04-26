@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
+use App\Http\Requests\Admin\ToggleProductFeaturedRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
@@ -110,12 +111,12 @@ class ProductController extends Controller
         return back();
     }
 
-    public function toggleFeatured(Product $product): RedirectResponse
+    public function toggleFeatured(ToggleProductFeaturedRequest $request, Product $product): RedirectResponse
     {
         $this->authorize('update', $product);
 
         $product->update([
-            'featured' => ! $product->featured,
+            'featured' => $request->validated('featured'),
         ]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);

@@ -92,7 +92,7 @@ class AdminProductCrudTest extends TestCase
         $product = Product::factory()->create(['featured' => false]);
 
         $this->actingAs($admin)
-            ->patch(route('admin.products.featured', $product))
+            ->patch(route('admin.products.featured', $product), ['featured' => true])
             ->assertRedirect();
 
         $this->assertTrue((bool) $product->fresh()->featured);

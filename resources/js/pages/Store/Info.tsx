@@ -79,7 +79,7 @@ export default function StoreInfo({ title, page, consultationPrefill, community,
     const authUser = (props as { auth?: { user?: { id: number } | null } }).auth?.user;
 
     return (
-        <main className="min-h-screen bg-zinc-950 text-zinc-100">
+        <main className="min-h-screen bg-slate-50 text-slate-900">
             <Navbar />
             <ThinHero title={title} />
 

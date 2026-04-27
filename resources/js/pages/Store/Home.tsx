@@ -43,7 +43,7 @@ export default function Home({
     }, [props]);
 
     return (
-        <main className="min-h-screen bg-gray-950 text-gray-100">
+        <main className="min-h-screen bg-slate-50 text-slate-900">
             <Navbar showHomepageStoreName />
             <HeroSection />
 

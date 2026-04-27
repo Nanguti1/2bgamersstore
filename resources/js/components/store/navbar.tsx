@@ -47,7 +47,7 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
 
     return (
         <>
-            <div className="bg-gradient-to-r from-blue-900 to-blue-800 py-2 text-xs text-white">
+            <div className="border-b border-blue-100 bg-gradient-to-r from-blue-600 to-blue-500 py-2 text-xs text-white">
                 <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-8">
                     <div className="flex items-center gap-4">
                         <span className="font-semibold">VISIT OUR STORE:</span>
@@ -61,15 +61,15 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                 </div>
             </div>
 
-            <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950">
+            <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
                 <nav className="mx-auto max-w-screen-2xl px-4 md:px-8">
                     <div className="flex h-16 items-center justify-between gap-3">
                         <Link href="/" className="flex items-center gap-2">
-                            <span className="text-2xl font-black tracking-tight text-white">{showHomepageStoreName ? '2B Gamers Store' : '2B Gamers'}</span>
+                            <span className="text-2xl font-black tracking-tight text-slate-900">{showHomepageStoreName ? '2B Gamers Store' : '2B Gamers'}</span>
                         </Link>
 
                         <div className="hidden items-center gap-8 lg:flex">
-                            <Link href="/" className="font-medium text-gray-300 transition hover:text-white">
+                            <Link href="/" className="font-medium text-slate-600 transition hover:text-slate-900">
                                 Home
                             </Link>
 
@@ -78,13 +78,13 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                                 onMouseEnter={() => setExploreDropdown(true)}
                                 onMouseLeave={() => setExploreDropdown(false)}
                             >
-                                <button className="flex items-center gap-1 font-medium text-gray-300 transition hover:text-white">
+                                <button className="flex items-center gap-1 font-medium text-slate-600 transition hover:text-slate-900">
                                     Explore Products
                                     <ChevronDown className="size-4" />
                                 </button>
 
                                 {exploreDropdown && (
-                                    <div className="absolute top-full left-0 -mt-0.5 w-72 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900 shadow-2xl">
+                                    <div className="absolute top-full left-0 -mt-0.5 w-72 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl">
                                         {categories.map((category) => {
                                             const Icon = category.icon;
 
@@ -92,17 +92,17 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                                                 <Link
                                                     key={category.name}
                                                     href={`/products?category=${category.name.toLowerCase().replace(/\s+/g, '-')}`}
-                                                    className="flex items-center justify-between border-b border-zinc-800 px-4 py-3 transition hover:bg-zinc-800 last:border-0"
+                                                    className="flex items-center justify-between border-b border-slate-200 px-4 py-3 transition hover:bg-slate-50 last:border-0"
                                                 >
                                                     <div className="flex items-center gap-3">
                                                         <Icon className="size-5 text-blue-400" />
-                                                        <span className="text-gray-300">{category.name}</span>
+                                                        <span className="text-slate-700">{category.name}</span>
                                                     </div>
-                                                    <ArrowRight className="size-4 text-gray-500" />
+                                                    <ArrowRight className="size-4 text-slate-400" />
                                                 </Link>
                                             );
                                         })}
-                                        <div className="bg-zinc-800/50 px-4 py-3">
+                                        <div className="bg-slate-50 px-4 py-3">
                                             <Link
                                                 href="/products"
                                                 className="text-sm font-medium text-blue-400 hover:text-blue-300"
@@ -114,13 +114,13 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                                 )}
                             </div>
 
-                            <Link href="/store" className="font-medium text-gray-300 transition hover:text-white">
+                            <Link href="/store" className="font-medium text-slate-600 transition hover:text-slate-900">
                                 Visit Store
                             </Link>
-                            <Link href="/consultation" className="font-medium text-gray-300 transition hover:text-white">
+                            <Link href="/consultation" className="font-medium text-slate-600 transition hover:text-slate-900">
                                 Setup Consultation
                             </Link>
-                            <Link href="/community" className="font-medium text-gray-300 transition hover:text-white">
+                            <Link href="/community" className="font-medium text-slate-600 transition hover:text-slate-900">
                                 Community
                             </Link>
                         </div>
@@ -129,19 +129,19 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                             <button
                                 type="button"
                                 onClick={() => setMobileMenuOpen((open) => !open)}
-                                className="rounded-md p-2 text-gray-300 transition hover:bg-zinc-800 hover:text-white lg:hidden"
+                                className="rounded-md p-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 lg:hidden"
                                 aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
                                 aria-expanded={mobileMenuOpen}
                             >
                                 {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
                             </button>
-                            <form onSubmit={submitSearch} className="hidden items-center rounded-lg border border-zinc-700 bg-zinc-900 px-2 md:flex">
-                                <Search className="size-4 text-zinc-400" />
+                            <form onSubmit={submitSearch} className="hidden items-center rounded-lg border border-slate-300 bg-slate-50 px-2 md:flex">
+                                <Search className="size-4 text-slate-400" />
                                 <input
                                     value={searchTerm}
                                     onChange={(event) => setSearchTerm(event.target.value)}
                                     placeholder="Search products"
-                                    className="w-36 bg-transparent px-2 py-1.5 text-sm text-zinc-100 outline-none lg:w-44"
+                                    className="w-36 bg-transparent px-2 py-1.5 text-sm text-slate-900 outline-none lg:w-44"
                                 />
                             </form>
                             <Link
@@ -150,7 +150,7 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                             >
                                 Today's Events
                             </Link>
-                            <Link href="/cart" className="relative p-2 text-gray-300 transition hover:text-white">
+                            <Link href="/cart" className="relative p-2 text-slate-600 transition hover:text-slate-900">
                                 <ShoppingCart className="size-5" />
                                 {cartCount > 0 && (
                                     <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
@@ -162,32 +162,32 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                     </div>
 
                     <form onSubmit={submitSearch} className="flex pb-4 md:hidden">
-                        <div className="flex w-full items-center rounded-lg border border-zinc-700 bg-zinc-900 px-3">
-                            <Search className="size-4 text-zinc-400" />
+                        <div className="flex w-full items-center rounded-lg border border-slate-300 bg-slate-50 px-3">
+                            <Search className="size-4 text-slate-400" />
                             <input
                                 value={searchTerm}
                                 onChange={(event) => setSearchTerm(event.target.value)}
                                 placeholder="Search products"
-                                className="w-full bg-transparent px-2 py-2 text-sm text-zinc-100 outline-none"
+                                className="w-full bg-transparent px-2 py-2 text-sm text-slate-900 outline-none"
                             />
                         </div>
                     </form>
 
                     {mobileMenuOpen && (
-                        <div className="space-y-2 border-t border-zinc-800 pb-4 lg:hidden">
+                        <div className="space-y-2 border-t border-slate-200 pb-4 lg:hidden">
                             <Link
                                 href="/"
                                 onClick={closeMobileMenu}
-                                className="block rounded-md px-3 py-2 font-medium text-gray-300 transition hover:bg-zinc-900 hover:text-white"
+                                className="block rounded-md px-3 py-2 font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
                             >
                                 Home
                             </Link>
 
-                            <div className="rounded-md bg-zinc-900/60">
+                            <div className="rounded-md bg-slate-100">
                                 <button
                                     type="button"
                                     onClick={() => setMobileExploreOpen((open) => !open)}
-                                    className="flex w-full items-center justify-between px-3 py-2 font-medium text-gray-300 transition hover:text-white"
+                                    className="flex w-full items-center justify-between px-3 py-2 font-medium text-slate-700 transition hover:text-slate-900"
                                     aria-expanded={mobileExploreOpen}
                                 >
                                     Explore Products
@@ -204,7 +204,7 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                                                     key={category.name}
                                                     href={`/products?category=${category.name.toLowerCase().replace(/\s+/g, '-')}`}
                                                     onClick={closeMobileMenu}
-                                                    className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-gray-300 transition hover:bg-zinc-800 hover:text-white"
+                                                    className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-slate-700 transition hover:bg-slate-200 hover:text-slate-900"
                                                 >
                                                     <Icon className="size-4 text-blue-400" />
                                                     <span>{category.name}</span>
@@ -225,21 +225,21 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                             <Link
                                 href="/store"
                                 onClick={closeMobileMenu}
-                                className="block rounded-md px-3 py-2 font-medium text-gray-300 transition hover:bg-zinc-900 hover:text-white"
+                                className="block rounded-md px-3 py-2 font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
                             >
                                 Visit Store
                             </Link>
                             <Link
                                 href="/consultation"
                                 onClick={closeMobileMenu}
-                                className="block rounded-md px-3 py-2 font-medium text-gray-300 transition hover:bg-zinc-900 hover:text-white"
+                                className="block rounded-md px-3 py-2 font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
                             >
                                 Setup Consultation
                             </Link>
                             <Link
                                 href="/community"
                                 onClick={closeMobileMenu}
-                                className="block rounded-md px-3 py-2 font-medium text-gray-300 transition hover:bg-zinc-900 hover:text-white"
+                                className="block rounded-md px-3 py-2 font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
                             >
                                 Community
                             </Link>

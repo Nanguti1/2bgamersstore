@@ -69,18 +69,18 @@ export function ProductHeadingSection({ featuredProducts }: { featuredProducts: 
     }, [featuredProducts.length]);
 
     return (
-        <section className="bg-gray-950 pt-12 pb-8">
+        <section className="bg-slate-50 pt-12 pb-8">
             <div className="mx-auto max-w-screen-2xl px-5 py-8 md:px-8">
                 <div className="mb-9 text-center">
                     <span className="text-base font-semibold text-orange-500">EXPLORE OUR COLLECTION</span>
-                    <h2 className="mt-2 text-3xl font-bold text-white md:text-4xl">Premium Gaming Products</h2>
-                    <p className="mx-auto mt-4 max-w-2xl text-sm text-zinc-300">
+                    <h2 className="mt-2 text-3xl font-bold text-slate-900 md:text-4xl">Premium Gaming Products</h2>
+                    <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-600">
                         Visit our store to experience these products firsthand with expert guidance
                     </p>
                 </div>
 
                 <div className="mb-10 flex justify-center">
-                    <div className="inline-flex rounded-sm bg-[#252525] p-1">
+                    <div className="inline-flex rounded-sm bg-slate-200 p-1">
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
@@ -89,7 +89,7 @@ export function ProductHeadingSection({ featuredProducts }: { featuredProducts: 
                                 className={`rounded-sm px-5 py-3 text-sm font-medium transition md:px-8 md:text-base ${
                                     activeTab === tab.id
                                         ? 'bg-blue-600 text-white'
-                                        : 'text-gray-400 hover:text-white'
+                                        : 'text-slate-600 hover:text-slate-900'
                                 }`}
                             >
                                 {tab.label}
@@ -100,25 +100,25 @@ export function ProductHeadingSection({ featuredProducts }: { featuredProducts: 
 
                 {activeTab === 'featured' && (
                     <div>
-                        <div className="mb-8 rounded-sm border border-[#143360] bg-[#1f1f21] px-5 py-6">
+                        <div className="mb-8 rounded-sm border border-blue-100 bg-white px-5 py-6 shadow-sm">
                             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                                 <div className="flex items-start gap-4">
                                     <div className="rounded bg-[#0a59ff1a] p-3 text-blue-500">
                                         <Gamepad2 className="size-5" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-semibold text-white">Featured Products</h3>
-                                        <p className="text-sm text-zinc-300">{featuredLabel}</p>
+                                        <h3 className="text-xl font-semibold text-slate-900">Featured Products</h3>
+                                        <p className="text-sm text-slate-600">{featuredLabel}</p>
                                     </div>
                                 </div>
 
                                 <div className="flex flex-wrap items-center gap-3 self-stretch md:self-auto">
-                                    <div className="rounded-sm bg-[#09152c] px-4 py-2 text-sm text-zinc-300">
-                                        Rate: <span className="font-semibold text-white">1 USD ≈ 143 KES</span>
+                                    <div className="rounded-sm bg-blue-50 px-4 py-2 text-sm text-slate-600">
+                                        Rate: <span className="font-semibold text-slate-900">1 USD ≈ 143 KES</span>
                                     </div>
-                                    <div className="flex rounded-sm border border-[#21457a] bg-[#0e1320] p-1 text-sm">
+                                    <div className="flex rounded-sm border border-blue-200 bg-slate-50 p-1 text-sm">
                                         <span className="rounded-sm bg-blue-600 px-4 py-2 font-semibold text-white">KES</span>
-                                        <span className="px-4 py-2 text-zinc-400">USD</span>
+                                        <span className="px-4 py-2 text-slate-500">USD</span>
                                     </div>
                                 </div>
                             </div>
@@ -147,11 +147,11 @@ export function ProductHeadingSection({ featuredProducts }: { featuredProducts: 
                             const Icon = setup.icon;
 
                             return (
-                                <article key={setup.title} className="rounded-sm border border-[#184b97] bg-[#1f1f21] p-8">
+                                <article key={setup.title} className="rounded-sm border border-blue-100 bg-white p-8 shadow-sm">
                                     <Icon className="size-10 text-blue-500" />
-                                    <h3 className="mt-8 text-2xl font-semibold text-white">{setup.title}</h3>
+                                    <h3 className="mt-8 text-2xl font-semibold text-slate-900">{setup.title}</h3>
                                     <p className="mt-4 text-xl font-semibold text-orange-500">{setup.price}</p>
-                                    <ul className="mt-8 space-y-4 text-zinc-300">
+                                    <ul className="mt-8 space-y-4 text-slate-600">
                                         {setup.features.map((feature) => (
                                             <li key={feature} className="flex items-center gap-3 text-base">
                                                 <span className="text-blue-500">✓</span>
@@ -161,7 +161,7 @@ export function ProductHeadingSection({ featuredProducts }: { featuredProducts: 
                                     </ul>
                                     <Link
                                         href="/consultation"
-                                        className="mt-10 inline-flex w-full items-center justify-center rounded bg-[#142f57] px-4 py-3 text-base font-semibold text-blue-500 transition hover:bg-[#1c3e72]"
+                                        className="mt-10 inline-flex w-full items-center justify-center rounded bg-blue-50 px-4 py-3 text-base font-semibold text-blue-700 transition hover:bg-blue-100"
                                     >
                                         BOOK SETUP CONSULTATION
                                     </Link>
@@ -172,18 +172,18 @@ export function ProductHeadingSection({ featuredProducts }: { featuredProducts: 
                 )}
 
                 {activeTab === 'experience' && (
-                    <div className="rounded-sm bg-[#1f1f21] px-8 py-14">
+                    <div className="rounded-sm border border-slate-200 bg-white px-8 py-14 shadow-sm">
                         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
                             {storeHighlights.map((highlight) => {
                                 const Icon = highlight.icon;
 
                                 return (
                                     <article key={highlight.title} className="text-center">
-                                        <div className="mx-auto flex size-20 items-center justify-center rounded-full bg-[#15305b]">
-                                            <Icon className="size-9 text-zinc-200" />
+                                        <div className="mx-auto flex size-20 items-center justify-center rounded-full bg-blue-50">
+                                            <Icon className="size-9 text-blue-700" />
                                         </div>
-                                        <h3 className="mt-6 text-2xl font-semibold text-white">{highlight.title}</h3>
-                                        <p className="mt-4 text-base text-zinc-300">{highlight.description}</p>
+                                        <h3 className="mt-6 text-2xl font-semibold text-slate-900">{highlight.title}</h3>
+                                        <p className="mt-4 text-base text-slate-600">{highlight.description}</p>
                                     </article>
                                 );
                             })}

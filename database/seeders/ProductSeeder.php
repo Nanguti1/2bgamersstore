@@ -230,6 +230,8 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        Product::query()->createMany($products);
+        foreach ($products as $product) {
+            Product::create($product);
+        }
     }
 }

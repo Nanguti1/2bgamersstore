@@ -50,9 +50,9 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
             <Navbar />
             <ThinHero title="Checkout" />
 
-            <section className="mx-auto grid max-w-screen-2xl gap-0 border-x border-zinc-800 bg-zinc-900 md:grid-cols-[1.5fr_1fr] my-16 px-8">
-                <div className="border-b border-zinc-800 p-8 md:border-r md:border-b-0 md:p-12">
-                    <h1 className="text-3xl font-semibold text-white">Checkout</h1>
+            <section className="mx-auto my-16 grid max-w-screen-2xl gap-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm md:grid-cols-[1.5fr_1fr]">
+                <div className="border-b border-slate-200 p-8 md:border-r md:border-b-0 md:p-12">
+                    <h1 className="text-3xl font-semibold text-slate-900">Checkout</h1>
 
                     <form
                         onSubmit={(event) => {
@@ -67,9 +67,9 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                     >
                         {/* Payment Method Selection */}
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Payment Method</label>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">Payment Method</label>
                             <div className="space-y-2">
-                                <label className="flex items-center gap-3 p-3 border border-zinc-700 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-300 p-3 transition hover:border-blue-500">
                                     <input
                                         type="radio"
                                         name="payment_method"
@@ -78,9 +78,9 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                                         onChange={() => setData('payment_method', 'mpesa')}
                                         className="text-blue-600"
                                     />
-                                    <span className="text-white font-medium">M-Pesa</span>
+                                    <span className="font-medium text-slate-900">M-Pesa</span>
                                 </label>
-                                <label className="flex items-center gap-3 p-3 border border-zinc-700 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-300 p-3 transition hover:border-blue-500">
                                     <input
                                         type="radio"
                                         name="payment_method"
@@ -89,9 +89,9 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                                         onChange={() => setData('payment_method', 'cash')}
                                         className="text-blue-600"
                                     />
-                                    <span className="text-white font-medium">Cash on Delivery</span>
+                                    <span className="font-medium text-slate-900">Cash on Delivery</span>
                                 </label>
-                                <label className="flex items-center gap-3 p-3 border border-zinc-700 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-300 p-3 transition hover:border-blue-500">
                                     <input
                                         type="radio"
                                         name="payment_method"
@@ -100,7 +100,7 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                                         onChange={() => setData('payment_method', 'bank')}
                                         className="text-blue-600"
                                     />
-                                    <span className="text-white font-medium">Bank Transfer</span>
+                                    <span className="font-medium text-slate-900">Bank Transfer</span>
                                 </label>
                             </div>
                         </div>
@@ -108,43 +108,43 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                         {/* M-Pesa Phone Number - only show for M-Pesa */}
                         {data.payment_method === 'mpesa' && (
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">M-Pesa Phone Number</label>
+                                <label className="mb-2 block text-sm font-medium text-slate-700">M-Pesa Phone Number</label>
                                 <input
                                     value={data.mpesa_phone}
                                     onChange={(event) => setData('mpesa_phone', event.target.value)}
-                                    className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                    className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                                     placeholder="2547XXXXXXXX"
                                     maxLength={12}
                                 />
-                                <p className="text-xs text-gray-400 mt-1">Enter your M-Pesa phone number (format: 2547XXXXXXXX)</p>
+                                <p className="mt-1 text-xs text-slate-500">Enter your M-Pesa phone number (format: 2547XXXXXXXX)</p>
                             </div>
                         )}
 
                         {/* Bank Transfer Info - only show for Bank */}
                         {data.payment_method === 'bank' && (
-                            <div className="p-4 bg-zinc-800 rounded-lg border border-zinc-700">
-                                <p className="text-sm text-gray-300 mb-2">Bank Transfer Details:</p>
-                                <p className="text-sm text-gray-400">Bank: Equity Bank</p>
-                                <p className="text-sm text-gray-400">Account Name: 2B Gamers Entertainment</p>
-                                <p className="text-sm text-gray-400">Account Number: 1234567890</p>
+                            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                                <p className="mb-2 text-sm text-slate-700">Bank Transfer Details:</p>
+                                <p className="text-sm text-slate-500">Bank: Equity Bank</p>
+                                <p className="text-sm text-slate-500">Account Name: 2B Gamers Entertainment</p>
+                                <p className="text-sm text-slate-500">Account Number: 1234567890</p>
                             </div>
                         )}
 
                         <div className="mt-6">
-                            <label className="block text-sm font-medium text-gray-300 mb-4">Customer Information</label>
+                            <label className="mb-4 block text-sm font-medium text-slate-700">Customer Information</label>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                             <input
                                 value={data.first_name}
                                 onChange={(event) => setData('first_name', event.target.value)}
-                                className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                                 placeholder="First Name"
                             />
                             <input
                                 value={data.last_name}
                                 onChange={(event) => setData('last_name', event.target.value)}
-                                className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                                 placeholder="Last Name"
                             />
                         </div>
@@ -152,7 +152,7 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                         <input
                             value={data.email}
                             onChange={(event) => setData('email', event.target.value)}
-                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                            className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                             placeholder="Email"
                             type="email"
                         />
@@ -160,25 +160,25 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                         <input
                             value={data.phone}
                             onChange={(event) => setData('phone', event.target.value)}
-                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                            className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                             placeholder="Phone Number"
                             type="tel"
                         />
 
                         <div className="mt-6">
-                            <label className="block text-sm font-medium text-gray-300 mb-4">Shipping Information</label>
+                            <label className="mb-4 block text-sm font-medium text-slate-700">Shipping Information</label>
                         </div>
 
                         <input
                             value={data.line_1}
                             onChange={(event) => setData('line_1', event.target.value)}
-                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                            className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                             placeholder="Address"
                         />
                         <input
                             value={data.line_2}
                             onChange={(event) => setData('line_2', event.target.value)}
-                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                            className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                             placeholder="Apartment / Landmark"
                         />
 
@@ -186,19 +186,19 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                             <input
                                 value={data.city}
                                 onChange={(event) => setData('city', event.target.value)}
-                                className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                className="rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                                 placeholder="City"
                             />
                             <input
                                 value={data.state}
                                 onChange={(event) => setData('state', event.target.value)}
-                                className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                className="rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                                 placeholder="County"
                             />
                             <input
                                 value={data.postal_code}
                                 onChange={(event) => setData('postal_code', event.target.value)}
-                                className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                                className="rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                                 placeholder="Postal code"
                             />
                         </div>
@@ -206,7 +206,7 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                         <input
                             value={data.country}
                             onChange={(event) => setData('country', event.target.value.toUpperCase())}
-                            className="w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-white placeholder-gray-400"
+                            className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 placeholder-slate-400"
                             placeholder="Country code (KE)"
                             maxLength={2}
                         />
@@ -224,19 +224,19 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                     </form>
                 </div>
 
-                <aside className="p-8 md:p-10">
+                <aside className="bg-slate-50 p-8 md:p-10">
                     <div className="space-y-6">
                         {cart.items.map((item) => (
-                            <div key={item.id} className="flex gap-4 border-b border-zinc-700 pb-5">
+                            <div key={item.id} className="flex gap-4 border-b border-slate-200 pb-5">
                                 <img
                                     src={item.product.image ?? 'https://placehold.co/92x92'}
                                     alt={item.product.name}
-                                    className="h-20 w-20 rounded-lg border border-zinc-700 object-cover"
+                                    className="h-20 w-20 rounded-lg border border-slate-300 object-cover"
                                 />
                                 <div className="flex-1">
-                                    <p className="font-semibold text-white">{item.product.name}</p>
-                                    <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
-                                    <p className="text-sm font-medium text-white">{formatKes(Number(item.product.price) * item.quantity)}</p>
+                                    <p className="font-semibold text-slate-900">{item.product.name}</p>
+                                    <p className="text-sm text-slate-500">Qty: {item.quantity}</p>
+                                    <p className="text-sm font-medium text-slate-900">{formatKes(Number(item.product.price) * item.quantity)}</p>
                                 </div>
                             </div>
                         ))}
@@ -244,20 +244,20 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
 
                     <div className="mt-8 space-y-3 text-sm">
                         <div className="flex justify-between">
-                            <span className="text-gray-400">Subtotal</span>
-                            <span className="text-white">{formatKes(total)}</span>
+                            <span className="text-slate-500">Subtotal</span>
+                            <span className="text-slate-900">{formatKes(total)}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-400">Taxes</span>
-                            <span className="text-white">{formatKes(tax)}</span>
+                            <span className="text-slate-500">Taxes</span>
+                            <span className="text-slate-900">{formatKes(tax)}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-400">Shipping</span>
-                            <span className="text-white">{formatKes(shipping)}</span>
+                            <span className="text-slate-500">Shipping</span>
+                            <span className="text-slate-900">{formatKes(shipping)}</span>
                         </div>
-                        <div className="mt-4 flex justify-between border-t border-zinc-700 pt-4 text-base font-semibold">
-                            <span className="text-white">Total</span>
-                            <span className="text-white">{formatKes(grandTotal)}</span>
+                        <div className="mt-4 flex justify-between border-t border-slate-200 pt-4 text-base font-semibold">
+                            <span className="text-slate-900">Total</span>
+                            <span className="text-slate-900">{formatKes(grandTotal)}</span>
                         </div>
                     </div>
                 </aside>

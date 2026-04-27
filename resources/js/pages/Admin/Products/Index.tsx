@@ -32,32 +32,32 @@ export default function AdminProductsIndex({ products }: { products: PaginatedPr
                     </Link>
                 </div>
 
-                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                    <table className="min-w-full text-left text-base text-slate-900">
+                <div className="mt-6 overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-[760px] w-full text-left text-base text-slate-900">
                         <thead className="bg-[#053354] text-white">
                             <tr>
-                                <th className="px-6 py-4 font-semibold">Name</th>
-                                <th className="px-6 py-4 font-semibold">Category</th>
-                                <th className="px-6 py-4 font-semibold">Price</th>
-                                <th className="px-6 py-4 font-semibold">Stock</th>
-                                <th className="px-6 py-4 font-semibold">Status</th>
-                                <th className="px-6 py-4 font-semibold">Featured</th>
-                                <th className="px-6 py-4 text-right font-semibold">Actions</th>
+                                <th className="px-6 py-3 font-semibold">Name</th>
+                                <th className="px-6 py-3 font-semibold">Category</th>
+                                <th className="px-6 py-3 font-semibold">Price</th>
+                                <th className="px-6 py-3 font-semibold">Stock</th>
+                                <th className="px-6 py-3 font-semibold">Status</th>
+                                <th className="px-6 py-3 font-semibold">Featured</th>
+                                <th className="px-6 py-3 text-right font-semibold">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {products.data.map((product, index) => (
                                 <tr key={product.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
-                                    <td className="px-6 py-5 font-medium">{product.name}</td>
-                                    <td className="px-6 py-5">{product.category?.name ?? 'N/A'}</td>
-                                    <td className="px-6 py-5">{formatKes(Number(product.price))}</td>
-                                    <td className="px-6 py-5">{product.stock}</td>
-                                    <td className="px-6 py-5">
+                                    <td className="px-6 py-3 font-medium">{product.name}</td>
+                                    <td className="px-6 py-3">{product.category?.name ?? 'N/A'}</td>
+                                    <td className="px-6 py-3">{formatKes(Number(product.price))}</td>
+                                    <td className="px-6 py-3">{product.stock}</td>
+                                    <td className="px-6 py-3">
                                         <span className={`rounded-full px-3 py-1 text-xs font-semibold ${product.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-zinc-200 text-zinc-700'}`}>
                                             {product.is_active ? 'Active' : 'Inactive'}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-5">
+                                    <td className="px-6 py-3">
                                         <button
                                             type="button"
                                             className={`cursor-pointer rounded-full px-3 py-1 text-xs font-semibold ${product.featured ? 'bg-yellow-100 text-yellow-700' : 'bg-zinc-200 text-zinc-700'}`}
@@ -66,7 +66,7 @@ export default function AdminProductsIndex({ products }: { products: PaginatedPr
                                             {product.featured ? 'Featured' : 'Not Featured'}
                                         </button>
                                     </td>
-                                    <td className="px-6 py-5 text-right">
+                                    <td className="px-6 py-3 text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 type="button"

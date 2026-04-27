@@ -50,7 +50,7 @@ export function TestimonialsSection({ testimonials = [] }: { testimonials: Testi
                 {displayTestimonials.map((testimonial) => (
                     <div
                         key={testimonial.id}
-                        className="flex flex-col rounded-lg border border-gray-700 bg-gradient-to-br from-gray-900 to-gray-950 p-6"
+                        className="flex flex-col rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
                     >
                         <div className="mb-4 flex gap-1">
                             {Array.from({ length: testimonial.rating }).map((_, i) => (
@@ -61,17 +61,17 @@ export function TestimonialsSection({ testimonials = [] }: { testimonials: Testi
                             ))}
                         </div>
 
-                        <p className="mb-6 flex-1 text-gray-300">{testimonial.content}</p>
+                        <p className="mb-6 flex-1 text-slate-600">{testimonial.content}</p>
 
                         <div className="flex items-center gap-3">
                             <img
                                 src={testimonial.avatar}
                                 alt={testimonial.author}
-                                className="h-10 w-10 rounded-full bg-gray-700"
+                                className="h-10 w-10 rounded-full bg-slate-200"
                             />
                             <div>
-                                <p className="font-semibold text-white">{testimonial.author}</p>
-                                <p className="text-sm text-gray-400">{testimonial.role}</p>
+                                <p className="font-semibold text-slate-900">{testimonial.author}</p>
+                                <p className="text-sm text-slate-500">{testimonial.role}</p>
                             </div>
                         </div>
                     </div>

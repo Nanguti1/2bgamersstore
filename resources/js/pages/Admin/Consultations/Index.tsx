@@ -22,27 +22,27 @@ export default function AdminConsultationsIndex({ appointments }: { appointments
             <div className="mx-auto max-w-7xl">
                 <h1 className="text-3xl font-semibold text-slate-900">Consultation Appointments</h1>
 
-                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                    <table className="min-w-full text-left text-sm text-slate-900">
+                <div className="mt-6 overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-[760px] w-full text-left text-sm text-slate-900">
                         <thead className="bg-[#053354] text-white">
                             <tr>
-                                <th className="px-4 py-3">Client</th>
-                                <th className="px-4 py-3">Preferred Date</th>
-                                <th className="px-4 py-3">Message</th>
-                                <th className="px-4 py-3">Status</th>
+                                <th className="px-4 py-2.5">Client</th>
+                                <th className="px-4 py-2.5">Preferred Date</th>
+                                <th className="px-4 py-2.5">Message</th>
+                                <th className="px-4 py-2.5">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {appointments.data.map((appointment, index) => (
                                 <tr key={appointment.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
-                                    <td className="px-4 py-4">
+                                    <td className="px-4 py-2.5">
                                         <p className="font-semibold">{appointment.name}</p>
                                         <p className="text-xs text-zinc-500">{appointment.email}</p>
                                         <p className="text-xs text-zinc-500">{appointment.phone}</p>
                                     </td>
-                                    <td className="px-4 py-4">{new Date(appointment.preferred_at).toLocaleString()}</td>
-                                    <td className="px-4 py-4 text-zinc-600">{appointment.message ?? '—'}</td>
-                                    <td className="px-4 py-4">
+                                    <td className="px-4 py-2.5">{new Date(appointment.preferred_at).toLocaleString()}</td>
+                                    <td className="px-4 py-2.5 text-zinc-600">{appointment.message ?? '—'}</td>
+                                    <td className="px-4 py-2.5">
                                         <div className="flex flex-col gap-2">
                                             <select
                                                 value={appointment.status}

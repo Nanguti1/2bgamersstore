@@ -49,21 +49,21 @@ export default function AdminCustomersIndex({ customers }: { customers: Paginate
                     <button className="cursor-pointer rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>+ New Client</button>
                 </form>
 
-                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                    <table className="min-w-full text-left text-base text-slate-900">
+                <div className="mt-6 overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-[760px] w-full text-left text-base text-slate-900">
                         <thead className="bg-[#053354] text-white">
                             <tr>
-                                <th className="px-6 py-4 font-semibold">Client</th>
-                                <th className="px-6 py-4 font-semibold">Email</th>
-                                <th className="px-6 py-4 text-right font-semibold">Actions</th>
+                                <th className="px-6 py-3 font-semibold">Client</th>
+                                <th className="px-6 py-3 font-semibold">Email</th>
+                                <th className="px-6 py-3 text-right font-semibold">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {customers.data.map((customer, index) => (
                                 <tr key={customer.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
-                                    <td className="px-6 py-5 font-medium">{customer.name}</td>
-                                    <td className="px-6 py-5">{customer.email}</td>
-                                    <td className="px-6 py-5 text-right">
+                                    <td className="px-6 py-3 font-medium">{customer.name}</td>
+                                    <td className="px-6 py-3">{customer.email}</td>
+                                    <td className="px-6 py-3 text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 type="button"

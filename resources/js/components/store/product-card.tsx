@@ -49,8 +49,8 @@ export function ProductCard({ product }: { product: Product }): JSX.Element {
     };
 
     return (
-        <article className="group relative overflow-hidden rounded-lg border border-gray-700 bg-gradient-to-br from-gray-900 to-gray-950 transition hover:border-blue-500/50">
-            <div className="relative overflow-hidden bg-gray-800">
+        <article className="group relative overflow-hidden rounded-lg border border-slate-200 bg-white transition hover:border-blue-300 hover:shadow-md">
+            <div className="relative overflow-hidden bg-slate-100">
                 <img
                     src={product.image ?? 'https://placehold.co/400x300'}
                     alt={product.name}
@@ -63,18 +63,18 @@ export function ProductCard({ product }: { product: Product }): JSX.Element {
 
                 <button
                     onClick={() => setIsWishlisted(!isWishlisted)}
-                    className="absolute top-3 left-3 rounded-full bg-gray-900/80 p-2 transition hover:bg-gray-900"
+                    className="absolute top-3 left-3 rounded-full bg-white/90 p-2 transition hover:bg-white"
                 >
                     <Heart
                         className={`h-5 w-5 transition ${
-                            isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-300'
+                            isWishlisted ? 'fill-red-500 text-red-500' : 'text-slate-500'
                         }`}
                     />
                 </button>
             </div>
 
             <div className="p-4">
-                <h3 className="line-clamp-2 font-semibold text-white transition group-hover:text-blue-400">
+                <h3 className="line-clamp-2 font-semibold text-slate-900 transition group-hover:text-blue-600">
                     {product.name}
                 </h3>
 

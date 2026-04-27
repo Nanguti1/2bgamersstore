@@ -82,21 +82,21 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
                 </div>
 
                 <div className="mt-6 grid gap-4 lg:grid-cols-2">
-                    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                        <table className="min-w-full text-left text-base text-slate-900">
+                    <div className="overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                        <table className="min-w-[760px] w-full text-left text-base text-slate-900">
                             <thead className="bg-[#053354] text-white">
                                 <tr>
-                                    <th className="px-6 py-4 font-semibold">Role</th>
-                                    <th className="px-6 py-4 font-semibold">Permissions</th>
-                                    <th className="px-6 py-4 text-right font-semibold">Actions</th>
+                                    <th className="px-6 py-3 font-semibold">Role</th>
+                                    <th className="px-6 py-3 font-semibold">Permissions</th>
+                                    <th className="px-6 py-3 text-right font-semibold">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {roles.map((role, index) => (
                                     <tr key={role.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
-                                        <td className="px-6 py-5 font-medium capitalize">{role.name}</td>
-                                        <td className="px-6 py-5">{role.permissions_count}</td>
-                                        <td className="px-6 py-5 text-right">
+                                        <td className="px-6 py-3 font-medium capitalize">{role.name}</td>
+                                        <td className="px-6 py-3">{role.permissions_count}</td>
+                                        <td className="px-6 py-3 text-right">
                                             <button type="button" className="cursor-pointer rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={() => router.delete(`/admin/access-control/roles/${role.id}`)}>Delete</button>
                                         </td>
                                     </tr>
@@ -105,19 +105,19 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
                         </table>
                     </div>
 
-                    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                        <table className="min-w-full text-left text-base text-slate-900">
+                    <div className="overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                        <table className="min-w-[760px] w-full text-left text-base text-slate-900">
                             <thead className="bg-[#053354] text-white">
                                 <tr>
-                                    <th className="px-6 py-4 font-semibold">Permission</th>
-                                    <th className="px-6 py-4 text-right font-semibold">Actions</th>
+                                    <th className="px-6 py-3 font-semibold">Permission</th>
+                                    <th className="px-6 py-3 text-right font-semibold">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {permissions.map((permission, index) => (
                                     <tr key={permission.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
-                                        <td className="px-6 py-5 font-medium">{permission.name}</td>
-                                        <td className="px-6 py-5 text-right">
+                                        <td className="px-6 py-3 font-medium">{permission.name}</td>
+                                        <td className="px-6 py-3 text-right">
                                             <button type="button" className="cursor-pointer rounded-xl bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={() => router.delete(`/admin/access-control/permissions/${permission.id}`)}>Delete</button>
                                         </td>
                                     </tr>
@@ -127,13 +127,13 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
                     </div>
                 </div>
 
-                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                    <table className="min-w-full text-left text-base text-slate-900">
+                <div className="mt-6 overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-[760px] w-full text-left text-base text-slate-900">
                         <thead className="bg-[#053354] text-white">
                             <tr>
-                                <th className="px-6 py-4 font-semibold">User</th>
-                                <th className="px-6 py-4 font-semibold">Email</th>
-                                <th className="px-6 py-4 font-semibold">Role Assignment</th>
+                                <th className="px-6 py-3 font-semibold">User</th>
+                                <th className="px-6 py-3 font-semibold">Email</th>
+                                <th className="px-6 py-3 font-semibold">Role Assignment</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -142,9 +142,9 @@ export default function AdminAccessControlIndex({ users, roles, permissions }: {
 
                                 return (
                                     <tr key={user.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
-                                        <td className="px-6 py-5 font-medium">{user.name}</td>
-                                        <td className="px-6 py-5">{user.email}</td>
-                                        <td className="px-6 py-5">
+                                        <td className="px-6 py-3 font-medium">{user.name}</td>
+                                        <td className="px-6 py-3">{user.email}</td>
+                                        <td className="px-6 py-3">
                                             <select
                                                 defaultValue={currentRole}
                                                 className="rounded-lg border border-zinc-300 bg-white px-3 py-2"

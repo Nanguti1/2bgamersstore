@@ -9,8 +9,8 @@ export function HeroSection(): JSX.Element {
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: "url('/banners/2b-gamers-store-hero-banner-ps5.jpg')" }}
             />
-            {/* Dark overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-950 via-gray-950/85 to-gray-950/70" />
+            {/* Light overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-blue-50/80 to-white/60" />
 
             <div className="relative z-10 h-full flex items-center mx-auto px-8">
                 <div className="w-full max-w-screen-2xl mx-auto">
@@ -26,10 +26,10 @@ export function HeroSection(): JSX.Element {
                                 </span>
                             </div>
 
-                            <p className="text-sm uppercase tracking-[0.3em] text-blue-400 font-semibold mb-2">
+                            <p className="mb-2 text-sm font-semibold tracking-[0.3em] text-blue-600 uppercase">
                                 Your Ultimate
                             </p>
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight">
+                            <h1 className="text-4xl leading-tight font-black text-slate-900 md:text-5xl lg:text-6xl">
                                 Gaming
                                 <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">
@@ -37,7 +37,7 @@ export function HeroSection(): JSX.Element {
                                 </span>
                             </h1>
 
-                            <p className="mt-6 max-w-xl text-gray-300 text-lg leading-relaxed">
+                            <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-700">
                                 Discover Nairobi's premier gaming hub. From high-performance PCs to the latest consoles, we have everything you need to level up your gaming experience.
                             </p>
 
@@ -48,8 +48,8 @@ export function HeroSection(): JSX.Element {
                                 >
                                     VISIT OUR STORE
                                 </Link>
-                                <button className="inline-flex items-center justify-center gap-2 border-2 border-white/30 px-8 py-4 rounded-lg font-semibold text-white transition hover:bg-white/10">
-                                    <Play className="size-5 fill-white" />
+                                <button className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-slate-300 px-8 py-4 font-semibold text-slate-700 transition hover:bg-white/70">
+                                    <Play className="size-5 fill-slate-700" />
                                     Watch Video
                                 </button>
                             </div>
@@ -57,26 +57,26 @@ export function HeroSection(): JSX.Element {
                             <div className="mt-10 flex items-center gap-6">
                                 <div className="flex items-center gap-2">
                                     <Shield className="size-5 text-green-400" />
-                                    <span className="text-sm text-gray-400">Authorized Dealer</span>
+                                    <span className="text-sm text-slate-600">Authorized Dealer</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Award className="size-5 text-yellow-400" />
-                                    <span className="text-sm text-gray-400">Award Winning</span>
+                                    <span className="text-sm text-slate-600">Award Winning</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Right side - Trust Card */}
                         <div className="hidden lg:flex justify-center">
-                            <div className="bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-700 rounded-2xl p-8 shadow-2xl max-w-md">
+                            <div className="max-w-md rounded-2xl border border-slate-200 bg-white/90 p-8 shadow-2xl backdrop-blur">
                                 <div className="text-center">
                                     <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mb-4">
                                         <span className="text-3xl font-black text-white">10K+</span>
                                     </div>
-                                    <h3 className="text-2xl font-bold text-white mb-2">
+                                    <h3 className="mb-2 text-2xl font-bold text-slate-900">
                                         Trusted by Gamers
                                     </h3>
-                                    <p className="text-gray-400 mb-6">
+                                    <p className="mb-6 text-slate-600">
                                         Join thousands of satisfied customers who trust us for their gaming needs
                                     </p>
                                     <div className="flex justify-center gap-1">
@@ -90,7 +90,7 @@ export function HeroSection(): JSX.Element {
                                             </svg>
                                         ))}
                                     </div>
-                                    <p className="text-sm text-gray-500 mt-2">4.9/5 Customer Rating</p>
+                                    <p className="mt-2 text-sm text-slate-500">4.9/5 Customer Rating</p>
                                 </div>
                             </div>
                         </div>

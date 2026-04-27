@@ -51,7 +51,7 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                 <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-8">
                     <div className="flex items-center gap-4">
                         <span className="font-semibold">VISIT OUR STORE:</span>
-                        <span>Luthuli Avenue Gaberone Plaza, First Floor Luthuli Ave, Nairobi</span>
+                        <span>Gaberone Plaza  First Floor, Shop F20 situated off Luthuli Avenue and gaberone lane junction</span>
                     </div>
                     <div className="hidden items-center gap-4 md:flex">
                         <span className="rounded bg-yellow-500 px-3 py-1 font-semibold text-black">

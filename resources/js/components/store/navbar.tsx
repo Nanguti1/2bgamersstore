@@ -1,10 +1,12 @@
 import { Link, router } from '@inertiajs/react';
-import { ArrowRight, ChevronDown, Gamepad2, Headphones, Laptop, Monitor, Search, ShoppingCart } from 'lucide-react';
+import { ArrowRight, ChevronDown, Gamepad2, Headphones, Laptop, Menu, Monitor, Search, ShoppingCart, X } from 'lucide-react';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 
 export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreName?: boolean }): JSX.Element {
     const [exploreDropdown, setExploreDropdown] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const { cartCount, updateCartCount } = useCart();
 
@@ -36,6 +38,11 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                 preserveScroll: false,
             },
         );
+    };
+
+    const closeMobileMenu = (): void => {
+        setMobileMenuOpen(false);
+        setMobileExploreOpen(false);
     };
 
     return (
@@ -77,7 +84,7 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                                 </button>
 
                                 {exploreDropdown && (
-                                    <div className="absolute top-full left-0 mt-2 w-72 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900 shadow-2xl">
+                                    <div className="absolute top-full left-0 -mt-0.5 w-72 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900 shadow-2xl">
                                         {categories.map((category) => {
                                             const Icon = category.icon;
 
@@ -118,7 +125,16 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                             </Link>
                         </div>
 
-                        <div className="flex items-center gap-3 md:gap-4">
+                        <div className="flex items-center gap-2 md:gap-4">
+                            <button
+                                type="button"
+                                onClick={() => setMobileMenuOpen((open) => !open)}
+                                className="rounded-md p-2 text-gray-300 transition hover:bg-zinc-800 hover:text-white lg:hidden"
+                                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                                aria-expanded={mobileMenuOpen}
+                            >
+                                {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+                            </button>
                             <form onSubmit={submitSearch} className="hidden items-center rounded-lg border border-zinc-700 bg-zinc-900 px-2 md:flex">
                                 <Search className="size-4 text-zinc-400" />
                                 <input
@@ -156,6 +172,86 @@ export function Navbar({ showHomepageStoreName = false }: { showHomepageStoreNam
                             />
                         </div>
                     </form>
+
+                    {mobileMenuOpen && (
+                        <div className="space-y-2 border-t border-zinc-800 pb-4 lg:hidden">
+                            <Link
+                                href="/"
+                                onClick={closeMobileMenu}
+                                className="block rounded-md px-3 py-2 font-medium text-gray-300 transition hover:bg-zinc-900 hover:text-white"
+                            >
+                                Home
+                            </Link>
+
+                            <div className="rounded-md bg-zinc-900/60">
+                                <button
+                                    type="button"
+                                    onClick={() => setMobileExploreOpen((open) => !open)}
+                                    className="flex w-full items-center justify-between px-3 py-2 font-medium text-gray-300 transition hover:text-white"
+                                    aria-expanded={mobileExploreOpen}
+                                >
+                                    Explore Products
+                                    <ChevronDown className={`size-4 transition ${mobileExploreOpen ? 'rotate-180' : ''}`} />
+                                </button>
+
+                                {mobileExploreOpen && (
+                                    <div className="space-y-1 px-2 pb-2">
+                                        {categories.map((category) => {
+                                            const Icon = category.icon;
+
+                                            return (
+                                                <Link
+                                                    key={category.name}
+                                                    href={`/products?category=${category.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                                    onClick={closeMobileMenu}
+                                                    className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-gray-300 transition hover:bg-zinc-800 hover:text-white"
+                                                >
+                                                    <Icon className="size-4 text-blue-400" />
+                                                    <span>{category.name}</span>
+                                                </Link>
+                                            );
+                                        })}
+                                        <Link
+                                            href="/products"
+                                            onClick={closeMobileMenu}
+                                            className="block px-2 py-2 text-sm font-medium text-blue-400 hover:text-blue-300"
+                                        >
+                                            View all our store →
+                                        </Link>
+                                    </div>
+                                )}
+                            </div>
+
+                            <Link
+                                href="/store"
+                                onClick={closeMobileMenu}
+                                className="block rounded-md px-3 py-2 font-medium text-gray-300 transition hover:bg-zinc-900 hover:text-white"
+                            >
+                                Visit Store
+                            </Link>
+                            <Link
+                                href="/consultation"
+                                onClick={closeMobileMenu}
+                                className="block rounded-md px-3 py-2 font-medium text-gray-300 transition hover:bg-zinc-900 hover:text-white"
+                            >
+                                Setup Consultation
+                            </Link>
+                            <Link
+                                href="/community"
+                                onClick={closeMobileMenu}
+                                className="block rounded-md px-3 py-2 font-medium text-gray-300 transition hover:bg-zinc-900 hover:text-white"
+                            >
+                                Community
+                            </Link>
+                            <Link
+                                href="/events"
+                                onClick={closeMobileMenu}
+                                className="block rounded-md bg-gradient-to-r from-green-500 to-green-600 px-3 py-2 font-semibold text-white"
+                            >
+                                Today's Events
+                            </Link>
+                        </div>
+                    )}
                 </nav>
             </header>
         </>

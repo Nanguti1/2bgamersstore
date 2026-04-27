@@ -57,23 +57,23 @@ export default function AdminModelsIndex({ models, categories }: { models: Pagin
                     <button className="cursor-pointer rounded-xl bg-pink-200 px-4 py-2.5 font-medium text-slate-900 hover:bg-pink-300 disabled:opacity-60" disabled={processing}>Add Model</button>
                 </form>
 
-                <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                    <table className="min-w-full text-left text-base text-slate-900">
+                <div className="mt-6 overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                    <table className="min-w-[760px] w-full text-left text-base text-slate-900">
                         <thead className="bg-[#053354] text-white">
                             <tr>
-                                <th className="px-6 py-4 font-semibold">Name</th>
-                                <th className="px-6 py-4 font-semibold">Category</th>
-                                <th className="px-6 py-4 font-semibold">Description</th>
-                                <th className="px-6 py-4 text-right font-semibold">Actions</th>
+                                <th className="px-6 py-3 font-semibold">Name</th>
+                                <th className="px-6 py-3 font-semibold">Category</th>
+                                <th className="px-6 py-3 font-semibold">Description</th>
+                                <th className="px-6 py-3 text-right font-semibold">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {models.data.map((item, index) => (
                                 <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-rose-50/40'}>
-                                    <td className="px-6 py-5 font-medium">{item.name}</td>
-                                    <td className="px-6 py-5">{item.category.name}</td>
-                                    <td className="px-6 py-5">{item.description ?? 'No description'}</td>
-                                    <td className="px-6 py-5 text-right">
+                                    <td className="px-6 py-3 font-medium">{item.name}</td>
+                                    <td className="px-6 py-3">{item.category.name}</td>
+                                    <td className="px-6 py-3">{item.description ?? 'No description'}</td>
+                                    <td className="px-6 py-3 text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 type="button"

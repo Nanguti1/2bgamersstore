@@ -1,5 +1,17 @@
-import { useForm } from '@inertiajs/react';
-import { useMemo } from 'react';
+import { Link, useForm } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
+
+interface Tab {
+    id: string;
+    label: string;
+}
+
+const tabs: Tab[] = [
+    { id: 'general', label: 'General' },
+    { id: 'description', label: 'Description' },
+    { id: 'specifications', label: 'Specifications' },
+    { id: 'media', label: 'Media' },
+];
 
 type Category = {
     id: number;
@@ -11,6 +23,7 @@ type ProductFormData = {
     name: string;
     slug: string;
     description: string;
+    specifications: string;
     price: string;
     stock: string;
     image: File | null;
@@ -22,11 +35,14 @@ type ProductFormData = {
 const MAX_GALLERY_ITEMS = 4;
 
 export default function AdminProductsCreate({ categories }: { categories: Category[] }): JSX.Element {
+    const [currentTab, setCurrentTab] = useState('general');
+
     const { data, setData, post, processing, errors } = useForm<ProductFormData>({
         category_id: categories[0]?.id ?? '',
         name: '',
         slug: '',
         description: '',
+        specifications: '',
         price: '',
         stock: '',
         image: null,
@@ -61,94 +77,248 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
     }, [data.gallery]);
 
     return (
-        <main className="p-6">
-            <h1 className="text-2xl font-bold">Create Product</h1>
-            <p className="mt-1 text-sm text-zinc-500">Upload a primary image and up to 4 gallery images.</p>
+        <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
+            <div className="mx-auto max-w-7xl">
+                <div className="mb-6">
+                    <Link href="/admin/products" className="text-blue-600 hover:text-blue-800">
+                        ← Back to Products
+                    </Link>
+                </div>
+                <h1 className="text-3xl font-semibold text-slate-900 mb-6">Create Product</h1>
 
-            <form onSubmit={submit} className="mt-4 grid max-w-3xl gap-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                    <div className="grid gap-1">
-                        <label className="text-sm font-medium">Category</label>
-                        <select
-                            value={data.category_id}
-                            onChange={(event) => setData('category_id', Number(event.target.value))}
-                            className="rounded border p-2"
-                        >
-                            {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
-                        {errors.category_id && <p className="text-xs text-red-500">{errors.category_id}</p>}
-                    </div>
-
-                    <div className="grid gap-1">
-                        <label className="text-sm font-medium">Name</label>
-                        <input value={data.name} onChange={(event) => setData('name', event.target.value)} className="rounded border p-2" placeholder="Name" />
-                        {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
-                    </div>
-
-                    <div className="grid gap-1">
-                        <label className="text-sm font-medium">Slug</label>
-                        <input value={data.slug} onChange={(event) => setData('slug', event.target.value)} className="rounded border p-2" placeholder="Slug" />
-                        {errors.slug && <p className="text-xs text-red-500">{errors.slug}</p>}
-                    </div>
-
-                    <div className="grid gap-1">
-                        <label className="text-sm font-medium">Price</label>
-                        <input value={data.price} onChange={(event) => setData('price', event.target.value)} className="rounded border p-2" placeholder="79.99" />
-                        {errors.price && <p className="text-xs text-red-500">{errors.price}</p>}
-                    </div>
-
-                    <div className="grid gap-1">
-                        <label className="text-sm font-medium">Stock</label>
-                        <input value={data.stock} onChange={(event) => setData('stock', event.target.value)} className="rounded border p-2" placeholder="20" />
-                        {errors.stock && <p className="text-xs text-red-500">{errors.stock}</p>}
-                    </div>
-
-                    <div className="grid gap-1">
-                        <label className="text-sm font-medium">Primary Image</label>
-                        <input type="file" accept="image/*" onChange={(event) => setData('image', event.target.files?.[0] ?? null)} className="rounded border p-2" />
-                        {primaryImagePreview && <img src={primaryImagePreview} alt="Primary preview" className="mt-2 h-32 w-32 rounded border object-cover" />}
-                        {errors.image && <p className="text-xs text-red-500">{errors.image}</p>}
-                    </div>
+                {/* Tab Navigation */}
+                <div className="mb-6 border-b border-zinc-200">
+                    <nav className="flex space-x-8">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setCurrentTab(tab.id)}
+                                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                                    currentTab === tab.id
+                                        ? 'border-blue-600 text-blue-600'
+                                        : 'border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700'
+                                }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </nav>
                 </div>
 
-                <div className="grid gap-1">
-                    <label className="text-sm font-medium">Description</label>
-                    <textarea value={data.description} onChange={(event) => setData('description', event.target.value)} className="min-h-28 rounded border p-2" placeholder="Description" />
-                    {errors.description && <p className="text-xs text-red-500">{errors.description}</p>}
-                </div>
+                {/* Tab Content */}
+                <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+                    {currentTab === 'general' && (
+                        <form onSubmit={submit} className="grid gap-4 md:grid-cols-2">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
+                                <input
+                                    value={data.name}
+                                    onChange={(event) => setData('name', event.target.value)}
+                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                />
+                                {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Slug</label>
+                                <input
+                                    value={data.slug}
+                                    onChange={(event) => setData('slug', event.target.value)}
+                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                />
+                                {errors.slug && <p className="text-xs text-red-500 mt-1">{errors.slug}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Price</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    value={data.price}
+                                    onChange={(event) => setData('price', event.target.value)}
+                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                />
+                                {errors.price && <p className="text-xs text-red-500 mt-1">{errors.price}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Stock</label>
+                                <input
+                                    type="number"
+                                    value={data.stock}
+                                    onChange={(event) => setData('stock', Number(event.target.value))}
+                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                />
+                                {errors.stock && <p className="text-xs text-red-500 mt-1">{errors.stock}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                                <select
+                                    value={data.category_id}
+                                    onChange={(event) => setData('category_id', Number(event.target.value))}
+                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                >
+                                    {categories.map((category) => (
+                                        <option key={category.id} value={category.id}>{category.name}</option>
+                                    ))}
+                                </select>
+                                {errors.category_id && <p className="text-xs text-red-500 mt-1">{errors.category_id}</p>}
+                            </div>
+                            <div>
+                                <label className="flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={data.is_active}
+                                        onChange={(event) => setData('is_active', event.target.checked)}
+                                        className="rounded border-zinc-300"
+                                    />
+                                    <span className="text-sm font-medium text-slate-700">Active</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label className="flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={data.featured}
+                                        onChange={(event) => setData('featured', event.target.checked)}
+                                        className="rounded border-zinc-300"
+                                    />
+                                    <span className="text-sm font-medium text-slate-700">Featured</span>
+                                </label>
+                            </div>
+                            <div className="md:col-span-2 flex justify-end gap-3">
+                                <Link
+                                    href="/admin/products"
+                                    className="rounded-lg bg-gray-200 px-4 py-2 font-medium text-slate-900 hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </Link>
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                                >
+                                    {processing ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
+                    )}
 
-                <div className="rounded border p-4">
-                    <p className="text-sm font-semibold">Gallery Images (max {MAX_GALLERY_ITEMS})</p>
-                    <input type="file" accept="image/*" multiple onChange={onGalleryChange} className="mt-2 rounded border p-2" />
-                    {errors.gallery && <p className="mt-2 text-xs text-red-500">{errors.gallery}</p>}
-                    <p className="mt-2 text-xs text-zinc-500">Selected: {data.gallery.length} files</p>
-                    {galleryPreviews.length > 0 && (
-                        <div className="mt-3 grid grid-cols-4 gap-2">
-                            {galleryPreviews.map((preview, index) => (
-                                <img key={`${preview}-${index}`} src={preview} alt={`Gallery preview ${index + 1}`} className="h-24 w-full rounded border object-cover" />
-                            ))}
-                        </div>
+                    {currentTab === 'description' && (
+                        <form onSubmit={submit} className="grid gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                                <textarea
+                                    id="description-editor"
+                                    value={data.description}
+                                    onChange={(event) => setData('description', event.target.value)}
+                                    rows={12}
+                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    placeholder="Enter product description (HTML supported)"
+                                />
+                                {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description}</p>}
+                            </div>
+                            <div className="flex justify-end gap-3">
+                                <Link
+                                    href="/admin/products"
+                                    className="rounded-lg bg-gray-200 px-4 py-2 font-medium text-slate-900 hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </Link>
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                                >
+                                    {processing ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
+                    )}
+
+                    {currentTab === 'specifications' && (
+                        <form onSubmit={submit} className="grid gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Specifications</label>
+                                <p className="text-xs text-zinc-500 mb-2">Enter product specifications in HTML format. Use tables, lists, or any HTML formatting.</p>
+                                <textarea
+                                    id="specifications-editor"
+                                    value={data.specifications}
+                                    onChange={(event) => setData('specifications', event.target.value)}
+                                    rows={12}
+                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    placeholder="Enter product specifications (HTML supported)"
+                                />
+                                {errors.specifications && <p className="text-xs text-red-500 mt-1">{errors.specifications}</p>}
+                            </div>
+                            <div className="flex justify-end gap-3">
+                                <Link
+                                    href="/admin/products"
+                                    className="rounded-lg bg-gray-200 px-4 py-2 font-medium text-slate-900 hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </Link>
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                                >
+                                    {processing ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
+                    )}
+
+                    {currentTab === 'media' && (
+                        <form onSubmit={submit} className="grid gap-4">
+                            <div className="rounded-lg border border-zinc-200 p-4">
+                                <p className="text-sm font-medium text-slate-700">Primary Image</p>
+                                {primaryImagePreview && (
+                                    <img src={primaryImagePreview} alt="Primary preview" className="mt-2 h-24 w-24 rounded border object-cover" />
+                                )}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(event) => setData('image', event.target.files?.[0] ?? null)}
+                                    className="mt-3 w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                />
+                                {errors.image && <p className="text-xs text-red-500 mt-1">{errors.image}</p>}
+                            </div>
+                            <div className="rounded-lg border border-zinc-200 p-4">
+                                <p className="text-sm font-medium text-slate-700">Gallery Images (max {MAX_GALLERY_ITEMS})</p>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={onGalleryChange}
+                                    className="mt-3 w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                />
+                                {errors.gallery && <p className="text-xs text-red-500 mt-1">{errors.gallery}</p>}
+                                <p className="mt-2 text-xs text-zinc-500">Selected: {data.gallery.length} files</p>
+                                {galleryPreviews.length > 0 && (
+                                    <div className="mt-3 grid grid-cols-4 gap-2">
+                                        {galleryPreviews.map((preview, index) => (
+                                            <img key={`${preview}-${index}`} src={preview} alt={`Gallery preview ${index + 1}`} className="h-20 w-full rounded border object-cover" />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex justify-end gap-3">
+                                <Link
+                                    href="/admin/products"
+                                    className="rounded-lg bg-gray-200 px-4 py-2 font-medium text-slate-900 hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </Link>
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                                >
+                                    {processing ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
                     )}
                 </div>
-
-                <label className="inline-flex items-center gap-2 text-sm font-medium">
-                    <input type="checkbox" checked={data.is_active} onChange={(event) => setData('is_active', event.target.checked)} />
-                    Active Product
-                </label>
-
-                <label className="inline-flex items-center gap-2 text-sm font-medium">
-                    <input type="checkbox" checked={data.featured} onChange={(event) => setData('featured', event.target.checked)} />
-                    Featured Product
-                </label>
-
-                <button disabled={processing} className="w-fit cursor-pointer rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60">
-                    Save
-                </button>
-            </form>
+            </div>
         </main>
     );
 }

@@ -23,8 +23,8 @@ class OrderService
     {
         $cart = $this->cartService->getCart($user);
         $total = $this->calculateCartTotalAction->execute($cart);
-        $order = $this->createOrderAction->execute($cart, $address, $total, $mpesaPhone, $shippingAmount, $taxAmount, $paymentMethod, $firstName, $lastName, $email, $phone);
+        $order = $this->createOrderAction->execute($cart->load('items.variant'), $address, $total, $mpesaPhone, $shippingAmount, $taxAmount, $paymentMethod, $firstName, $lastName, $email, $phone);
 
-        return $this->processCheckoutAction->execute($cart->load('items.product'), $order, $paymentMethod);
+        return $this->processCheckoutAction->execute($cart->load('items.product', 'items.variant'), $order, $paymentMethod);
     }
 }

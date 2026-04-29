@@ -65,6 +65,6 @@ class ProductService
 
     public function getBySlug(string $slug): Product
     {
-        return Product::query()->with('category')->where('slug', $slug)->firstOrFail();
+        return Product::query()->with(['category', 'variants'])->where('slug', $slug)->firstOrFail();
     }
 }

@@ -29,16 +29,19 @@ class CreateOrderAction
         ]);
 
         $items = $cart->items->map(function ($item): array {
+            $unitPrice = $item->variant ? $item->variant->price : $item->product->price;
+
             return [
                 'product_id' => $item->product_id,
+                'variant_id' => $item->variant_id,
                 'quantity' => $item->quantity,
-                'unit_price' => $item->product->price,
-                'line_total' => (float) $item->product->price * $item->quantity,
+                'unit_price' => $unitPrice,
+                'line_total' => (float) $unitPrice * $item->quantity,
             ];
         })->all();
 
         $order->items()->createMany($items);
 
-        return $order;
+        return $order->load('items.variant');
     }
 }

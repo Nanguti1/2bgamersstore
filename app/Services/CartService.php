@@ -22,13 +22,13 @@ class CartService
 
     public function getCart(User $user): Cart
     {
-        return Cart::query()->firstOrCreate(['user_id' => $user->id])->load('items.product');
+        return Cart::query()->firstOrCreate(['user_id' => $user->id])->load('items.product', 'items.variant');
     }
 
-    public function addItem(User $user, Product $product, int $quantity): Cart
+    public function addItem(User $user, Product $product, int $quantity, ?int $variantId = null): Cart
     {
         $cart = $this->getCart($user);
-        $this->addToCartAction->execute($cart, $product, $quantity);
+        $this->addToCartAction->execute($cart, $product, $quantity, $variantId);
 
         return $this->getCart($user);
     }

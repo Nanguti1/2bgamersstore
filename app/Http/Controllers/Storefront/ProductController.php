@@ -33,6 +33,14 @@ class ProductController extends Controller
             ->withCount('reviews')
             ->firstOrFail();
 
+        $relatedProducts = Product::query()
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_active', true)
+            ->inRandomOrder()
+            ->take(4)
+            ->get(['id', 'name', 'slug', 'price', 'image']);
+
         return Inertia::render('Products/Show', [
             'product' => $product,
             'reviews' => $product->reviews()
@@ -43,6 +51,7 @@ class ProductController extends Controller
                 'average_rating' => round((float) ($reviewSummary->reviews_avg_rating ?? 0), 1),
                 'total_reviews' => (int) $reviewSummary->reviews_count,
             ],
+            'relatedProducts' => $relatedProducts,
         ]);
     }
 }

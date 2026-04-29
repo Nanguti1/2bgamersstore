@@ -8,8 +8,10 @@ use App\Http\Requests\Admin\ToggleProductFeaturedRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -43,13 +45,16 @@ class ProductController extends Controller
         ]);
     }
 
-    public function edit(Product $product): Response
+    public function edit(Product $product, Request $request): Response
     {
         $this->authorize('update', $product);
 
+        $activeTab = $request->query('tab', 'general');
+
         return Inertia::render('Admin/Products/Edit', [
-            'product' => $product->load('category'),
+            'product' => $product->load(['category', 'variants']),
             'categories' => Category::query()->orderBy('name')->get(),
+            'activeTab' => $activeTab,
         ]);
     }
 
@@ -135,6 +140,34 @@ class ProductController extends Controller
         ]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
+
+        return back();
+    }
+
+    public function updateVariants(Request $request, Product $product): RedirectResponse
+    {
+        $this->authorize('update', $product);
+
+        $variants = $request->input('variants', []);
+
+        // Delete existing variants
+        $product->variants()->delete();
+
+        // Create new variants
+        foreach ($variants as $variant) {
+            if (! empty($variant['name']) && ! empty($variant['sku']) && isset($variant['price']) && isset($variant['stock'])) {
+                ProductVariant::query()->create([
+                    'product_id' => $product->id,
+                    'name' => $variant['name'],
+                    'sku' => $variant['sku'],
+                    'price' => $variant['price'],
+                    'stock' => $variant['stock'],
+                    'is_active' => $variant['is_active'] ?? true,
+                ]);
+            }
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Variants updated successfully.']);
 
         return back();
     }

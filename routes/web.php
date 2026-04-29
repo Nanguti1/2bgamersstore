@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ManagementController as AdminManagementController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\MpesaC2BController;
 use App\Http\Controllers\MpesaSTKPUSHController;
 use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\CheckoutController;
@@ -94,5 +95,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 
 // Mpesa STK Push Routes
 Route::post('/v1/mpesa/stk/push', [MpesaSTKPUSHController::class, 'STKPush'])->name('mpesa.stk.push');
+
+// Mpesa C2B Routes
+Route::post('/v1/mpesa/c2b/register-urls', [MpesaC2BController::class, 'registerURLS'])->name('mpesa.c2b.register');
 
 require __DIR__.'/settings.php';

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ManagementController as AdminManagementController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\MpesaSTKPUSHController;
 use App\Http\Controllers\Storefront\CartController;
 use App\Http\Controllers\Storefront\CheckoutController;
 use App\Http\Controllers\Storefront\ConsultationAppointmentController;
@@ -90,5 +91,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         Route::delete('/access-control/permissions/{permission}', [AdminManagementController::class, 'destroyPermission'])->name('access-control.permissions.destroy');
     });
 });
+
+// Mpesa STK Push Routes
+Route::post('/v1/mpesa/stk/push', [MpesaSTKPUSHController::class, 'STKPush'])->name('mpesa.stk.push');
 
 require __DIR__.'/settings.php';

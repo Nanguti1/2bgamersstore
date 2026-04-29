@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Storefront;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkout\CheckoutRequest;
+use App\Models\MpesaSTK;
 use App\Services\CartService;
 use App\Services\OrderService;
+use Iankumu\Mpesa\Facades\Mpesa;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -42,6 +44,7 @@ class CheckoutController extends Controller
         $shippingAmount = 650; // Fixed shipping cost
         $taxAmount = $orderService->cartService->total($orderService->cartService->getCart($request->user())) * 0.16;
 
+        // Create order first
         $order = $orderService->checkout(
             $request->user(),
             $address,
@@ -54,6 +57,31 @@ class CheckoutController extends Controller
             $email,
             $phone
         );
+
+        // If payment method is Mpesa, initiate STK Push
+        if ($paymentMethod === 'mpesa' && $mpesaPhone) {
+            $amount = $order->total_amount;
+
+            $response = Mpesa::stkpush(
+                phonenumber: $mpesaPhone,
+                amount: $amount,
+                account_number: $order->id,
+                callbackurl: null,
+                transactionType: Mpesa::PAYBILL
+            );
+
+            $result = $response->json();
+
+            // Store the STK Push request details
+            MpesaSTK::create([
+                'merchant_request_id' => $result['MerchantRequestID'],
+                'checkout_request_id' => $result['CheckoutRequestID'],
+                'amount' => (string) $amount,
+                'phonenumber' => $mpesaPhone,
+            ]);
+
+            return redirect()->route('home')->with('success', 'Order placed successfully! Please complete the Mpesa payment on your phone.');
+        }
 
         return redirect()->route('home')->with('success', 'Order placed successfully!');
     }

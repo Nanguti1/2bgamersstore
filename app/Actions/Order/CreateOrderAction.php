@@ -30,10 +30,11 @@ class CreateOrderAction
 
         $items = $cart->items->map(function ($item): array {
             $unitPrice = $item->variant ? $item->variant->price : $item->product->price;
+            $variantId = $item->variant_id !== null && $item->variant_id > 0 ? $item->variant_id : null;
 
             return [
                 'product_id' => $item->product_id,
-                'variant_id' => $item->variant_id,
+                'variant_id' => $variantId,
                 'quantity' => $item->quantity,
                 'unit_price' => $unitPrice,
                 'line_total' => (float) $unitPrice * $item->quantity,

@@ -9,6 +9,10 @@ class AddToCartAction
 {
     public function execute(Cart $cart, Product $product, int $quantity, ?int $variantId = null): void
     {
+        if ($variantId !== null && $variantId <= 0) {
+            $variantId = null;
+        }
+
         $conditions = ['product_id' => $product->id];
         if ($variantId !== null) {
             $conditions['variant_id'] = $variantId;
@@ -19,6 +23,10 @@ class AddToCartAction
         $stockLimit = $variantId !== null
             ? $product->variants()->where('id', $variantId)->value('stock')
             : $product->stock;
+
+        if ($stockLimit === null) {
+            $stockLimit = $product->stock;
+        }
 
         $currentQuantity = $item->quantity ?? 0;
         $item->quantity = min($stockLimit, $currentQuantity + $quantity);

@@ -20,6 +20,10 @@ class AddToCartAction
             ? $product->variants()->where('id', $variantId)->value('stock')
             : $product->stock;
 
+        if ($stockLimit === null) {
+            $stockLimit = $product->stock;
+        }
+
         $currentQuantity = $item->quantity ?? 0;
         $item->quantity = min($stockLimit, $currentQuantity + $quantity);
         

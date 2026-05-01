@@ -1,7 +1,7 @@
 import { Footer } from '@/components/store/footer';
 import { Navbar } from '@/components/store/navbar';
 import { ThinHero } from '@/components/store/thin-hero';
-import { useForm, router } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 
 interface CartItem {
     id: number;
@@ -57,11 +57,14 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                     <form
                         onSubmit={(event) => {
                             event.preventDefault();
-                            const submitData: any = { ...data };
+                            const submitData: Record<string, string> = { ...data };
                             if (submitData.payment_method !== 'mpesa') {
                                 delete submitData.mpesa_phone;
                             }
-                            router.post('/checkout', submitData);
+                            post('/checkout', {
+                                data: submitData,
+                                preserveScroll: true,
+                            });
                         }}
                         className="mt-8 space-y-4"
                     >
@@ -211,8 +214,15 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                             maxLength={2}
                         />
 
-                        {(errors.line_1 || errors.city || errors.state || errors.postal_code || errors.country || errors.mpesa_phone) && (
-                            <p className="text-sm text-red-600">Please fill all required fields correctly.</p>
+                        {Object.keys(errors).length > 0 && (
+                            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                <p className="font-medium">Please correct the highlighted checkout fields.</p>
+                                <ul className="mt-2 list-disc space-y-1 pl-5">
+                                    {Object.entries(errors).map(([field, message]) => (
+                                        <li key={field}>{message}</li>
+                                    ))}
+                                </ul>
+                            </div>
                         )}
 
                         <button

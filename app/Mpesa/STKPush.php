@@ -6,6 +6,7 @@ use App\Enums\PaymentStatus;
 use App\Models\MpesaSTK;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class STKPush
 {
@@ -14,6 +15,10 @@ class STKPush
 
     public function confirm(Request $request): self
     {
+        Log::info('M-Pesa STK callback received.', [
+            'payload' => $request->getContent(),
+        ]);
+
         $payload = json_decode($request->getContent());
 
         if (property_exists($payload, 'Body') && $payload->Body->stkCallback->ResultCode == '0') {
@@ -57,8 +62,10 @@ class STKPush
 
             if ($stkPush) {
                 $stkPush->fill($data)->save();
+                Log::info('Updated existing M-Pesa STK record from callback.', $data);
             } else {
                 $stkPush = MpesaSTK::create($data);
+                Log::info('Created new M-Pesa STK record from callback.', $data);
             }
 
             // Update order payment status if payment was successful
@@ -73,10 +80,26 @@ class STKPush
                     $order->update([
                         'payment_status' => PaymentStatus::Paid,
                     ]);
+
+                    Log::info('Marked order as paid from STK callback.', [
+                        'order_id' => $order->id,
+                        'checkout_request_id' => $checkout_request_id,
+                        'mpesa_receipt_number' => $mpesa_receipt_number,
+                    ]);
+                } else {
+                    Log::warning('No pending order matched successful STK callback.', [
+                        'mpesa_receipt_number' => $mpesa_receipt_number,
+                        'phone' => $phonenumber,
+                        'checkout_request_id' => $checkout_request_id,
+                    ]);
                 }
             }
         } else {
             $this->failed = true;
+
+            Log::warning('M-Pesa STK callback indicates failure or invalid payload.', [
+                'payload' => $request->getContent(),
+            ]);
         }
 
         return $this;

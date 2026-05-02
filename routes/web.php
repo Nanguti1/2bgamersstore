@@ -44,6 +44,9 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/{order}/awaiting-payment', [CheckoutController::class, 'awaiting'])->name('checkout.awaiting');
+    Route::get('/checkout/{order}/payment-status', [CheckoutController::class, 'paymentStatus'])->name('checkout.payment-status');
+    Route::post('/checkout/{order}/retry-mpesa', [CheckoutController::class, 'retryMpesa'])->name('checkout.retry-mpesa');
 
     Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])->name('products.reviews.store');
 

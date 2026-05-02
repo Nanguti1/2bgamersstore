@@ -16,13 +16,14 @@ class Order extends Model
     /** @use HasFactory<OrderFactory> */
     use HasFactory;
 
-    protected $fillable = ['user_id', 'first_name', 'last_name', 'email', 'phone', 'address_id', 'mpesa_phone', 'total_amount', 'shipping_amount', 'tax_amount', 'status', 'payment_status', 'payment_method'];
+    protected $fillable = ['user_id', 'first_name', 'last_name', 'email', 'phone', 'address_id', 'mpesa_phone', 'mpesa_receipt_number', 'total_amount', 'shipping_amount', 'tax_amount', 'status', 'payment_status', 'paid_at', 'payment_method'];
 
     protected function casts(): array
     {
         return [
             'status' => OrderStatus::class,
             'payment_status' => PaymentStatus::class,
+            'paid_at' => 'datetime',
             'total_amount' => 'decimal:2',
             'shipping_amount' => 'decimal:2',
             'tax_amount' => 'decimal:2',

@@ -64,28 +64,6 @@ class CheckoutController extends Controller
             $amount = $order->total_amount;
             $callbackUrl = config('mpesa.callbacks.callback_url');
 
-            Log::info('Initiating M-Pesa STK push from checkout.', [
-                'order_id' => $order->id,
-                'amount' => $amount,
-                'phone' => $mpesaPhone,
-                'payment_method' => $paymentMethod,
-                'callback_url' => $callbackUrl,
-            ]);
-
-            if (! is_string($callbackUrl) || $callbackUrl === '' || ! str_starts_with($callbackUrl, 'https://')) {
-                Log::warning('M-Pesa callback URL may be unreachable by Safaricom. Use a public HTTPS URL.', [
-                    'app_url' => config('app.url'),
-                    'callback_url' => $callbackUrl,
-                ]);
-            }
-
-            Log::info('Initiating M-Pesa STK push from checkout.', [
-                'order_id' => $order->id,
-                'amount' => $amount,
-                'phone' => $mpesaPhone,
-                'payment_method' => $paymentMethod,
-            ]);
-
             $response = Mpesa::stkpush(
                 phonenumber: $mpesaPhone,
                 amount: $amount,
@@ -105,6 +83,7 @@ class CheckoutController extends Controller
             MpesaSTK::create([
                 'merchant_request_id' => $result['MerchantRequestID'],
                 'checkout_request_id' => $result['CheckoutRequestID'],
+                'order_id' => $order->id,
                 'amount' => (string) $amount,
                 'phonenumber' => $mpesaPhone,
             ]);

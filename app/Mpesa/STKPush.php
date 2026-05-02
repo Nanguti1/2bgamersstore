@@ -5,6 +5,7 @@ namespace App\Mpesa;
 use App\Enums\PaymentStatus;
 use App\Models\MpesaSTK;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class STKPush
@@ -63,15 +64,34 @@ class STKPush
 
             // Update order payment status if payment was successful
             if ($result_code == '0') {
-                $order = Order::where('id', $mpesa_receipt_number)
-                    ->orWhere('mpesa_phone', $phonenumber)
-                    ->where('payment_method', 'mpesa')
-                    ->where('payment_status', PaymentStatus::Pending)
-                    ->first();
+                $order = null;
+
+                if ($stkPush?->order_id) {
+                    $order = Order::query()
+                        ->where('id', $stkPush->order_id)
+                        ->where('payment_method', 'mpesa')
+                        ->where('payment_status', PaymentStatus::Pending)
+                        ->first();
+                }
+
+                if (! $order) {
+                    $order = Order::query()
+                        ->where('mpesa_phone', (string) $phonenumber)
+                        ->where('payment_method', 'mpesa')
+                        ->where('payment_status', PaymentStatus::Pending)
+                        ->latest('id')
+                        ->first();
+                }
 
                 if ($order) {
+                    $paidAt = is_numeric($transaction_date)
+                        ? Carbon::createFromFormat('YmdHis', (string) $transaction_date)->toDateTimeString()
+                        : now()->toDateTimeString();
+
                     $order->update([
                         'payment_status' => PaymentStatus::Paid,
+                        'mpesa_receipt_number' => (string) $mpesa_receipt_number,
+                        'paid_at' => $paidAt,
                     ]);
                 }
             }

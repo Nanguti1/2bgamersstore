@@ -4,6 +4,10 @@ type Order = {
     id: number;
     total_amount: string;
     status: string;
+    payment_method: string;
+    payment_status: string;
+    mpesa_receipt_number: string | null;
+    paid_at: string | null;
     user?: {
         name: string;
         email: string;
@@ -33,6 +37,7 @@ export default function AdminOrdersIndex({ orders, statuses }: { orders: Paginat
                                 <th className="px-6 py-3 font-semibold">Customer</th>
                                 <th className="px-6 py-3 font-semibold">Total</th>
                                 <th className="px-6 py-3 font-semibold">Status</th>
+                                <th className="px-6 py-3 font-semibold">Payment</th>
                                 <th className="px-6 py-3 text-right font-semibold">Actions</th>
                             </tr>
                         </thead>
@@ -55,6 +60,11 @@ export default function AdminOrdersIndex({ orders, statuses }: { orders: Paginat
                                                 <option key={status} value={status}>{status}</option>
                                             ))}
                                         </select>
+                                    </td>
+                                    <td className="px-6 py-3 text-sm text-slate-700">
+                                        <p className="font-medium uppercase">{order.payment_method}</p>
+                                        <p>{order.payment_status}</p>
+                                        {order.payment_method === 'mpesa' && order.mpesa_receipt_number && <p>Receipt: {order.mpesa_receipt_number}</p>}
                                     </td>
                                     <td className="px-6 py-3 text-right">
                                         <div className="flex items-center justify-end gap-2">

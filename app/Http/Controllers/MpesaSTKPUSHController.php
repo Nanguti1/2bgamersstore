@@ -23,12 +23,13 @@ class MpesaSTKPUSHController extends Controller
         $amount = $request->input('amount');
         $phoneno = $request->input('phonenumber');
         $account_number = $request->input('account_number');
+        $callbackUrl = config('mpesa.callbacks.callback_url');
 
         $response = Mpesa::stkpush(
             phonenumber: $phoneno,
             amount: $amount,
             account_number: $account_number,
-            callbackurl: null,
+            callbackurl: $callbackUrl,
             transactionType: Mpesa::PAYBILL
         );
 

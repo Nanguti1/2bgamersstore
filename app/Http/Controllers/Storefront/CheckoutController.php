@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Storefront;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkout\CheckoutRequest;
+use App\Models\Order;
 use App\Models\MpesaSTK;
 use App\Services\CartService;
 use App\Services\OrderService;
 use Iankumu\Mpesa\Facades\Mpesa;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -88,15 +90,62 @@ class CheckoutController extends Controller
                 'phonenumber' => $mpesaPhone,
             ]);
 
-            Log::info('Saved initial M-Pesa STK request record.', [
-                'order_id' => $order->id,
-                'merchant_request_id' => $result['MerchantRequestID'] ?? null,
-                'checkout_request_id' => $result['CheckoutRequestID'] ?? null,
-            ]);
-
-            return redirect()->route('home')->with('success', 'Order placed successfully! Please complete the Mpesa payment on your phone.');
+            return redirect()->route('checkout.awaiting', $order);
         }
 
         return redirect()->route('home')->with('success', 'Order placed successfully!');
+    }
+
+    public function awaiting(Order $order): Response
+    {
+        abort_if($order->user_id !== auth()->id(), 403);
+
+        return Inertia::render('Checkout/AwaitingPayment', [
+            'order' => $order->only(['id', 'total_amount', 'payment_status', 'payment_method', 'mpesa_phone', 'mpesa_receipt_number', 'paid_at']),
+        ]);
+    }
+
+    public function paymentStatus(Order $order): JsonResponse
+    {
+        abort_if($order->user_id !== auth()->id(), 403);
+
+        return response()->json([
+            'payment_status' => $order->payment_status,
+            'mpesa_receipt_number' => $order->mpesa_receipt_number,
+            'paid_at' => $order->paid_at,
+        ]);
+    }
+
+    public function retryMpesa(Request $request, Order $order): RedirectResponse
+    {
+        abort_if($order->user_id !== auth()->id(), 403);
+
+        if ($order->payment_method !== 'mpesa' || ! $order->mpesa_phone) {
+            return back()->with('error', 'This order is not eligible for M-Pesa retry.');
+        }
+
+        if ($order->payment_status->value === 'paid') {
+            return back()->with('success', 'This order has already been paid.');
+        }
+
+        $response = Mpesa::stkpush(
+            phonenumber: $order->mpesa_phone,
+            amount: $order->total_amount,
+            account_number: $order->id,
+            callbackurl: config('mpesa.callbacks.callback_url'),
+            transactionType: Mpesa::PAYBILL
+        );
+
+        $result = $response->json();
+
+        MpesaSTK::create([
+            'merchant_request_id' => $result['MerchantRequestID'],
+            'checkout_request_id' => $result['CheckoutRequestID'],
+            'order_id' => $order->id,
+            'amount' => (string) $order->total_amount,
+            'phonenumber' => $order->mpesa_phone,
+        ]);
+
+        return redirect()->route('checkout.awaiting', $order)->with('success', 'M-Pesa prompt resent. Complete payment on your phone.');
     }
 }

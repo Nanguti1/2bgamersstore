@@ -22,7 +22,7 @@ class STKPush
 
         $payload = json_decode($request->getContent());
 
-        if (! property_exists($payload, 'Body') || ! property_exists($payload->Body, 'stkCallback')) {
+        if (! is_object($payload) || ! property_exists($payload, 'Body') || ! is_object($payload->Body) || ! property_exists($payload->Body, 'stkCallback')) {
             $this->failed = true;
 
             return $this;
@@ -34,7 +34,7 @@ class STKPush
         $result_code = (string) $payload->Body->stkCallback->ResultCode;
 
         if ($result_code === '0') {
-            $metadata = $payload->Body->stkCallback->CallbackMetadata->Item;
+                $metadata = $payload->Body->stkCallback->CallbackMetadata->Item ?? [];
             $amount = null;
             $mpesa_receipt_number = null;
             $transaction_date = null;

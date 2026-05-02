@@ -76,10 +76,9 @@ class CheckoutController extends Controller
 
             $result = $response->json();
 
-            Log::info('M-Pesa STK push API response received.', [
-                'order_id' => $order->id,
-                'response' => $result,
-            ]);
+            if (! isset($result['MerchantRequestID'], $result['CheckoutRequestID'])) {
+                return back()->with('error', $result['errorMessage'] ?? 'Unable to start M-Pesa payment. Please try again.');
+            }
 
             // Store the STK Push request details
             MpesaSTK::create([
@@ -137,6 +136,10 @@ class CheckoutController extends Controller
         );
 
         $result = $response->json();
+
+        if (! isset($result['MerchantRequestID'], $result['CheckoutRequestID'])) {
+            return back()->with('error', $result['errorMessage'] ?? 'Unable to resend M-Pesa prompt right now.');
+        }
 
         MpesaSTK::create([
             'merchant_request_id' => $result['MerchantRequestID'],

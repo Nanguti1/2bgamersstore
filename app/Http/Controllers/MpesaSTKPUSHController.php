@@ -52,7 +52,7 @@ class MpesaSTKPUSHController extends Controller
 
         $stk_push_confirm = (new STKPush())->confirm($Request);
 
-        if ($stk_push_confirm) {
+        if (! $stk_push_confirm->failed) {
             $this->result_code = 0;
             $this->result_desc = 'Success';
         }

@@ -18,16 +18,18 @@ class ProcessCheckoutAction
                 $item->product()->decrement('stock', $item->quantity);
             }
 
+            $isMpesaPayment = $paymentMethod === 'mpesa';
+
             $order->payment()->create([
                 'amount' => $order->total_amount + $order->shipping_amount + $order->tax_amount,
-                'status' => PaymentStatus::Paid,
+                'status' => $isMpesaPayment ? PaymentStatus::Pending : PaymentStatus::Paid,
                 'reference' => 'MPESA-' . strtoupper(Str::random(10)),
                 'payment_method' => $paymentMethod,
             ]);
 
             $order->update([
-                'status' => OrderStatus::Processing,
-                'payment_status' => PaymentStatus::Paid,
+                'status' => $isMpesaPayment ? OrderStatus::Pending : OrderStatus::Processing,
+                'payment_status' => $isMpesaPayment ? PaymentStatus::Pending : PaymentStatus::Paid,
             ]);
 
             $cart->items()->delete();

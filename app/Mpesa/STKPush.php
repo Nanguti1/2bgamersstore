@@ -22,12 +22,18 @@ class STKPush
 
         $payload = json_decode($request->getContent());
 
-        if (property_exists($payload, 'Body') && $payload->Body->stkCallback->ResultCode == '0') {
-            $merchant_request_id = $payload->Body->stkCallback->MerchantRequestID;
-            $checkout_request_id = $payload->Body->stkCallback->CheckoutRequestID;
-            $result_desc = $payload->Body->stkCallback->ResultDesc;
-            $result_code = $payload->Body->stkCallback->ResultCode;
+        if (! property_exists($payload, 'Body') || ! property_exists($payload->Body, 'stkCallback')) {
+            $this->failed = true;
 
+            return $this;
+        }
+
+        $merchant_request_id = $payload->Body->stkCallback->MerchantRequestID;
+        $checkout_request_id = $payload->Body->stkCallback->CheckoutRequestID;
+        $result_desc = $payload->Body->stkCallback->ResultDesc;
+        $result_code = (string) $payload->Body->stkCallback->ResultCode;
+
+        if ($result_code === '0') {
             $metadata = $payload->Body->stkCallback->CallbackMetadata->Item;
             $amount = null;
             $mpesa_receipt_number = null;
@@ -52,7 +58,7 @@ class STKPush
 
             $data = [
                 'result_desc' => $result_desc,
-                'result_code' => $result_code,
+                'result_code' => (string) $result_code,
                 'merchant_request_id' => $merchant_request_id,
                 'checkout_request_id' => $checkout_request_id,
                 'amount' => $amount,
@@ -69,9 +75,7 @@ class STKPush
                 Log::info('Created new M-Pesa STK record from callback.', $data);
             }
 
-            // Update order payment status if payment was successful
-            if ($result_code == '0') {
-                $order = null;
+            $order = null;
 
                 if ($stkPush?->order_id) {
                     $order = Order::query()
@@ -90,31 +94,43 @@ class STKPush
                         ->first();
                 }
 
-                if ($order) {
-                    $paidAt = is_numeric($transaction_date)
-                        ? Carbon::createFromFormat('YmdHis', (string) $transaction_date)->toDateTimeString()
-                        : now()->toDateTimeString();
+            if ($order && $mpesa_receipt_number) {
+                $paidAt = is_numeric($transaction_date)
+                    ? Carbon::createFromFormat('YmdHis', (string) $transaction_date)->toDateTimeString()
+                    : now()->toDateTimeString();
 
-                    $order->update([
-                        'payment_status' => PaymentStatus::Paid,
-                        'mpesa_receipt_number' => (string) $mpesa_receipt_number,
-                        'paid_at' => $paidAt,
-                    ]);
+                $order->update([
+                    'payment_status' => PaymentStatus::Paid,
+                    'mpesa_receipt_number' => (string) $mpesa_receipt_number,
+                    'paid_at' => $paidAt,
+                ]);
 
-                    Log::info('Marked order as paid from STK callback.', [
-                        'order_id' => $order->id,
-                        'checkout_request_id' => $checkout_request_id,
-                        'mpesa_receipt_number' => $mpesa_receipt_number,
-                    ]);
-                } else {
-                    Log::warning('No pending order matched successful STK callback.', [
-                        'mpesa_receipt_number' => $mpesa_receipt_number,
-                        'phone' => $phonenumber,
-                        'checkout_request_id' => $checkout_request_id,
-                    ]);
-                }
+                $order->payment()->update([
+                    'status' => PaymentStatus::Paid,
+                    'reference' => (string) $mpesa_receipt_number,
+                ]);
             }
         } else {
+            $stkPush = MpesaSTK::where('merchant_request_id', $merchant_request_id)
+                ->where('checkout_request_id', $checkout_request_id)
+                ->first();
+
+            if ($stkPush) {
+                $stkPush->update([
+                    'result_code' => $result_code,
+                    'result_desc' => $result_desc,
+                ]);
+
+                if ($stkPush->order_id) {
+                    $order = Order::query()->find($stkPush->order_id);
+
+                    if ($order && $order->payment_status === PaymentStatus::Pending) {
+                        $order->update(['payment_status' => PaymentStatus::Failed]);
+                        $order->payment()->update(['status' => PaymentStatus::Failed]);
+                    }
+                }
+            }
+
             $this->failed = true;
 
             Log::warning('M-Pesa STK callback indicates failure or invalid payload.', [

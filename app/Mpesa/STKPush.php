@@ -7,6 +7,7 @@ use App\Models\MpesaSTK;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class STKPush
 {
@@ -15,6 +16,10 @@ class STKPush
 
     public function confirm(Request $request): self
     {
+        Log::info('M-Pesa STK callback received.', [
+            'payload' => $request->getContent(),
+        ]);
+
         $payload = json_decode($request->getContent());
 
         if (! property_exists($payload, 'Body') || ! property_exists($payload->Body, 'stkCallback')) {
@@ -64,8 +69,10 @@ class STKPush
 
             if ($stkPush) {
                 $stkPush->fill($data)->save();
+                Log::info('Updated existing M-Pesa STK record from callback.', $data);
             } else {
                 $stkPush = MpesaSTK::create($data);
+                Log::info('Created new M-Pesa STK record from callback.', $data);
             }
 
             $order = null;
@@ -125,6 +132,10 @@ class STKPush
             }
 
             $this->failed = true;
+
+            Log::warning('M-Pesa STK callback indicates failure or invalid payload.', [
+                'payload' => $request->getContent(),
+            ]);
         }
 
         return $this;

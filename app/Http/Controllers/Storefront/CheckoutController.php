@@ -76,6 +76,11 @@ class CheckoutController extends Controller
 
             $result = $response->json();
 
+            Log::info('M-Pesa STK push API response received.', [
+                'order_id' => $order->id,
+                'response' => $result,
+            ]);
+
             // Store the STK Push request details
             MpesaSTK::create([
                 'merchant_request_id' => $result['MerchantRequestID'],

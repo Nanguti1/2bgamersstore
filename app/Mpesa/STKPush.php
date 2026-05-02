@@ -5,6 +5,7 @@ namespace App\Mpesa;
 use App\Enums\PaymentStatus;
 use App\Models\MpesaSTK;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class STKPush
@@ -16,12 +17,18 @@ class STKPush
     {
         $payload = json_decode($request->getContent());
 
-        if (property_exists($payload, 'Body') && $payload->Body->stkCallback->ResultCode == '0') {
-            $merchant_request_id = $payload->Body->stkCallback->MerchantRequestID;
-            $checkout_request_id = $payload->Body->stkCallback->CheckoutRequestID;
-            $result_desc = $payload->Body->stkCallback->ResultDesc;
-            $result_code = $payload->Body->stkCallback->ResultCode;
+        if (! property_exists($payload, 'Body') || ! property_exists($payload->Body, 'stkCallback')) {
+            $this->failed = true;
 
+            return $this;
+        }
+
+        $merchant_request_id = $payload->Body->stkCallback->MerchantRequestID;
+        $checkout_request_id = $payload->Body->stkCallback->CheckoutRequestID;
+        $result_desc = $payload->Body->stkCallback->ResultDesc;
+        $result_code = (string) $payload->Body->stkCallback->ResultCode;
+
+        if ($result_code === '0') {
             $metadata = $payload->Body->stkCallback->CallbackMetadata->Item;
             $amount = null;
             $mpesa_receipt_number = null;
@@ -46,7 +53,7 @@ class STKPush
 
             $data = [
                 'result_desc' => $result_desc,
-                'result_code' => $result_code,
+                'result_code' => (string) $result_code,
                 'merchant_request_id' => $merchant_request_id,
                 'checkout_request_id' => $checkout_request_id,
                 'amount' => $amount,
@@ -61,21 +68,62 @@ class STKPush
                 $stkPush = MpesaSTK::create($data);
             }
 
-            // Update order payment status if payment was successful
-            if ($result_code == '0') {
-                $order = Order::where('id', $mpesa_receipt_number)
-                    ->orWhere('mpesa_phone', $phonenumber)
-                    ->where('payment_method', 'mpesa')
-                    ->where('payment_status', PaymentStatus::Pending)
-                    ->first();
+            $order = null;
 
-                if ($order) {
-                    $order->update([
-                        'payment_status' => PaymentStatus::Paid,
-                    ]);
+                if ($stkPush?->order_id) {
+                    $order = Order::query()
+                        ->where('id', $stkPush->order_id)
+                        ->where('payment_method', 'mpesa')
+                        ->where('payment_status', PaymentStatus::Pending)
+                        ->first();
                 }
+
+                if (! $order) {
+                    $order = Order::query()
+                        ->where('mpesa_phone', (string) $phonenumber)
+                        ->where('payment_method', 'mpesa')
+                        ->where('payment_status', PaymentStatus::Pending)
+                        ->latest('id')
+                        ->first();
+                }
+
+            if ($order && $mpesa_receipt_number) {
+                $paidAt = is_numeric($transaction_date)
+                    ? Carbon::createFromFormat('YmdHis', (string) $transaction_date)->toDateTimeString()
+                    : now()->toDateTimeString();
+
+                $order->update([
+                    'payment_status' => PaymentStatus::Paid,
+                    'mpesa_receipt_number' => (string) $mpesa_receipt_number,
+                    'paid_at' => $paidAt,
+                ]);
+
+                $order->payment()->update([
+                    'status' => PaymentStatus::Paid,
+                    'reference' => (string) $mpesa_receipt_number,
+                ]);
             }
         } else {
+            $stkPush = MpesaSTK::where('merchant_request_id', $merchant_request_id)
+                ->where('checkout_request_id', $checkout_request_id)
+                ->first();
+
+            if ($stkPush) {
+                $stkPush->update([
+                    'result_code' => $result_code,
+                    'result_desc' => $result_desc,
+                ]);
+
+                if ($stkPush->order_id) {
+                    $order = Order::query()->find($stkPush->order_id);
+
+                    if ($order && $order->payment_status === PaymentStatus::Pending) {
+                        $order->update(['payment_status' => PaymentStatus::Failed]);
+                        $order->payment()->update(['status' => PaymentStatus::Failed]);
+                    }
+                }
+            }
+
             $this->failed = true;
         }
 

@@ -1,5 +1,17 @@
 import { router } from '@inertiajs/react';
 
+const formatPaymentDate = (value: string | null): string => {
+    if (!value) {
+        return '-';
+    }
+
+    const parsedDate = new Date(value);
+
+    return Number.isNaN(parsedDate.getTime())
+        ? value
+        : new Intl.DateTimeFormat('en-KE', { dateStyle: 'medium', timeStyle: 'short' }).format(parsedDate);
+};
+
 export default function AdminOrdersShow({ order }: { order: any }): JSX.Element {
     return (
         <main className="min-h-screen bg-[#f3f4f6] p-6 md:p-8">
@@ -44,6 +56,18 @@ export default function AdminOrdersShow({ order }: { order: any }): JSX.Element 
                                 <h3 className="font-semibold text-slate-700">Payment Method</h3>
                                 <p className="text-slate-900">{order.payment_method}</p>
                             </div>
+                            {order.payment_method === 'mpesa' && (
+                                <>
+                                    <div>
+                                        <h3 className="font-semibold text-slate-700">M-Pesa Receipt</h3>
+                                        <p className="text-slate-900">{order.mpesa_receipt_number ?? '-'}</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-slate-700">Paid At</h3>
+                                        <p className="text-slate-900">{formatPaymentDate(order.paid_at)}</p>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">

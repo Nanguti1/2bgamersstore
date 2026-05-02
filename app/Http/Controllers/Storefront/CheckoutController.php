@@ -61,12 +61,13 @@ class CheckoutController extends Controller
         // If payment method is Mpesa, initiate STK Push
         if ($paymentMethod === 'mpesa' && $mpesaPhone) {
             $amount = $order->total_amount;
+            $callbackUrl = config('mpesa.callbacks.callback_url');
 
             $response = Mpesa::stkpush(
                 phonenumber: $mpesaPhone,
                 amount: $amount,
                 account_number: $order->id,
-                callbackurl: null,
+                callbackurl: $callbackUrl,
                 transactionType: Mpesa::PAYBILL
             );
 
@@ -76,6 +77,7 @@ class CheckoutController extends Controller
             MpesaSTK::create([
                 'merchant_request_id' => $result['MerchantRequestID'],
                 'checkout_request_id' => $result['CheckoutRequestID'],
+                'order_id' => $order->id,
                 'amount' => (string) $amount,
                 'phonenumber' => $mpesaPhone,
             ]);

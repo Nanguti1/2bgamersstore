@@ -24,6 +24,14 @@ class MpesaSTKPUSHController extends Controller
         $amount = $request->input('amount');
         $phoneno = $request->input('phonenumber');
         $account_number = $request->input('account_number');
+        $callbackUrl = config('mpesa.callbacks.callback_url');
+
+        Log::info('Manual STK push endpoint called.', [
+            'amount' => $amount,
+            'phone' => $phoneno,
+            'account_number' => $account_number,
+            'callback_url' => $callbackUrl,
+        ]);
 
         Log::info('Manual STK push endpoint called.', [
             'amount' => $amount,
@@ -35,7 +43,7 @@ class MpesaSTKPUSHController extends Controller
             phonenumber: $phoneno,
             amount: $amount,
             account_number: $account_number,
-            callbackurl: null,
+            callbackurl: $callbackUrl,
             transactionType: Mpesa::PAYBILL
         );
 

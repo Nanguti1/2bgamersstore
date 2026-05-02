@@ -62,6 +62,22 @@ class CheckoutController extends Controller
         // If payment method is Mpesa, initiate STK Push
         if ($paymentMethod === 'mpesa' && $mpesaPhone) {
             $amount = $order->total_amount;
+            $callbackUrl = config('mpesa.callbacks.callback_url');
+
+            Log::info('Initiating M-Pesa STK push from checkout.', [
+                'order_id' => $order->id,
+                'amount' => $amount,
+                'phone' => $mpesaPhone,
+                'payment_method' => $paymentMethod,
+                'callback_url' => $callbackUrl,
+            ]);
+
+            if (! is_string($callbackUrl) || $callbackUrl === '' || ! str_starts_with($callbackUrl, 'https://')) {
+                Log::warning('M-Pesa callback URL may be unreachable by Safaricom. Use a public HTTPS URL.', [
+                    'app_url' => config('app.url'),
+                    'callback_url' => $callbackUrl,
+                ]);
+            }
 
             Log::info('Initiating M-Pesa STK push from checkout.', [
                 'order_id' => $order->id,
@@ -74,7 +90,7 @@ class CheckoutController extends Controller
                 phonenumber: $mpesaPhone,
                 amount: $amount,
                 account_number: $order->id,
-                callbackurl: null,
+                callbackurl: $callbackUrl,
                 transactionType: Mpesa::PAYBILL
             );
 

@@ -6,6 +6,7 @@ use App\Mpesa\STKPush;
 use App\Models\MpesaSTK;
 use Iankumu\Mpesa\Facades\Mpesa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MpesaSTKPUSHController extends Controller
 {
@@ -35,6 +36,8 @@ class MpesaSTKPUSHController extends Controller
 
         $result = $response->json();
 
+        Log::info('Manual STK push API response.', ['response' => $result]);
+
         MpesaSTK::create([
             'merchant_request_id' => $result['MerchantRequestID'],
             'checkout_request_id' => $result['CheckoutRequestID'],
@@ -45,6 +48,8 @@ class MpesaSTKPUSHController extends Controller
 
     public function STKConfirm(Request $Request): array
     {
+        Log::info('STK confirm endpoint hit.', ['payload' => $Request->getContent()]);
+
         $stk_push_confirm = (new STKPush())->confirm($Request);
 
         if (! $stk_push_confirm->failed) {

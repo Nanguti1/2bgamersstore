@@ -9,6 +9,7 @@ use App\Services\CartService;
 use App\Services\OrderService;
 use Iankumu\Mpesa\Facades\Mpesa;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -73,6 +74,11 @@ class CheckoutController extends Controller
 
             $result = $response->json();
 
+            Log::info('M-Pesa STK push API response received.', [
+                'order_id' => $order->id,
+                'response' => $result,
+            ]);
+
             // Store the STK Push request details
             MpesaSTK::create([
                 'merchant_request_id' => $result['MerchantRequestID'],
@@ -80,6 +86,12 @@ class CheckoutController extends Controller
                 'order_id' => $order->id,
                 'amount' => (string) $amount,
                 'phonenumber' => $mpesaPhone,
+            ]);
+
+            Log::info('Saved initial M-Pesa STK request record.', [
+                'order_id' => $order->id,
+                'merchant_request_id' => $result['MerchantRequestID'] ?? null,
+                'checkout_request_id' => $result['CheckoutRequestID'] ?? null,
             ]);
 
             return redirect()->route('home')->with('success', 'Order placed successfully! Please complete the Mpesa payment on your phone.');

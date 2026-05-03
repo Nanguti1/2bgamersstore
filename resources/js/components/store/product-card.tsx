@@ -9,6 +9,7 @@ type Product = {
     slug: string;
     price: number;
     image: string | null;
+    stock: number;
 };
 
 const formatKes = (value: number): string => {
@@ -23,6 +24,7 @@ export function ProductCard({ product }: { product: Product }): JSX.Element {
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [isAdding, setIsAdding] = useState(false);
     const { incrementCart } = useCart();
+    const isOutOfStock = product.stock <= 0;
 
     const handleInquire = () => {
         const message = `Hi, I'm interested in ${product.name}. Can you provide more details?`;
@@ -99,11 +101,15 @@ export function ProductCard({ product }: { product: Product }): JSX.Element {
                         </button>
                         <button
                             onClick={handleAddToCart}
-                            disabled={isAdding}
-                            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                            disabled={isAdding || isOutOfStock}
+                            className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-70 ${
+                                isOutOfStock ? 'bg-slate-400' : 'bg-blue-600 hover:bg-blue-700'
+                            }`}
                         >
                             <ShoppingCart className="h-4 w-4" />
-                            <span className="hidden sm:inline">{isAdding ? 'Adding...' : 'Add to Cart'}</span>
+                            <span className="hidden sm:inline">
+                                {isOutOfStock ? 'Out of Stock' : isAdding ? 'Adding...' : 'Add to Cart'}
+                            </span>
                         </button>
                     </div>
                 </div>

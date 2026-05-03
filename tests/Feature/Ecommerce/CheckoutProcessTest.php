@@ -5,7 +5,9 @@ namespace Tests\Feature\Ecommerce;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
+use App\Mail\OrderPlacedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class CheckoutProcessTest extends TestCase
@@ -14,6 +16,10 @@ class CheckoutProcessTest extends TestCase
 
     public function test_user_can_complete_checkout_process(): void
     {
+        Mail::fake();
+
+        config(['mail.order_notification_recipient' => 'g.nanguti@gmail.com']);
+
         $user = User::factory()->create();
         $product = Product::factory()->create(['stock' => 10]);
         $cart = Cart::factory()->create(['user_id' => $user->id]);
@@ -40,5 +46,9 @@ class CheckoutProcessTest extends TestCase
             'variant_id' => null,
             'quantity' => 2,
         ]);
+
+        Mail::assertSent(OrderPlacedNotification::class, function (OrderPlacedNotification $mail): bool {
+            return $mail->hasTo('g.nanguti@gmail.com');
+        });
     }
 }

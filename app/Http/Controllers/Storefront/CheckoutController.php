@@ -7,11 +7,13 @@ use App\Http\Requests\Checkout\CheckoutRequest;
 use App\Models\Order;
 use App\Models\MpesaSTK;
 use App\Services\CartService;
+use App\Mail\OrderPlacedNotification;
 use App\Services\OrderService;
 use Iankumu\Mpesa\Facades\Mpesa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -59,6 +61,10 @@ class CheckoutController extends Controller
             $lastName,
             $email,
             $phone
+        );
+
+        Mail::to(config('mail.order_notification_recipient'))->send(
+            new OrderPlacedNotification($order->loadMissing(['items.product']))
         );
 
         // If payment method is Mpesa, initiate STK Push

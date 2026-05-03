@@ -47,8 +47,32 @@ class CheckoutProcessTest extends TestCase
             'quantity' => 2,
         ]);
 
-        Mail::assertSent(OrderPlacedNotification::class, function (OrderPlacedNotification $mail): bool {
+        Mail::assertQueued(OrderPlacedNotification::class, function (OrderPlacedNotification $mail): bool {
             return $mail->hasTo('g.nanguti@gmail.com');
         });
+    }
+
+    public function test_user_cannot_checkout_with_empty_cart(): void
+    {
+        Mail::fake();
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post(route('checkout.store'), [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'john@example.com',
+            'phone' => '0712345678',
+            'line_1' => '100 Main St',
+            'line_2' => null,
+            'city' => 'Austin',
+            'state' => 'TX',
+            'postal_code' => '73301',
+            'country' => 'US',
+            'payment_method' => 'cash',
+        ])->assertRedirect(route('cart.index'));
+
+        $this->assertDatabaseCount('orders', 0);
+        Mail::assertNothingQueued();
     }
 }

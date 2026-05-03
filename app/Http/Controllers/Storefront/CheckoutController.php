@@ -13,6 +13,7 @@ use Iankumu\Mpesa\Facades\Mpesa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -31,6 +32,12 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request, OrderService $orderService): RedirectResponse
     {
+        $cart = $orderService->cartService->getCart($request->user());
+
+        if ($cart->items->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty. Continue shopping to add products.');
+        }
+
         $address = $request->user()->addresses()->create([
             'line_1' => $request->validated('line_1'),
             'line_2' => $request->validated('line_2'),
@@ -46,8 +53,8 @@ class CheckoutController extends Controller
         $phone = $request->validated('phone');
         $mpesaPhone = $request->validated('mpesa_phone') ?? null;
         $paymentMethod = $request->validated('payment_method');
-        $shippingAmount = 650; // Fixed shipping cost
-        $taxAmount = $orderService->cartService->total($orderService->cartService->getCart($request->user())) * 0.16;
+        $shippingAmount = 0;
+        $taxAmount = 0;
 
         // Create order first
         $order = $orderService->checkout(
@@ -63,9 +70,16 @@ class CheckoutController extends Controller
             $phone
         );
 
-        Mail::to(config('mail.order_notification_recipient'))->send(
-            new OrderPlacedNotification($order->loadMissing(['items.product']))
-        );
+        try {
+            Mail::to(config('mail.order_notification_recipient'))->queue(
+                new OrderPlacedNotification($order->loadMissing(['items.product']))
+            );
+        } catch (\Throwable $exception) {
+            Log::error('Order notification email could not be queued.', [
+                'order_id' => $order->id,
+                'message' => $exception->getMessage(),
+            ]);
+        }
 
         // If payment method is Mpesa, initiate STK Push
         if ($paymentMethod === 'mpesa' && $mpesaPhone) {

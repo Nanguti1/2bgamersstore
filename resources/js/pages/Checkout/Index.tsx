@@ -1,7 +1,7 @@
 import { Footer } from '@/components/store/footer';
 import { Navbar } from '@/components/store/navbar';
 import { ThinHero } from '@/components/store/thin-hero';
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 
 interface CartItem {
     id: number;
@@ -26,9 +26,9 @@ const formatKes = (value: number): string => {
 };
 
 export default function CheckoutIndex({ total, cart }: { total: number; cart: CartData }): JSX.Element {
-    const shipping = cart.items.length > 0 ? 650 : 0;
-    const tax = total * 0.16;
-    const grandTotal = total + shipping + tax;
+    const shipping = 0;
+    const grandTotal = total;
+    const hasItems = cart.items.length > 0;
 
     const { data, setData, post, processing, errors } = useForm({
         first_name: '',
@@ -50,6 +50,18 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
             <Navbar />
             <ThinHero title="Checkout" />
 
+            {!hasItems ? (
+                <section className="mx-auto my-16 max-w-3xl rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+                    <h1 className="text-3xl font-semibold text-slate-900">No products to checkout</h1>
+                    <p className="mt-3 text-slate-600">Your cart is empty. Continue shopping to add products.</p>
+                    <Link
+                        href="/products"
+                        className="mt-6 inline-flex items-center justify-center rounded-md bg-blue-600 px-6 py-3 text-base font-semibold text-white hover:bg-blue-500"
+                    >
+                        Continue Shopping
+                    </Link>
+                </section>
+            ) : (
             <section className="mx-auto my-16 grid max-w-screen-2xl gap-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm md:grid-cols-[1.5fr_1fr]">
                 <div className="border-b border-slate-200 p-8 md:border-r md:border-b-0 md:p-12">
                     <h1 className="text-3xl font-semibold text-slate-900">Checkout</h1>
@@ -258,13 +270,14 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                             <span className="text-slate-900">{formatKes(total)}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-slate-500">Taxes</span>
-                            <span className="text-slate-900">{formatKes(tax)}</span>
+                            <span className="text-slate-500">VAT</span>
+                            <span className="text-slate-900">Included</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-slate-500">Shipping</span>
                             <span className="text-slate-900">{formatKes(shipping)}</span>
                         </div>
+                        <p className="text-xs text-slate-500">Shipping fee: Outside Nairobi CBD is KES 350. Free delivery within CBD.</p>
                         <div className="mt-4 flex justify-between border-t border-slate-200 pt-4 text-base font-semibold">
                             <span className="text-slate-900">Total</span>
                             <span className="text-slate-900">{formatKes(grandTotal)}</span>
@@ -272,6 +285,7 @@ export default function CheckoutIndex({ total, cart }: { total: number; cart: Ca
                     </div>
                 </aside>
             </section>
+            )}
 
             <Footer />
         </main>

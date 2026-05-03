@@ -84,6 +84,13 @@ export default function AdminProductsIndex({ products }: { products: PaginatedPr
                                             </button>
                                             <button
                                                 type="button"
+                                                className="cursor-pointer rounded-lg bg-violet-600 px-2 py-1 text-xs font-medium text-white hover:bg-violet-700"
+                                                onClick={() => router.post(`/admin/products/${product.id}/duplicate`)}
+                                            >
+                                                Duplicate
+                                            </button>
+                                            <button
+                                                type="button"
                                                 className="cursor-pointer rounded-lg bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700"
                                                 onClick={() => router.delete(`/admin/products/${product.id}`)}
                                             >

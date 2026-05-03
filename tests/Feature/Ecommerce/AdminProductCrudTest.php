@@ -129,4 +129,34 @@ class AdminProductCrudTest extends TestCase
         $this->assertContains('/storage/products/original-2.jpg', $updatedProduct->gallery);
         $this->assertCount(2, $updatedProduct->gallery);
     }
+
+    public function test_admin_can_duplicate_product_from_index(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $product = Product::factory()->create([
+            'name' => 'Original Product',
+            'slug' => 'original-product',
+        ]);
+
+        $product->variants()->create([
+            'name' => 'Black',
+            'sku' => 'SKU-ORIGINAL',
+            'price' => 1000,
+            'stock' => 5,
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.products.duplicate', $product))
+            ->assertRedirect();
+
+        $this->assertDatabaseCount('products', 2);
+        $this->assertDatabaseHas('products', [
+            'name' => 'Original Product Copy',
+        ]);
+        $this->assertDatabaseHas('product_variants', [
+            'sku' => 'SKU-ORIGINAL-COPY',
+            'stock' => 5,
+        ]);
+    }
 }

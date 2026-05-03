@@ -131,6 +131,30 @@ class ProductController extends Controller
         return back();
     }
 
+    public function duplicate(Product $product): RedirectResponse
+    {
+        $this->authorize('create', Product::class);
+
+        $duplicateProduct = $product->replicate(['slug']);
+        $duplicateProduct->name = $product->name.' Copy';
+        $duplicateProduct->slug = $product->slug.'-copy-'.strtolower((string) str()->random(6));
+        $duplicateProduct->save();
+
+        foreach ($product->variants as $variant) {
+            $duplicateProduct->variants()->create([
+                'name' => $variant->name,
+                'sku' => $variant->sku.'-COPY',
+                'price' => $variant->price,
+                'stock' => $variant->stock,
+                'is_active' => $variant->is_active,
+            ]);
+        }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product duplicated successfully.']);
+
+        return redirect()->route('admin.products.edit', $duplicateProduct);
+    }
+
     public function toggleFeatured(ToggleProductFeaturedRequest $request, Product $product): RedirectResponse
     {
         $this->authorize('update', $product);

@@ -115,4 +115,8 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+
+    'order_notification_recipient' => env('ORDER_NOTIFICATION_RECIPIENT', 'g.nanguti@gmail.com'),
+
 ];
+

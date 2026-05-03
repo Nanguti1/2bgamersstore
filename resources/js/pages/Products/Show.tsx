@@ -32,6 +32,7 @@ interface Product {
     specifications?: string | null;
     price: number;
     image: string | null;
+    stock: number;
     gallery?: string[] | null;
     variants?: ProductVariant[];
 }
@@ -76,6 +77,7 @@ export default function ProductShow({
     }, [product.gallery, product.image]);
 
     const currentPrice = selectedVariant ? selectedVariant.price : product.price;
+    const isOutOfStock = selectedVariant ? selectedVariant.stock <= 0 : product.stock <= 0;
 
     const renderStars = (rating: number): JSX.Element => {
         return (
@@ -165,27 +167,35 @@ export default function ProductShow({
                         )}
 
                         {/* Quantity and Add to Cart */}
+                        {isOutOfStock && (
+                            <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700">
+                                Out of stock
+                            </p>
+                        )}
                         <div className="flex items-center gap-4">
                             <div className="flex items-center rounded-lg border border-slate-300 bg-white">
                                 <button
                                     type="button"
+                                    disabled={isOutOfStock}
                                     onClick={() => addToCartForm.setData('quantity', Math.max(1, addToCartForm.data.quantity - 1))}
-                                    className="px-4 py-3 text-xl font-semibold text-slate-900 hover:bg-slate-50"
+                                    className="px-4 py-3 text-xl font-semibold text-slate-900 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     -
                                 </button>
                                 <input
                                     type="number"
+                                    disabled={isOutOfStock}
                                     min={1}
                                     max={10}
                                     value={addToCartForm.data.quantity}
                                     onChange={(event) => addToCartForm.setData('quantity', Number(event.target.value))}
-                                    className="w-16 bg-transparent text-center text-lg font-semibold text-slate-900 focus:outline-none"
+                                    className="w-16 bg-transparent text-center text-lg font-semibold text-slate-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
                                 />
                                 <button
                                     type="button"
+                                    disabled={isOutOfStock}
                                     onClick={() => addToCartForm.setData('quantity', Math.min(10, addToCartForm.data.quantity + 1))}
-                                    className="px-4 py-3 text-xl font-semibold text-slate-900 hover:bg-slate-50"
+                                    className="px-4 py-3 text-xl font-semibold text-slate-900 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     +
                                 </button>
@@ -203,9 +213,12 @@ export default function ProductShow({
                             >
                                 <button
                                     type="submit"
-                                    className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white hover:bg-blue-700 transition"
+                                    disabled={isOutOfStock || addToCartForm.processing}
+                                    className={`rounded-lg px-8 py-3 font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-70 ${
+                                        isOutOfStock ? 'bg-slate-400' : 'bg-blue-600 hover:bg-blue-700'
+                                    }`}
                                 >
-                                    Add to Cart
+                                    {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
                                 </button>
                             </form>
                         </div>

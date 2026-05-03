@@ -49,4 +49,20 @@ class AddToCartTest extends TestCase
             'quantity' => 1,
         ]);
     }
+
+    public function test_authenticated_user_cannot_add_out_of_stock_product_to_cart(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create(['stock' => 0]);
+
+        $this->actingAs($user)->from(route('products.show', $product->slug))->post(route('cart.store'), [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ])->assertRedirect(route('products.show', $product->slug))
+            ->assertSessionHasErrors('product_id');
+
+        $this->assertDatabaseMissing('cart_items', [
+            'product_id' => $product->id,
+        ]);
+    }
 }

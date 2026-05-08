@@ -125,7 +125,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                 <input
                                     value={data.name}
                                     onChange={(event) => setData('name', event.target.value)}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 />
                                 {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                             </div>
@@ -134,7 +134,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                 <input
                                     value={data.slug}
                                     onChange={(event) => setData('slug', event.target.value)}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 />
                                 {errors.slug && <p className="text-xs text-red-500 mt-1">{errors.slug}</p>}
                             </div>
@@ -145,7 +145,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                     step="0.01"
                                     value={data.price}
                                     onChange={(event) => setData('price', event.target.value)}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 />
                                 {errors.price && <p className="text-xs text-red-500 mt-1">{errors.price}</p>}
                             </div>
@@ -155,7 +155,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                     type="number"
                                     value={data.stock}
                                     onChange={(event) => setData('stock', Number(event.target.value))}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 />
                                 {errors.stock && <p className="text-xs text-red-500 mt-1">{errors.stock}</p>}
                             </div>
@@ -164,7 +164,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                 <select
                                     value={data.category_id}
                                     onChange={(event) => setData('category_id', Number(event.target.value))}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 >
                                     {categories.map((category) => (
                                         <option key={category.id} value={category.id}>{category.name}</option>
@@ -221,7 +221,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                     value={data.description}
                                     onChange={(event) => setData('description', event.target.value)}
                                     rows={12}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                     placeholder="Enter product description (HTML supported)"
                                 />
                                 {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description}</p>}
@@ -254,7 +254,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                     value={data.specifications}
                                     onChange={(event) => setData('specifications', event.target.value)}
                                     rows={12}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                     placeholder="Enter product specifications (HTML supported)"
                                 />
                                 {errors.specifications && <p className="text-xs text-red-500 mt-1">{errors.specifications}</p>}
@@ -392,7 +392,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                                             type="text"
                                                             value={variant.name}
                                                             onChange={(e) => updateVariant(index, 'name', e.target.value)}
-                                                            className="w-full rounded border border-zinc-300 px-2 py-1 text-sm"
+                                                            className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-sm text-slate-900"
                                                             placeholder="e.g., Red - Large"
                                                         />
                                                     </td>
@@ -401,7 +401,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                                             type="text"
                                                             value={variant.sku}
                                                             onChange={(e) => updateVariant(index, 'sku', e.target.value)}
-                                                            className="w-full rounded border border-zinc-300 px-2 py-1 text-sm"
+                                                            className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-sm text-slate-900"
                                                             placeholder="SKU-001"
                                                         />
                                                     </td>
@@ -411,7 +411,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                                             step="0.01"
                                                             value={variant.price}
                                                             onChange={(e) => updateVariant(index, 'price', e.target.value)}
-                                                            className="w-full rounded border border-zinc-300 px-2 py-1 text-sm"
+                                                            className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-sm text-slate-900"
                                                             placeholder="0.00"
                                                         />
                                                     </td>
@@ -420,7 +420,7 @@ export default function AdminProductsEdit({ product, categories, activeTab }: { 
                                                             type="number"
                                                             value={variant.stock}
                                                             onChange={(e) => updateVariant(index, 'stock', e.target.value)}
-                                                            className="w-full rounded border border-zinc-300 px-2 py-1 text-sm"
+                                                            className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-sm text-slate-900"
                                                             placeholder="0"
                                                         />
                                                     </td>

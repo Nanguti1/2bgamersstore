@@ -114,7 +114,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                                 <input
                                     value={data.name}
                                     onChange={(event) => setData('name', event.target.value)}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 />
                                 {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                             </div>
@@ -123,7 +123,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                                 <input
                                     value={data.slug}
                                     onChange={(event) => setData('slug', event.target.value)}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 />
                                 {errors.slug && <p className="text-xs text-red-500 mt-1">{errors.slug}</p>}
                             </div>
@@ -134,7 +134,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                                     step="0.01"
                                     value={data.price}
                                     onChange={(event) => setData('price', event.target.value)}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 />
                                 {errors.price && <p className="text-xs text-red-500 mt-1">{errors.price}</p>}
                             </div>
@@ -144,7 +144,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                                     type="number"
                                     value={data.stock}
                                     onChange={(event) => setData('stock', Number(event.target.value))}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 />
                                 {errors.stock && <p className="text-xs text-red-500 mt-1">{errors.stock}</p>}
                             </div>
@@ -153,7 +153,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                                 <select
                                     value={data.category_id}
                                     onChange={(event) => setData('category_id', Number(event.target.value))}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                 >
                                     {categories.map((category) => (
                                         <option key={category.id} value={category.id}>{category.name}</option>
@@ -210,7 +210,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                                     value={data.description}
                                     onChange={(event) => setData('description', event.target.value)}
                                     rows={12}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                     placeholder="Enter product description (HTML supported)"
                                 />
                                 {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description}</p>}
@@ -243,7 +243,7 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                                     value={data.specifications}
                                     onChange={(event) => setData('specifications', event.target.value)}
                                     rows={12}
-                                    className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
                                     placeholder="Enter product specifications (HTML supported)"
                                 />
                                 {errors.specifications && <p className="text-xs text-red-500 mt-1">{errors.specifications}</p>}

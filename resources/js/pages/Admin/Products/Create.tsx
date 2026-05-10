@@ -11,6 +11,7 @@ const tabs: Tab[] = [
     { id: 'description', label: 'Description' },
     { id: 'specifications', label: 'Specifications' },
     { id: 'media', label: 'Media' },
+    { id: 'seo', label: 'SEO' },
 ];
 
 type Category = {
@@ -30,6 +31,13 @@ type ProductFormData = {
     gallery: File[];
     is_active: boolean;
     featured: boolean;
+    seo_title: string;
+    seo_description: string;
+    og_title: string;
+    og_description: string;
+    twitter_title: string;
+    twitter_description: string;
+    image_alt: string;
 };
 
 const MAX_GALLERY_ITEMS = 4;
@@ -49,6 +57,13 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
         gallery: [],
         is_active: true,
         featured: false,
+        seo_title: '',
+        seo_description: '',
+        og_title: '',
+        og_description: '',
+        twitter_title: '',
+        twitter_description: '',
+        image_alt: '',
     });
 
     const submit = (event: React.FormEvent<HTMLFormElement>): void => {
@@ -299,6 +314,102 @@ export default function AdminProductsCreate({ categories }: { categories: Catego
                                         ))}
                                     </div>
                                 )}
+                            </div>
+                            <div className="flex justify-end gap-3">
+                                <Link
+                                    href="/admin/products"
+                                    className="rounded-lg bg-gray-200 px-4 py-2 font-medium text-slate-900 hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </Link>
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                                >
+                                    {processing ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
+                    )}
+
+                    {currentTab === 'seo' && (
+                        <form onSubmit={submit} className="grid gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">SEO Title</label>
+                                <p className="text-xs text-zinc-500 mb-2">Custom title for search engines. Leave empty to use product name.</p>
+                                <input
+                                    value={data.seo_title}
+                                    onChange={(event) => setData('seo_title', event.target.value)}
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
+                                    placeholder="e.g., Buy Original PS5 in Kenya | Best Price in Nairobi"
+                                />
+                                {errors.seo_title && <p className="text-xs text-red-500 mt-1">{errors.seo_title}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">SEO Description</label>
+                                <p className="text-xs text-zinc-500 mb-2">Meta description for search engines. Leave empty to use auto-generated description.</p>
+                                <textarea
+                                    value={data.seo_description}
+                                    onChange={(event) => setData('seo_description', event.target.value)}
+                                    rows={3}
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
+                                    placeholder="e.g., Buy original PS5 at best prices in Nairobi, Kenya. Genuine products with warranty."
+                                />
+                                {errors.seo_description && <p className="text-xs text-red-500 mt-1">{errors.seo_description}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Open Graph Title</label>
+                                <p className="text-xs text-zinc-500 mb-2">Title for social media sharing. Leave empty to use SEO title.</p>
+                                <input
+                                    value={data.og_title}
+                                    onChange={(event) => setData('og_title', event.target.value)}
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
+                                />
+                                {errors.og_title && <p className="text-xs text-red-500 mt-1">{errors.og_title}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Open Graph Description</label>
+                                <p className="text-xs text-zinc-500 mb-2">Description for social media sharing. Leave empty to use SEO description.</p>
+                                <textarea
+                                    value={data.og_description}
+                                    onChange={(event) => setData('og_description', event.target.value)}
+                                    rows={3}
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
+                                />
+                                {errors.og_description && <p className="text-xs text-red-500 mt-1">{errors.og_description}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Twitter Title</label>
+                                <p className="text-xs text-zinc-500 mb-2">Title for Twitter cards. Leave empty to use Open Graph title.</p>
+                                <input
+                                    value={data.twitter_title}
+                                    onChange={(event) => setData('twitter_title', event.target.value)}
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
+                                />
+                                {errors.twitter_title && <p className="text-xs text-red-500 mt-1">{errors.twitter_title}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Twitter Description</label>
+                                <p className="text-xs text-zinc-500 mb-2">Description for Twitter cards. Leave empty to use Open Graph description.</p>
+                                <textarea
+                                    value={data.twitter_description}
+                                    onChange={(event) => setData('twitter_description', event.target.value)}
+                                    rows={3}
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
+                                />
+                                {errors.twitter_description && <p className="text-xs text-red-500 mt-1">{errors.twitter_description}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Image Alt Text</label>
+                                <p className="text-xs text-zinc-500 mb-2">Descriptive alt text for the product image for accessibility and SEO.</p>
+                                <input
+                                    value={data.image_alt}
+                                    onChange={(event) => setData('image_alt', event.target.value)}
+                                    className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-slate-900"
+                                    placeholder="e.g., Original Sony PlayStation 5 console with controller"
+                                />
+                                {errors.image_alt && <p className="text-xs text-red-500 mt-1">{errors.image_alt}</p>}
                             </div>
                             <div className="flex justify-end gap-3">
                                 <Link

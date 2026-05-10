@@ -4,6 +4,8 @@ export default function AdminCategoriesEdit({ category }: { category: any }): JS
     const { data, setData, patch, processing, errors } = useForm({
         name: category.name,
         description: category.description || '',
+        seo_title: category.seo_title || '',
+        seo_description: category.seo_description || '',
     });
 
     const submit = (event: React.FormEvent<HTMLFormElement>): void => {
@@ -39,6 +41,32 @@ export default function AdminCategoriesEdit({ category }: { category: any }): JS
                                 rows={4}
                                 className="w-full rounded-lg border border-zinc-300 px-3 py-2"
                             />
+                        </div>
+                        <div className="pt-4 border-t border-zinc-200">
+                            <h3 className="text-lg font-semibold text-slate-900 mb-4">SEO Settings</h3>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">SEO Title</label>
+                            <p className="text-xs text-zinc-500 mb-2">Custom title for search engines. Leave empty to use category name.</p>
+                            <input
+                                value={data.seo_title}
+                                onChange={(event) => setData('seo_title', event.target.value)}
+                                className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                placeholder="e.g., PS5 Consoles in Kenya | Best Price in Nairobi"
+                            />
+                            {errors.seo_title && <p className="text-xs text-red-500 mt-1">{errors.seo_title}</p>}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">SEO Description</label>
+                            <p className="text-xs text-zinc-500 mb-2">Meta description for search engines. Leave empty to use auto-generated description.</p>
+                            <textarea
+                                value={data.seo_description}
+                                onChange={(event) => setData('seo_description', event.target.value)}
+                                rows={3}
+                                className="w-full rounded-lg border border-zinc-300 px-3 py-2"
+                                placeholder="e.g., Browse our collection of PS5 consoles at best prices in Nairobi, Kenya."
+                            />
+                            {errors.seo_description && <p className="text-xs text-red-500 mt-1">{errors.seo_description}</p>}
                         </div>
                     </div>
                     <div className="mt-6 flex justify-end gap-3">

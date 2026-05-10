@@ -1,6 +1,6 @@
 import { Footer } from '@/components/store/footer';
 import { Navbar } from '@/components/store/navbar';
-import { Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 
@@ -35,6 +35,13 @@ interface Product {
     stock: number;
     gallery?: string[] | null;
     variants?: ProductVariant[];
+    seo_title?: string | null;
+    seo_description?: string | null;
+    og_title?: string | null;
+    og_description?: string | null;
+    twitter_title?: string | null;
+    twitter_description?: string | null;
+    image_alt?: string | null;
 }
 
 interface RelatedProduct {
@@ -79,6 +86,27 @@ export default function ProductShow({
     const currentPrice = selectedVariant ? selectedVariant.price : product.price;
     const isOutOfStock = selectedVariant ? selectedVariant.stock <= 0 : product.stock <= 0;
 
+    const seoTitle = product.seo_title ?? `Buy Original ${product.name} in Nairobi | Best Price in Kenya | 2B Gamers Store`;
+    const seoDescription = product.seo_description ?? `Buy ${product.name} at 2B Gamers Store Nairobi. Get original gaming gear at the best price in Kenya.`;
+    const canonicalUrl = `/products/${product.slug}`;
+    const imageAlt = product.image_alt ?? `${product.name} - Original product at 2B Gamers Store Nairobi`;
+    const productSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: product.description,
+        image: product.image ? [product.image] : [],
+        brand: { '@type': 'Brand', name: '2B Gamers Store' },
+        offers: {
+            '@type': 'Offer',
+            priceCurrency: 'KES',
+            price: currentPrice,
+            availability: isOutOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+            url: canonicalUrl,
+        },
+    };
+
+
     const renderStars = (rating: number): JSX.Element => {
         return (
             <div className="flex text-yellow-400">
@@ -90,6 +118,21 @@ export default function ProductShow({
     };
 
     return (
+        <>
+            <Head>
+                <title>{seoTitle}</title>
+                <meta name="description" content={seoDescription} />
+                <link rel="canonical" href={canonicalUrl} />
+                <meta property="og:title" content={product.og_title ?? seoTitle} />
+                <meta property="og:description" content={product.og_description ?? seoDescription} />
+                <meta property="og:type" content="product" />
+                <meta property="og:url" content={canonicalUrl} />
+                <meta property="og:image" content={product.image ?? ''} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={product.twitter_title ?? seoTitle} />
+                <meta name="twitter:description" content={product.twitter_description ?? seoDescription} />
+                <script type="application/ld+json">{JSON.stringify(productSchema)}</script>
+            </Head>
         <main className="min-h-screen bg-slate-100 text-slate-900">
             <Navbar />
 
@@ -98,7 +141,7 @@ export default function ProductShow({
                     {/* Product Images */}
                     <div className="space-y-4">
                         <div className="overflow-hidden rounded-lg bg-white shadow-sm">
-                            <img src={activeImage} alt={product.name} className="h-full w-full object-cover" />
+                            <img src={activeImage} alt={imageAlt} className="h-full w-full object-cover" />
                         </div>
                         <div className="grid grid-cols-5 gap-3">
                             {productImages.map((image, index) => (
@@ -355,5 +398,6 @@ export default function ProductShow({
 
             <Footer />
         </main>
+        </>
     );
 }

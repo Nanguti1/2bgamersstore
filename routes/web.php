@@ -15,8 +15,23 @@ use App\Http\Controllers\Storefront\ProductController;
 use App\Http\Controllers\Storefront\ProductReviewController;
 use App\Http\Controllers\Storefront\StorePageController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 Route::get('/', HomeController::class)->name('home');
+Route::get('/sitemap.xml', function () {
+    $path = public_path('sitemap.xml');
+
+    if (! File::exists($path)) {
+        Artisan::call('sitemap:generate');
+    }
+
+    return response()->file($path, ['Content-Type' => 'application/xml']);
+})->name('sitemap');
+
+Route::get('/robots.txt', function () {
+    return response("User-agent: *\nAllow: /\nSitemap: ".route('sitemap')."\n", 200, ['Content-Type' => 'text/plain']);
+});
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
 

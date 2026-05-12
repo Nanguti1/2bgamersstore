@@ -1,0 +1,12 @@
+# Ads.txt for 2B Gamers Store
+# This file contains a list of authorized digital sellers for this property
+# For more information, visit: https://iabtechlab.com/ads-txt/
+
+# Google AdSense
+google.com, pub-xxxxxxxxxxxxxxxx, DIRECT, f08c47fec0942fa0
+
+# Facebook
+facebook.com, xxxxxxxxxxxxxxxx, DIRECT, c3e20eea835e0c69
+
+# Add your authorized sellers below following the format:
+# domain, publisher-id, relationship-type, certification-authority-id

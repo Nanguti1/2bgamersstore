@@ -4,6 +4,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        {{-- Preconnect to external domains for performance --}}
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link rel="dns-prefetch" href="https://fonts.bunny.net">
+        @if(config('app.google_tag_manager_id'))
+        <link rel="preconnect" href="https://www.googletagmanager.com">
+        @endif
+
         {{-- Google Tag Manager --}}
         @if(config('app.google_tag_manager_id'))
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -44,7 +51,6 @@
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
         @viteReactRefresh

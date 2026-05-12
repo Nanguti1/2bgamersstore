@@ -46,33 +46,53 @@ export default function Home({
     return (
         <>
             <Head>
-                <title>2B Gamers Store | Buy Original PS5, PS4 & Gaming Accessories in Kenya</title>
-                <meta name="description" content="Shop original PS5, PS4, gaming accessories, and iPhones at best prices in Nairobi, Kenya. Genuine products with warranty. Fast delivery nationwide." />
+                <title>Buy PS5, PS4 & Gaming Accessories in Kenya | 2B Gamers</title>
+                <meta name="description" content="Shop authentic PS5, PS4, gaming consoles, and accessories at Kenya's best prices. Original products with warranty. Fast nationwide delivery. Expert gaming gear in Nairobi, Mombasa & beyond." />
+                <meta name="keywords" content="PS5 Kenya, PS4 Kenya, gaming accessories, console gaming, Nairobi gaming store" />
                 <link rel="canonical" href="https://2bgamersstore.co.ke/" />
-                <meta property="og:title" content="2B Gamers Store | Buy Original PS5, PS4 & Gaming Accessories in Kenya" />
-                <meta property="og:description" content="Shop original PS5, PS4, gaming accessories, and iPhones at best prices in Nairobi, Kenya. Genuine products with warranty." />
+                <meta property="og:title" content="Buy PS5, PS4 & Gaming Accessories in Kenya | 2B Gamers" />
+                <meta property="og:description" content="Shop authentic gaming consoles and accessories. Original PS5, PS4 at best prices in Kenya. Fast delivery nationwide." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://2bgamersstore.co.ke/" />
                 <meta property="og:image" content="https://2bgamersstore.co.ke/images/og-image.jpg" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="2B Gamers Store | Buy Original PS5, PS4 & Gaming Accessories in Kenya" />
-                <meta name="twitter:description" content="Shop original PS5, PS4, gaming accessories, and iPhones at best prices in Nairobi, Kenya." />
+                <meta name="twitter:title" content="Buy PS5, PS4 & Gaming Accessories in Kenya | 2B Gamers" />
+                <meta name="twitter:description" content="Authentic gaming consoles and accessories. PS5, PS4 at best Kenya prices with fast delivery." />
                 <meta name="twitter:image" content="https://2bgamersstore.co.ke/images/og-image.jpg" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify({
                             '@context': 'https://schema.org',
-                            '@type': 'Organization',
+                            '@type': 'LocalBusiness',
                             name: '2B Gamers Store',
                             url: 'https://2bgamersstore.co.ke',
                             logo: 'https://2bgamersstore.co.ke/images/logo.png',
-                            description: 'Leading gaming store in Kenya offering original PS5, PS4, gaming accessories, and iPhones at best prices.',
+                            description: 'Kenya\'s leading gaming store offering authentic PS5, PS4, gaming consoles, and accessories at best prices.',
+                            telephone: '+254700000000',
                             address: {
                                 '@type': 'PostalAddress',
+                                streetAddress: 'Nairobi',
                                 addressLocality: 'Nairobi',
+                                addressRegion: 'Nairobi',
                                 addressCountry: 'KE',
                             },
+                            geo: {
+                                '@type': 'GeoCoordinates',
+                                latitude: '-1.2921',
+                                longitude: '36.8219',
+                            },
+                            areaServed: {
+                                '@type': 'Country',
+                                name: 'KE',
+                            },
+                            priceRange: 'KES 5000 - KES 500000',
+                            image: 'https://2bgamersstore.co.ke/images/logo.png',
+                            sameAs: [
+                                'https://www.facebook.com/2bgamersstore',
+                                'https://www.instagram.com/2bgamersstore',
+                                'https://www.twitter.com/2bgamersstore',
+                            ],
                         }),
                     }}
                 />
@@ -84,12 +104,29 @@ export default function Home({
                             '@type': 'WebSite',
                             name: '2B Gamers Store',
                             url: 'https://2bgamersstore.co.ke',
-                            description: 'Shop original gaming consoles and accessories in Kenya',
+                            description: 'Shop authentic gaming consoles and accessories in Kenya',
                             potentialAction: {
                                 '@type': 'SearchAction',
                                 target: 'https://2bgamersstore.co.ke/products?search={search_term_string}',
                                 'query-input': 'required name=search_term_string',
                             },
+                        }),
+                    }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            '@context': 'https://schema.org',
+                            '@type': 'BreadcrumbList',
+                            itemListElement: [
+                                {
+                                    '@type': 'ListItem',
+                                    position: 1,
+                                    name: 'Home',
+                                    item: 'https://2bgamersstore.co.ke',
+                                },
+                            ],
                         }),
                     }}
                 />
